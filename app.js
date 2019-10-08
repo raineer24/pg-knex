@@ -6,7 +6,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 
 // const blogRoute = require("./routes/blog");
-// const userRoute = require("./routes/useraccount");
+const userRoute = require("./api/routes/users");
 
 const test = require("./api/test");
 
@@ -43,7 +43,7 @@ app.use((req, res, next) => {
 });
 
 // app.use("/api/v2/blog", blogRoute);
-// app.use("/api/v2/useraccount", userRoute);
+app.use("/api/v2/users", userRoute);
 app.use("/api/v2/test", test);
 
 app.listen(port, function(err) {
