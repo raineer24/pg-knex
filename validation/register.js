@@ -16,19 +16,26 @@ module.exports = function checkRegistrationFields(data) {
     errors.email = "Email is required";
   }
 
-  if (Validator.isEmpty(data.password1)) {
-    errors.password1 = "Password is required";
-  }
+  // if (Validator.isEmpty(data.password1)) {
+  //   errors.password1 = "Password is required";
+  // }
 
-  if (!Validator.isLength(data.password1, { min: 8, max: 120 })) {
-    errors.password1 = "Password must be greater than 8 characters";
-  }
+  // if (!Validator.isLength(data.password1, { min: 8, max: 120 })) {
+  //   errors.password1 = "Password must be greater than 8 characters";
+  // }
 
-  if (Validator.isEmpty(data.password2)) {
-    errors.password2 = "Confirmation password is required";
-  }
+  // if (Validator.isEmpty(data.password2)) {
+  //   errors.password2 = "Confirmation password is required";
+  // }
 
-  if (!Validator.equals(data.password1, data.password2)) {
-    errors.password1 = "Both password fields must match";
-  }
+  // if (!Validator.equals(data.password1, data.password2)) {
+  //   errors.password1 = "Both password fields must match";
+  // }
+
+  //Return the errors from the checkRegistrationFields function
+  // and use the ifEmpty function to check if the errors object is empty
+  return {
+    errors,
+    isValid: ifEmpty(errors)
+  };
 };
