@@ -29,10 +29,13 @@ router.post("/register", (req, res) => {
   // }
 
   database("users")
-    .returning("id", "email")
+    .returning("id", "email", "username")
     .insert({
       email: req.body.email,
-      password: req.body.password
+      password: req.body.password,
+      username: req.body.username,
+      first_name: req.body.first_name,
+      image_url: req.body.image_url
     })
     .then(user => {
       // This is where the api returns json to the /register route
