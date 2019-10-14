@@ -9,8 +9,8 @@ module.exports = function checkRegistrationFields(data) {
   // else if empty, data.email = ""
 
   data.email = !ifEmpty(data.email) ? data.email : "";
-  data.password1 = !ifEmpty(data.password1) ? data.password1 : "";
-  data.password2 = !ifEmpty(data.password2) ? data.password1 : "";
+  // data.password1 = !ifEmpty(data.password1) ? data.password1 : "";
+  // data.password2 = !ifEmpty(data.password2) ? data.password1 : "";
 
   if (Validator.isEmpty(data.email)) {
     errors.email = "Email is required";

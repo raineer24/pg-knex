@@ -9,19 +9,12 @@ router.get("/", (req, res, next) => {
   database
     .select()
     .table("users")
-    .then(data => console.log(data));
-});
-
-router.get("/", (req, res, next) => {
-  database
-    .select()
-    .table("users")
-    .then(data => console.log(data));
+    .then(data => res.json(data));
 });
 
 router.post("/register", (req, res) => {
   // Ensures that all entries by the user are valid
-  // const { errors, isValid } = checkRegistrationFields(req.body);
+  //const { errors, isValid } = checkRegistrationFields(req.body);
 
   //If any of the entries made by the user are invalid, a status 400 is returned with the error
   // if (!isValid) {
@@ -29,7 +22,7 @@ router.post("/register", (req, res) => {
   // }
 
   database("users")
-    .returning("id", "email", "username")
+    .returning(["id", "email", "username"])
     .insert({
       email: req.body.email,
       password: req.body.password,
@@ -41,7 +34,8 @@ router.post("/register", (req, res) => {
       // This is where the api returns json to the /register route
       // Return the id, email, registered on date and token here
       // Sending the user's token as a response here is insecure
-      console.log("shit", user);
+      res.json({ user, success: true, message: "ok" });
+      // console.log(user[0]);
     })
     .catch(err => {
       console.log(err);
