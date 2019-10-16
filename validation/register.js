@@ -16,6 +16,10 @@ module.exports = function checkRegistrationFields(data) {
     errors.email = "Email is required";
   }
 
+  if (!Validator.isEmail(data.email)) {
+    errors.email = "Email address is invalid";
+  }
+
   // if (Validator.isEmpty(data.password1)) {
   //   errors.password1 = "Password is required";
   // }

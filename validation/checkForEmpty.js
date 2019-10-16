@@ -1,6 +1,8 @@
+// simple-api/validation/checkForEmpty.js
 const ifEmpty = field => {
   try {
     let result = false;
+
     if (
       field === undefined ||
       field === null ||
@@ -8,6 +10,8 @@ const ifEmpty = field => {
       (typeof field === "object" && Object.keys(field).length === 0)
     )
       result = true;
+
+    return result;
   } catch (err) {
     return err;
   }
