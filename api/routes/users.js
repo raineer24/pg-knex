@@ -20,30 +20,7 @@ router.post("/register", (req, res) => {
   if (!isValid) {
     return res.status(400).json(errors);
   }
-  console.log(res);
-  // database("users").select('email')
-  //     .from('users')
-  //     where('email', req.body.email)
-  //     .then(email_list => {
-  //       if (email_list.length === 0) {
-  //         return database('users')
-  //           .returning(["id", "email", "username"])
-  //         .insert({
-  //           email: req.body.email,
-  //           password: req.body.password,
-  //           username: req.body.username,
-  //           first_name: req.body.first_name,
-  //           image_url: req.body.image_url
-  //         })
-  //         .then(newUserId => {
-  //           console.log('inserted user', newUserId);
 
-  //         });
-  //         console.log('not inserting user');
-  //         return
-
-  //       }
-  //     }
   database("users")
     .select("username")
     .from("users")
@@ -51,20 +28,24 @@ router.post("/register", (req, res) => {
     .andWhere("email", req.body.email)
     .then(userNameList => {
       if (userNameList.length === 0) {
-        return database("users")
-          .returning("id")
-          .insert([
-            {
-              username: req.body.username,
-              email: req.body.email,
-              password: req.body.password,
-              first_name: req.body.first_name,
-              image_url: req.body.image_url
-            }
-          ])
-          .then(newUserId => {
-            console.log("inserted user", newUserId);
-          });
+        bcrypt.hash(req.body.password, 12, (err, hash) => {
+          if (err) throw err;
+          return database("users")
+            .returning(["id", "email", "username", "password"])
+            .insert([
+              {
+                username: req.body.username,
+                email: req.body.email,
+                password: hash,
+                first_name: req.body.first_name,
+                image_url: req.body.image_url
+              }
+            ])
+            .then(newUserId => {
+              //console.log("inserted user", newUserId);
+              res.json(newUserId[0]);
+            });
+        });
       }
       console.log("not inserting user");
       return;
