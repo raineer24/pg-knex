@@ -48,6 +48,7 @@ router.post("/register", (req, res) => {
         });
       }
       console.log("not inserting user");
+      res.status(400).json(errors);
       return;
     });
 
