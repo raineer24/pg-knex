@@ -5,7 +5,7 @@ const createError = require("http-errors");
 const express = require("express");
 const bodyParser = require("body-parser");
 
-// const blogRoute = require("./routes/blog");
+const blogRoute = require("./api/routes/blogs");
 const userRoute = require("./api/routes/users");
 
 const test = require("./api/test");
@@ -42,7 +42,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// app.use("/api/v2/blog", blogRoute);
+app.use("/api/v2/blogs", blogRoute);
 app.use("/api/v2/users", userRoute);
 app.use("/api/v2/test", test);
 
