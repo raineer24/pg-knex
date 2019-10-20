@@ -16,7 +16,8 @@
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.16.5",
     "morgan": "^1.9.1",
-    "pg": "^7.12.1"
+    "pg": "^7.12.1",
+    "validator": "^11.1.0"
   },
   "devDependencies": {
     "nodemon": "^1.19.3"
