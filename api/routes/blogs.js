@@ -12,4 +12,28 @@ router.get("/", (req, res, next) => {
     .then(data => res.json(data));
 });
 
+router.post("/", (req, res) => {
+  //const { errors, isValid } = checkRegistrationFields(req.body);
+  console.log(req.body.title);
+
+  database("blogs")
+    .returning(["blog_id", "title", "content"])
+    .insert({
+      title: req.body.title,
+      content: req.body.content,
+      image_url: req.body.image_url
+    })
+    .then(blogs => {
+      // This is where the api returns json to the /register route
+      // Return the id, email, registered on date and token here
+      // Sending the user's token as a response here is insecure
+      res.json({ blogs, success: true, message: "ok" });
+      // console.log(user[0]);
+    })
+    .catch(err => {
+      //errors.account = "Email already registered";
+      res.status(400).json(err);
+    });
+});
+
 module.exports = router;
