@@ -4,6 +4,11 @@ const database = require("../../config/database");
 const bcrypt = require("bcrypt");
 // Registration validation
 const checkRegistrationFields = require("../../validation/register");
+// Login validation
+const validateLoginInput = require("../../validation/login");
+const jwt = require("jsonwebtoken");
+// Secret key
+const key = require("../../utilities/keys");
 
 router.get("/", (req, res, next) => {
   database
@@ -15,6 +20,11 @@ router.get("/", (req, res, next) => {
 router.post("/register", (req, res) => {
   // Ensures that all entries by the user are valid
   const { errors, isValid } = checkRegistrationFields(req.body);
+
+  // If any of the entries made by the user are invalid, a status 400 is returned with the error
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
 
   //If any of the entries made by the user are invalid, a status 400 is returned with the error
   if (!isValid) {
@@ -79,5 +89,26 @@ router.post("/register", (req, res) => {
         });
     });
   });
+});
+
+//login route
+router.post("/login", (req, res) => {
+  // Ensures that all entries by the user are valid
+  const { errors, isValid } = validateLoginInput(req.body);
+
+  if (!isValid) {
+    return res.status(400).json(errors);
+  } else {
+    database
+      .select("id", "email", "password")
+      .where("email", "=", req.body.email)
+      .from("users")
+      .then(data => {
+        bcrypt.compare(req.body.password, data[0].password).then(isMatch => {
+          const payload = { id: data[0].id, email: data[0].email };
+          jwt.sign(payload, key.secretKey);
+        });
+      });
+  }
 });
 module.exports = router;
