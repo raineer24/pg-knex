@@ -10,6 +10,8 @@ const jwt = require("jsonwebtoken");
 // Secret key
 const key = require("../../utilities/keys");
 
+const crypto = require("crypto");
+
 router.get("/", (req, res, next) => {
   database
     .select()
@@ -31,36 +33,16 @@ router.post("/register", (req, res) => {
     return res.status(400).json(errors);
   }
 
-  // database("users")
-  //   .select("username")
-  //   .from("users")
-  //   .where("username", req.body.username)
-  //   .andWhere("email", req.body.email)
-  //   .then(userNameList => {
-  //     if (userNameList.length === 0) {
-  //       bcrypt.hash(req.body.password, 12, (err, hash) => {
-  //         if (err) throw err;
-  //         return database("users")
-  //           .returning(["id", "email", "username", "password"])
-  //           .insert([
-  //             {
-  //               username: req.body.username,
-  //               email: req.body.email,
-  //               password: hash,
-  //               first_name: req.body.first_name,
-  //               image_url: req.body.image_url
-  //             }
-  //           ])
-  //           .then(newUserId => {
-  //             //console.log("inserted user", newUserId);
-  //             res.json(newUserId[0]);
-  //           });
-  //       });
-  //     }
-  //     console.log("not inserting user");
-  //     res.status(400).json(errors);
-  //     return;
-  //   });
+  let token;
+  crypto.randomBytes(48, (err, buf) => {
+    if (err) throw err;
+    token = buf
+      .toString("base64")
+      .replace(/\//g, "") // Because '/' and '+' aren't valid in URLs
+      .replace(/\+/g, "-");
+    return token;
+  });
+
   bcrypt.genSalt(12, (err, salt) => {
     if (err) throw err;
     bcrypt.hash(req.body.password, salt, (err, hash) => {
@@ -71,6 +53,7 @@ router.post("/register", (req, res) => {
           email: req.body.email,
           password: hash,
           username: req.body.username,
+          token: token,
           first_name: req.body.first_name,
           image_url: req.body.image_url
         })
@@ -105,9 +88,23 @@ router.post("/login", (req, res) => {
       .from("users")
       .then(data => {
         bcrypt.compare(req.body.password, data[0].password).then(isMatch => {
-          const payload = { id: data[0].id, email: data[0].email };
-          jwt.sign(payload, key.secretKey);
+          if (isMatch) {
+            const payload = { id: data[0].id, email: data[0].email };
+            jwt.sign(
+              payload,
+              key.secretKey,
+              { expiresIn: "1h" },
+              (err, token) => {
+                res.status(200).json("Bearer " + token);
+              }
+            );
+          } else {
+            res.status(400).json("Bad Request");
+          }
         });
+      })
+      .catch(err => {
+        res.status(400).json("Bad Request");
       });
   }
 });
