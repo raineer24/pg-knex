@@ -12,6 +12,8 @@ const key = require("../../utilities/keys");
 
 const crypto = require("crypto");
 
+require("dotenv").config();
+
 router.get("/", (req, res, next) => {
   database
     .select()
@@ -92,7 +94,7 @@ router.post("/login", (req, res) => {
             const payload = { id: data[0].id, email: data[0].email };
             jwt.sign(
               payload,
-              key.secretKey,
+              process.env.SECRET_KEY,
               { expiresIn: "1h" },
               (err, token) => {
                 res.status(200).json("Bearer " + token);
