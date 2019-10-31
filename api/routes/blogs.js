@@ -4,8 +4,9 @@ const database = require("../../config/database");
 const bcrypt = require("bcrypt");
 // Registration validation
 const checkRegistrationFields = require("../../validation/register");
+const checkAuth = require("../../middleware/check-auth");
 
-router.get("/", (req, res, next) => {
+router.get("/", checkAuth, (req, res, next) => {
   database
     .select()
     .table("blogs")
