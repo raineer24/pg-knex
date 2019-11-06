@@ -66,10 +66,20 @@ router.post("/register", (req, res) => {
         .then(user => {
           console.log("user[0]", user[0]);
 
-          new Mailer(mailConfirmation(user[0]))
+          const mailOptions = {
+            from: '"Example Team" <delaritaraineer81@gmail.com>',
+            to: "delaritaraineer81@gmail.com, delaritaraineer81@gmail.com",
+            subject: "Nice Nodemailer test",
+            text: "Hey there, it’s our first message sent with Nodemailer ",
+            html: `<b>Hello world?</b>${JSON.stringify(user[0])}`
+          };
+
+          new Mailer(mailOptions)
             .send()
             .then(() => {})
             .catch(err => {
+              console.log(err);
+
               console.log("failed to send");
             });
 
