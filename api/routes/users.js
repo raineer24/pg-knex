@@ -7,12 +7,17 @@ const checkRegistrationFields = require("../../validation/register");
 // Login validation
 const validateLoginInput = require("../../validation/login");
 const jwt = require("jsonwebtoken");
-// Secret key
-const key = require("../../utilities/keys");
+const config = require("../../config/config");
 
 const crypto = require("crypto");
 
+const User = require("../../models/users");
+
+const Mailer = require("../../service/mail");
+
 require("dotenv").config();
+
+let that;
 
 router.get("/", (req, res, next) => {
   database
@@ -22,15 +27,12 @@ router.get("/", (req, res, next) => {
 });
 
 router.post("/register", (req, res) => {
+  that = this;
+
   // Ensures that all entries by the user are valid
   const { errors, isValid } = checkRegistrationFields(req.body);
 
   // If any of the entries made by the user are invalid, a status 400 is returned with the error
-  if (!isValid) {
-    return res.status(400).json(errors);
-  }
-
-  //If any of the entries made by the user are invalid, a status 400 is returned with the error
   if (!isValid) {
     return res.status(400).json(errors);
   }
@@ -57,10 +59,19 @@ router.post("/register", (req, res) => {
           username: req.body.username,
           token: token,
           first_name: req.body.first_name,
-          image_url: req.body.image_url
+          image_url: req.body.image_url,
+          emailverified: "f",
+          tokenusedbefore: "f"
         })
         .then(user => {
-          console.log(user.rows);
+          console.log("user[0]", user[0]);
+
+          new Mailer(mailConfirmation(user[0]))
+            .send()
+            .then(() => {})
+            .catch(err => {
+              console.log("failed to send");
+            });
 
           // This is where the api returns json to the /register route
           // Return the id, email, registered on date and token here
@@ -69,6 +80,8 @@ router.post("/register", (req, res) => {
           // console.log(user[0]);
         })
         .catch(err => {
+          console.log(err);
+
           errors.account = "Email already registered";
           res.status(400).json(errors);
         });
@@ -87,6 +100,7 @@ router.post("/login", (req, res) => {
     database
       .select("id", "email", "password")
       .where("email", "=", req.body.email)
+      .andWhere("emailverified", true)
       .from("users")
       .then(data => {
         bcrypt.compare(req.body.password, data[0].password).then(isMatch => {
@@ -111,5 +125,36 @@ router.post("/login", (req, res) => {
         res.status(400).json("Bad Request");
       });
   }
+});
+
+router.post("/verify/:token", (req, res) => {
+  const { token } = req.params;
+  const errors = {};
+
+  database
+    .returning(["email", "emailverified", "tokenusedbefore"])
+    .from("users")
+    .where({ token: token, tokenusedbefore: "f" })
+    .update({ emailverified: "t", tokenusedbefore: "t" })
+    .then(data => {
+      console.log(data.length);
+      console.log(data);
+
+      if (data.length > 0) {
+        // Return an email verified message
+        res.json("Email verified! Please login to access your account");
+      } else {
+        database
+          .select("email", "emailverified", "tokenusedbefore")
+          .from("users")
+          .where("token", token)
+          .then(check => {
+            console.log("check", check);
+            if (check.length > 0) {
+              console.log("check length is 0");
+            }
+          });
+      }
+    });
 });
 module.exports = router;
