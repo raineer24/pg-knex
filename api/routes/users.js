@@ -52,7 +52,7 @@ router.post("/register", (req, res) => {
     bcrypt.hash(req.body.password, salt, (err, hash) => {
       if (err) throw err;
       database("users")
-        .returning(["id", "email", "username"])
+        .returning(["id", "email", "username", "token"])
         .insert({
           email: req.body.email,
           password: hash,
@@ -65,13 +65,19 @@ router.post("/register", (req, res) => {
         })
         .then(user => {
           console.log("user[0]", user[0]);
+          console.log(user.token);
+
+          let username = JSON.stringify(user[0].username);
+          let newTemp = username.replace(/"/g, "");
+
+          const body = `<b>Hello world?</b>${newTemp}`;
 
           const mailOptions = {
             from: '"Example Team" <delaritaraineer81@gmail.com>',
             to: "delaritaraineer81@gmail.com, delaritaraineer81@gmail.com",
-            subject: "Nice Nodemailer test",
+            subject: "Encrypt v2",
             text: "Hey there, it’s our first message sent with Nodemailer ",
-            html: `<b>Hello world?</b>${JSON.stringify(user[0])}`
+            html: body
           };
 
           new Mailer(mailOptions)
