@@ -68,8 +68,14 @@ router.post("/register", (req, res) => {
           console.log(user.token);
 
           const hostname = JSON.stringify(config.env.port).replace(/"/g, "");
-          const cfg =
-            `http://localhost:${hostname}/api/v2/users/verify/` + user[0].token;
+          // const cfg =
+          //   `http://localhost:${hostname}/api/v2/users/verify/` + user[0].token;
+
+          //const cfg = `http://localhost:4200/#/users/verify/` + user[0].token;
+
+          //const cfg = `http://localhost:4200/#/users/verify/`;
+
+          const cfg = `http://localhost:4200/#/users/verify/` + user[0].token;
 
           console.log(cfg);
 
