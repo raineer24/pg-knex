@@ -210,10 +210,12 @@ router.delete("/:id", (req, res) => {
 //get user :id
 router.get("/:id", (req, res) => {
   database("users")
-    .where({ blog_id: req.params.id })
+    .where({ id: req.params.id })
     .select()
     .then(data => {
-      res.send(data);
+      res.status(201).json({
+        data
+      });
     });
 });
 module.exports = router;
