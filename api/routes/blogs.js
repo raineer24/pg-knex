@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
 const checkRegistrationFields = require("../../validation/register");
 const checkAuth = require("../../middleware/check-auth");
 
-router.get("/", checkAuth, (req, res, next) => {
+router.get("/", (req, res, next) => {
   database
     .select()
     .table("blogs")
@@ -34,6 +34,27 @@ router.post("/", (req, res) => {
     .catch(err => {
       //errors.account = "Email already registered";
       res.status(400).json(err);
+    });
+});
+
+// remove blog id
+router.delete("/:id", (req, res) => {
+  console.log(req.params);
+
+  database("blogs")
+    .where({ blog_id: req.params.id })
+    .del()
+    .then(result => {
+      console.log(result);
+    });
+});
+
+router.get("/:id", (req, res) => {
+  database("blogs")
+    .where({ blog_id: req.params.id })
+    .select()
+    .then(data => {
+      res.send(data);
     });
 });
 

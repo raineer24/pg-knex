@@ -75,7 +75,7 @@ router.post("/register", (req, res) => {
 
           //const cfg = `http://localhost:4200/#/users/verify/`;
 
-          const cfg = `http://localhost:4200/#/users/verify/` + user[0].token;
+          const cfg = `http://localhost:4200/#/users/verify/?token=${user[0].token}`;
 
           console.log(cfg);
 
@@ -160,6 +160,8 @@ router.post("/login", (req, res) => {
 
 router.post("/verify/:token", (req, res) => {
   const { token } = req.params;
+  console.log(typeof req.params);
+
   const errors = {};
 
   database
