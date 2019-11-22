@@ -120,6 +120,8 @@ router.post("/register", (req, res) => {
   });
 });
 
+//
+
 //login route
 router.post("/login", (req, res) => {
   // Ensures that all entries by the user are valid
@@ -188,6 +190,30 @@ router.post("/verify/:token", (req, res) => {
             }
           });
       }
+    });
+});
+
+// remove user :id
+router.delete("/:id", (req, res) => {
+  console.log(req.params);
+
+  database("users")
+    .where({ id: req.params.id })
+    .del()
+    .then(result => {
+      res.status(201).json({
+        message: "User Deleted"
+      });
+    });
+});
+
+//get user :id
+router.get("/:id", (req, res) => {
+  database("users")
+    .where({ blog_id: req.params.id })
+    .select()
+    .then(data => {
+      res.send(data);
     });
 });
 module.exports = router;
