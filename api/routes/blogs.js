@@ -78,12 +78,39 @@ router.delete("/:id", (req, res) => {
 });
 
 router.get("/:id", (req, res) => {
+  console.log(typeof req.params.id);
+
   database("blogs")
     .where({ blog_id: req.params.id })
     .select()
     .then(data => {
-      res.send(data);
+      console.log(data);
+      const stringify = JSON.stringify(data);
+      const data1 = data;
+      console.log("data1", typeof data1);
+      console.log("stringify", typeof stringify);
+
+      return res.status(201).json({
+        data,
+        message: "Found"
+      });
     });
+});
+
+router.put("/:id", upload.single("image"), (req, res) => {
+  cloudinary.uploader.upload(req.file.path, result => {
+    database("blogs")
+      .where({ blog_id: req.params.id })
+      .update({
+        title: req.body.title || null,
+        content: req.body.content || null,
+        image_url: result.secure_url
+      })
+      .returning("*")
+      .then(data => {
+        res.json({ data, message: "blog updated" });
+      });
+  });
 });
 
 module.exports = router;
