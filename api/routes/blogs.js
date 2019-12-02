@@ -55,7 +55,7 @@ router.post("/", upload.single("image"), (req, res) => {
         // This is where the api returns json to the /register route
         // Return the id, email, registered on date and token here
         // Sending the user's token as a response here is insecure
-        res.json({ blogs, success: true, message: "ok" });
+        res.json({ blogs, success: true, message: "Saved" });
         // console.log(user[0]);
       })
       .catch(err => {
