@@ -28,9 +28,7 @@ app.use(
   })
 );
 
-//app.use(cors());
-
-const app = express().use("*", cors());
+// app.use(cors());
 
 // app.use(
 //   cors({
@@ -54,21 +52,21 @@ const app = express().use("*", cors());
 //   next();
 // });
 
-// app.use((req, res, next) => {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header(
-//     "Access-Control-Allow-Headers",
-//     "Origin, X-Requested-With, Content-Type,Accept, Authorization"
-//   );
-//   if (req.method === "OPTIONS") {
-//     res.header(
-//       "Access-Control-Allow-Methods",
-//       "PUT, POST, ,PATCH, DELETE, GET"
-//     );
-//     return res.status(200).json({});
-//   }
-//   next();
-// });
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type,Accept, Authorization"
+  );
+  if (req.method === "OPTIONS") {
+    res.header(
+      "Access-Control-Allow-Methods",
+      "PUT, POST, ,PATCH, DELETE, GET"
+    );
+    return res.status(200).json({});
+  }
+  next();
+});
 
 app.use("/api/v2/blogs", blogRoute);
 app.use("/api/v2/users", userRoute);
