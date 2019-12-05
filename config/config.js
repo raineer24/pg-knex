@@ -9,6 +9,6 @@ module.exports = {
     host: "smtp.gmail.com",
     port: 587,
     username: "	beybladebolo24@gmail.com",
-    password: "webdev456"
+    password: "batman489~"
   }
 };
