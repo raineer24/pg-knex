@@ -95,10 +95,10 @@ router.post("/register", upload.single("image"), (req, res) => {
 
             //const hostname = JSON.stringify(config.env.port).replace(/"/g, "");
 
-            // const hostname =
-            //   config.env.hostname === "localhost"
-            //     ? `${config.env.hostname}:${config.env.port}`
-            //     : config.env.hostname;
+            const hostname =
+              config.env.hostname === "localhost"
+                ? `${config.env.hostname}:${config.env.port}`
+                : config.env.hostname;
 
             // const cfg =
             //   `http://localhost:${hostname}/api/v2/users/verify/` + user[0].token;
