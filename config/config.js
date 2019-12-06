@@ -2,8 +2,8 @@ require("dotenv").config();
 
 module.exports = {
   env: {
-    port: process.env.PORT || "3000"
-    //hostname: "ner-web.com"
+    port: process.env.PORT || "3000",
+    hostname: "ner-web.com"
   },
   mail: {
     host: "smtp.gmail.com",

@@ -107,9 +107,9 @@ router.post("/register", upload.single("image"), (req, res) => {
 
             //const cfg = `http://localhost:4200/#/users/verify/`;
 
-            //const cfg = `http://${hostname}/#/users/verify/?token=${user[0].token}`;
+            const cfg = `http://${hostname}/#/users/verify/?token=${user[0].token}`;
 
-            const cfg = `http://localhost:4200/#/users/verify/?token=${user[0].token}`;
+            // const cfg = `http://localhost:4200/#/users/verify/?token=${user[0].token}`;
 
             console.log(cfg);
 
