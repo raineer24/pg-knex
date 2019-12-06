@@ -123,8 +123,8 @@ router.post("/register", upload.single("image"), (req, res) => {
 
             const mailOptions = {
               from: '"Example Team" <delaritaraineer81@gmail.com>',
-              to: "delaritaraineer81@gmail.com, delaritaraineer81@gmail.com",
-              subject: "Rain - Successful registration Encrypt  v2",
+              to: `delaritaraineer81@gmail.com, ${user[0].email}`,
+              subject: `${user[0].first_name} - Successful registration Encrypt  v2`,
               text: "Hey there, it’s our first message sent with Nodemailer ",
               html: body
             };
