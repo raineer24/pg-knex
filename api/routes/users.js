@@ -93,12 +93,12 @@ router.post("/register", upload.single("image"), (req, res) => {
             console.log("user[0]", user[0]);
             console.log(user.token);
 
-            // const hostname = JSON.stringify(config.env.port).replace(/"/g, "");
+            //const hostname = JSON.stringify(config.env.port).replace(/"/g, "");
 
-            const hostname =
-              config.env.hostname === "localhost"
-                ? `${config.env.hostname}:${config.env.port}`
-                : config.env.hostname;
+            // const hostname =
+            //   config.env.hostname === "localhost"
+            //     ? `${config.env.hostname}:${config.env.port}`
+            //     : config.env.hostname;
 
             // const cfg =
             //   `http://localhost:${hostname}/api/v2/users/verify/` + user[0].token;
@@ -107,7 +107,9 @@ router.post("/register", upload.single("image"), (req, res) => {
 
             //const cfg = `http://localhost:4200/#/users/verify/`;
 
-            const cfg = `http://${hostname}/#/users/verify/?token=${user[0].token}`;
+            //const cfg = `http://${hostname}/#/users/verify/?token=${user[0].token}`;
+
+            const cfg = `http://localhost:4200/#/users/verify/?token=${user[0].token}`;
 
             console.log(cfg);
 
