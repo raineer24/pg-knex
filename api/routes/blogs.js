@@ -73,7 +73,7 @@ router.delete("/:id", (req, res) => {
     .where({ blog_id: req.params.id })
     .del()
     .then(result => {
-      console.log(result);
+      res.json({ success: true, message: "Deleted" });
     });
 });
 
