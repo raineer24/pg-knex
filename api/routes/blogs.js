@@ -36,8 +36,6 @@ router.get("/", (req, res, next) => {
   database
     .select()
     .table("blogs")
-    .orderBy("title", "asc")
-    .orderBy("content", "asc")
     .then(data => res.json(data));
 });
 
