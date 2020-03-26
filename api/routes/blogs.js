@@ -36,6 +36,7 @@ router.get("/", (req, res, next) => {
   database
     .select()
     .table("blogs")
+    .orderBy("created_at", "desc")
     .then(data => res.json(data));
 });
 
