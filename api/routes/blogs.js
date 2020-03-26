@@ -36,12 +36,14 @@ router.get("/", (req, res, next) => {
   database
     .select()
     .table("blogs")
+    .orderBy("created_at", "desc")
     .then(data => res.json(data));
 });
 
 router.post("/", upload.single("image"), (req, res) => {
+  console.log(req.file.path);
+
   //const { errors, isValid } = checkRegistrationFields(req.body);
-  console.log(req.body.title);
 
   cloudinary.uploader.upload(req.file.path, result => {
     database("blogs")
