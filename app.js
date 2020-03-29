@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 
 const blogRoute = require("./api/routes/blogs");
 const userRoute = require("./api/routes/users");
+const userRoutes = require("./api/routes/user"); //another route
 
 const test = require("./api/test");
 
@@ -70,6 +71,7 @@ app.use((req, res, next) => {
 
 app.use("/api/v2/blogs", blogRoute);
 app.use("/api/v2/users", userRoute);
+app.use("/api/v2/user", userRoutes); //another route
 app.use("/api/v2/test", test);
 
 app.listen(port, function(err) {
