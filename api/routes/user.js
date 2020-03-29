@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const database = require("../../config/database");
+const gravatar = require("gravatar");
 
 router.get("/", (req, res) => {
   res.json({
@@ -11,22 +12,22 @@ router.get("/", (req, res) => {
 router.post("/register", (req, res) => {
   console.log(req.body);
 
+  const avatar = gravat.url(req.body.email, {
+    s: "200", // Size
+    r: "pg", // Rating
+    d: "mm" // Default
+  });
+
   database("users")
     .returning(["id", "first_name", "email", "image_url", "username"])
     .insert({
       email: req.body.email,
       password: req.body.password,
       username: req.body.username,
-      token: "token",
       first_name: req.body.first_name,
-      image_url: req.body.email,
-      emailverified: "f",
-      tokenusedbefore: "f"
+      image_url: req.body.email
     })
     .then(user => {
-      // This is where the api returns json to the /register route
-      // Return the id, email, registered on date and token here
-      // Sending the user's token as a response here is insecure
       return res.status(201).json({ user, success: true, message: "Saved" });
       // console.log(user[0]);
     })
