@@ -35,6 +35,10 @@ router.get("/", (req, res) => {
   });
 });
 
+// @route    POST api/users
+// @desc     Register user
+// @access   Public
+
 router.post("/register", upload.single("image"), (req, res) => {
   console.log(req.body);
   cloudinary.uploader.upload(req.file.path, result => {
@@ -75,6 +79,30 @@ router.post("/register", upload.single("image"), (req, res) => {
       });
     });
   });
+});
+
+// @route    GET api/users/login
+// @desc     Login User / Returning JWT Token
+// @access   Public
+router.post("/login", (req, res) => {
+  database
+    .select("id", "email", "password")
+    .where("email", "=", req.body.email)
+    .from("users")
+    .then(data => {
+      if (data.length === 0) {
+        return res.status(404).json({ email: "User not found" });
+      }
+
+      //Check is password
+      bcrypt.compare(req.body.password, data[0].password).then(isMatch => {
+        if (isMatch) {
+          res.json({ msg: "Success" });
+        } else {
+          return res.status(400).json({ password: "Password incorrect" });
+        }
+      });
+    });
 });
 
 module.exports = router;
