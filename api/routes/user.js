@@ -35,43 +35,44 @@ router.get("/", (req, res) => {
   });
 });
 
-router.post("/register", (req, res) => {
+router.post("/register", upload.single("image"), (req, res) => {
   console.log(req.body);
-
-  bcrypt.genSalt(10, (err, salt) => {
-    bcrypt.hash(req.body.password, salt, (err, hash) => {
-      if (err) throw err;
-      database("users")
-        .returning([
-          "id",
-          "first_name",
-          "email",
-          "image_url",
-          "username",
-          "password"
-        ])
-        .insert({
-          email: req.body.email,
-          password: hash,
-          username: req.body.username,
-          first_name: req.body.first_name,
-          image_url
-        })
-        .then(user => {
-          return res
-            .status(201)
-            .json({ user, success: true, message: "Saved" });
-          // console.log(user[0]);
-        })
-        .catch(err => {
-          console.log(err);
-          if (err.routine === "_bt_check_unique") {
+  cloudinary.uploader.upload(req.file.path, result => {
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(req.body.password, salt, (err, hash) => {
+        if (err) throw err;
+        database("users")
+          .returning([
+            "id",
+            "first_name",
+            "email",
+            "image_url",
+            "username",
+            "password"
+          ])
+          .insert({
+            email: req.body.email,
+            password: hash,
+            username: req.body.username,
+            first_name: req.body.first_name,
+            image_url: result.secure_url
+          })
+          .then(user => {
             return res
-              .status(400)
-              .send({ message: "User with that EMAIL already exist" });
-          }
-          return res.status(400).send(err);
-        });
+              .status(201)
+              .json({ user, success: true, message: "Saved" });
+            // console.log(user[0]);
+          })
+          .catch(err => {
+            console.log(err);
+            if (err.routine === "_bt_check_unique") {
+              return res
+                .status(400)
+                .send({ message: "User with that EMAIL already exist" });
+            }
+            return res.status(400).send(err);
+          });
+      });
     });
   });
 });
