@@ -4,6 +4,7 @@ const database = require("../../config/database");
 const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const cloudinary = require("cloudinary");
+const jwt = require("jsonwebtoken");
 
 const multer = require("multer");
 
@@ -97,7 +98,22 @@ router.post("/login", (req, res) => {
       //Check is password
       bcrypt.compare(req.body.password, data[0].password).then(isMatch => {
         if (isMatch) {
-          res.json({ msg: "Success" });
+          // User Matched
+          const payload = { id: data[0].id, email: data[0].email };
+
+          // Sign Token
+          jwt.sign(
+            payload,
+            process.env.SECRET_KEY,
+            { expiresIn: "1h" },
+            (err, token) => {
+              if (err) throw err;
+              res.status(200).json({
+                success: true,
+                token: "Bearer " + token
+              });
+            }
+          );
         } else {
           return res.status(400).json({ password: "Password incorrect" });
         }
