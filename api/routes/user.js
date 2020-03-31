@@ -5,6 +5,7 @@ const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const cloudinary = require("cloudinary");
 const jwt = require("jsonwebtoken");
+const checkAuth = require("../../middleware/check-auth");
 
 const multer = require("multer");
 
@@ -30,7 +31,7 @@ cloudinary.config({
   api_secret: "OEJwFk8xMOuNID7Z7L5MNDJ9nY8"
 });
 
-router.get("/", (req, res) => {
+router.get("/current", checkAuth, (req, res) => {
   res.json({
     message: "Welcome Test Development"
   });
