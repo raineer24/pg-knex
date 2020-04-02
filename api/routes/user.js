@@ -88,31 +88,33 @@ router.post("/register", upload.single("image"), (req, res) => {
 // @desc     Login User / Returning JWT Token
 // @access   Public
 router.post("/login", async (req, res) => {
-  console.log(req.body);
+  //console.log(req.body);
+  const { email, password } = req.body;
   try {
     const existingUser = await User.query()
       .select("id", "email", "password")
       .where("email", "=", req.body.email);
 
-    console.log(existingUser);
-
     if (!existingUser) {
       return res.status(400).json({ errors: [{ msg: "User not found!" }] });
     }
-    // const isMatch = await bcrypt.compare(password, user.password);
-    // if (!isMatch) {
-    //   return res.status(400).json({ errors: [{ msg: "Password incorrect" }] });
-    // }
-    // const payload = { id: user.id, email: user.email };
-    // jwt.sign(
-    //   payload,
-    //   process.env.SECRET_KEY,
-    //   { expiresIn: "1h" },
-    //   (err, token) => {
-    //     if (err) throw err;
-    //     res.status(200).json({ message: " Auth Successful", token: token });
-    //   }
-    // );
+    const isMatch = await bcrypt.compare(password, existingUser[0].password);
+    console.log("ismatch", isMatch);
+
+    if (!isMatch) {
+      return res.status(400).json({ errors: [{ msg: "Password incorrect" }] });
+    }
+
+    const payload = { id: existingUser[0].id, email: existingUser[0].email };
+    jwt.sign(
+      payload,
+      process.env.SECRET_KEY,
+      { expiresIn: "1h" },
+      (err, token) => {
+        if (err) throw err;
+        res.status(200).json({ message: " Auth Successful", token: token });
+      }
+    );
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
