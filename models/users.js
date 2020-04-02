@@ -1,9 +1,9 @@
-"use strict";
-
-const bookshelf = require("../bookshelf");
-
-const User = bookshelf.Model.extend({
-  tableName: "users"
-});
+const Model = require("objection").Model;
+require("./../objection");
+class User extends Model {
+  static get tableName() {
+    return "users";
+  }
+}
 
 module.exports = User;

@@ -7,6 +7,8 @@ const cloudinary = require("cloudinary");
 const jwt = require("jsonwebtoken");
 const checkAuth = require("../../middleware/check-auth");
 
+const User = require("../../models/users");
+
 const multer = require("multer");
 
 const storage = multer.diskStorage({
@@ -67,7 +69,6 @@ router.post("/register", upload.single("image"), (req, res) => {
             return res
               .status(201)
               .json({ user, success: true, message: "Saved" });
-            // console.log(user[0]);
           })
           .catch(err => {
             console.log(err);
@@ -86,40 +87,36 @@ router.post("/register", upload.single("image"), (req, res) => {
 // @route    GET api/users/login
 // @desc     Login User / Returning JWT Token
 // @access   Public
-router.post("/login", (req, res) => {
-  database
-    .select("id", "email", "password")
-    .where("email", "=", req.body.email)
-    .from("users")
-    .then(data => {
-      if (data.length === 0) {
-        return res.status(404).json({ email: "User not found" });
-      }
+router.post("/login", async (req, res) => {
+  console.log(req.body);
+  try {
+    const existingUser = await User.query()
+      .select("id", "email", "password")
+      .where("email", "=", req.body.email);
 
-      //Check is password
-      bcrypt.compare(req.body.password, data[0].password).then(isMatch => {
-        if (isMatch) {
-          // User Matched
-          const payload = { id: data[0].id, email: data[0].email };
+    console.log(existingUser);
 
-          // Sign Token
-          jwt.sign(
-            payload,
-            process.env.SECRET_KEY,
-            { expiresIn: "1h" },
-            (err, token) => {
-              if (err) throw err;
-              res.status(200).json({
-                success: true,
-                token: "Bearer " + token
-              });
-            }
-          );
-        } else {
-          return res.status(400).json({ password: "Password incorrect" });
-        }
-      });
-    });
+    if (!existingUser) {
+      return res.status(400).json({ errors: [{ msg: "User not found!" }] });
+    }
+    // const isMatch = await bcrypt.compare(password, user.password);
+    // if (!isMatch) {
+    //   return res.status(400).json({ errors: [{ msg: "Password incorrect" }] });
+    // }
+    // const payload = { id: user.id, email: user.email };
+    // jwt.sign(
+    //   payload,
+    //   process.env.SECRET_KEY,
+    //   { expiresIn: "1h" },
+    //   (err, token) => {
+    //     if (err) throw err;
+    //     res.status(200).json({ message: " Auth Successful", token: token });
+    //   }
+    // );
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
 });
 
 module.exports = router;
