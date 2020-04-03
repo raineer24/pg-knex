@@ -14,7 +14,7 @@ const log = require("color-logs")(true, true, "User Account");
 
 const multer = require("multer");
 
-const { getCurrent } = require("./../controllers/auth_controller");
+const { getCurrent, postLogin } = require("./../controllers/auth_controller");
 
 const storage = multer.diskStorage({
   filename(req, file, callback) {
@@ -146,5 +146,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.route("/current1").get(getCurrent);
+
+router.route("/login1").post(postLogin);
 
 module.exports = router;
