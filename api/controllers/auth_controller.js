@@ -5,24 +5,18 @@ const log = require("color-logs")(true, true, "User Account");
 
 //const postLogin = ()
 
-const postLogin = (req, res, next) => {
+const postLogin = async (req, res, next) => {
   const email = String(req.body.email);
   const password = String(req.body.password);
   console.log(req.body);
+  try {
+    const user = await _findUserByEmail({ email });
+    console.log(user);
+  } catch (err) {
+    log.error(err.message);
+    res.status(500).send(`Server error: ${err.message}`);
+  }
 
-  User.query()
-    .where("email", email)
-    .first()
-    .then(user => {
-      console.log(`user!: `, user);
-
-      if (!user) {
-        return Promise.reject(new Error("User not found"));
-      }
-      return Promise.resolve(user);
-    });
-
-  // let user = await _findUserByEmail({ email });
   //console.log(user);
 
   // try {
@@ -66,11 +60,9 @@ const _findUserByEmail = email => {
 };
 
 const getCurrent = (req, res, next) => {
-  res
-    .send({
-      message: "Welcome Test Development"
-    })
-    .catch(next);
+  User.query().then(user => {
+    res.json({ user });
+  });
 };
 
 module.exports = { getCurrent, postLogin };
