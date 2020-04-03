@@ -8,6 +8,7 @@ const jwt = require("jsonwebtoken");
 const checkAuth = require("../../middleware/check-auth");
 
 const User = require("../../models/users");
+const log = require("color-logs")(true, true, "User Account");
 
 const multer = require("multer");
 
@@ -88,17 +89,22 @@ router.post("/register", upload.single("image"), (req, res) => {
 // @desc     Login User / Returning JWT Token
 // @access   Public
 router.post("/login", async (req, res) => {
-  //console.log(req.body);
+  console.log(req.body);
   const { email, password } = req.body;
   try {
     const existingUser = await User.query()
       .select("id", "email", "password")
       .where("email", "=", req.body.email);
 
+    console.log(existingUser);
+
     if (!existingUser) {
       return res.status(400).json({ errors: [{ msg: "User not found!" }] });
     }
-    const isMatch = await bcrypt.compare(password, existingUser[0].password);
+    const isMatch = await bcrypt.compare(
+      req.body.password,
+      existingUser[0].password
+    );
     console.log("ismatch", isMatch);
 
     if (!isMatch) {
@@ -112,12 +118,13 @@ router.post("/login", async (req, res) => {
       { expiresIn: "1h" },
       (err, token) => {
         if (err) throw err;
+        log.info(`Logged into user account ${existingUser[0].email}`);
         res.status(200).json({ message: " Auth Successful", token: token });
       }
     );
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server error");
+    log.error(err.message);
+    res.status(500).send(`Server error: ${err.message}`);
   }
 });
 
