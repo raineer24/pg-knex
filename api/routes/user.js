@@ -91,8 +91,6 @@ router.post("/register", upload.single("image"), (req, res) => {
 // @desc     Login User / Returning JWT Token
 // @access   Public
 router.post("/login", async (req, res) => {
-  //console.log(req.body);
-
   const { email, password } = req.body;
   try {
     const _findUserByEmail = email =>
@@ -109,41 +107,32 @@ router.post("/login", async (req, res) => {
         });
 
     let user = await _findUserByEmail({ email });
-    console.log(`user2sss: `, user);
-    const existingUser = await User.query()
-      .select("id", "email", "password")
-      .where("email", "=", req.body.email);
 
-    // log.info(`existingUser: ${JSON.stringify(existingUser)}`);
+    // const existingUser = await User.query()
+    //   .select("id", "email", "password")
+    //   .where("email", "=", req.body.email);
 
-    log.info("find by email", _findUserByEmail);
+    const isMatch = await bcrypt.compare(password, user.password);
 
-    console.log(existingUser);
-    console.log(req.body.password);
-    const isMatch = await bcrypt.compare(
-      req.body.password,
-      existingUser[0].password
-    );
+    //console.log(existingUser[0].password);
 
-    console.log(existingUser[0].password);
-
-    if (!existingUser) {
-      return res.status(400).json({ errors: [{ msg: "User not found!" }] });
-    }
-    console.log("ismatch", isMatch);
+    // if (!existingUser) {
+    //   return res.status(400).json({ errors: [{ msg: "User not found!" }] });
+    // }
+    // console.log("ismatch", isMatch);
 
     if (!isMatch) {
       return res.status(400).json({ errors: [{ msg: "Password incorrect" }] });
     }
 
-    const payload = { id: existingUser[0].id, email: existingUser[0].email };
+    const payload = { id: user.id, email: user.email };
     jwt.sign(
       payload,
       process.env.SECRET_KEY,
       { expiresIn: "1h" },
       (err, token) => {
         if (err) throw err;
-        log.info(`Logged into user account ${existingUser[0].email}`);
+        log.info(`Logged into user account ${user.email}`);
         res.status(200).json({ message: " Auth Successful", token: token });
       }
     );
