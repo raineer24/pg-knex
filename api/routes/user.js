@@ -111,18 +111,7 @@ router.post("/login", async (req, res) => {
 
     let user = await _findUserByEmail({ email });
 
-    // const existingUser = await User.query()
-    //   .select("id", "email", "password")
-    //   .where("email", "=", req.body.email);
-
     const isMatch = await bcrypt.compare(password, user.password);
-
-    //console.log(existingUser[0].password);
-
-    // if (!existingUser) {
-    //   return res.status(400).json({ errors: [{ msg: "User not found!" }] });
-    // }
-    // console.log("ismatch", isMatch);
 
     if (!isMatch) {
       return res.status(400).json({ errors: [{ msg: "Password incorrect" }] });
@@ -145,7 +134,10 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.route("/current1").get(getCurrent);
+router
+  .route("/current1")
+  .all(checkAuth)
+  .get(getCurrent);
 
 router.route("/login1").post(postLogin);
 

@@ -1,11 +1,11 @@
 const jwt = require("jsonwebtoken");
 
-module.exports = (req, res, next) => {
+const checkAuth = (req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
     console.log(token);
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
-    req.userData = decoded;
+    //req.userData = decoded;
     next();
   } catch (error) {
     console.error("something wrong with auth middelware");
@@ -14,3 +14,9 @@ module.exports = (req, res, next) => {
     });
   }
 };
+
+// const exportables = {
+//   checkAuth
+// };
+
+module.exports = checkAuth;
