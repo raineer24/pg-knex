@@ -10,8 +10,33 @@ const postLogin = async (req, res, next) => {
   const password = String(req.body.password);
   console.log(req.body);
   try {
-    const user = await _findUserByEmail({ email });
-    console.log(user);
+    _findUserByEmail(email)
+      .then(data => {
+        res.json({ data });
+      })
+      .catch(Error, err => {
+        if (err.message === "User not found") {
+          log.error(
+            `The email address ${email} is not associated with any account.`
+          );
+          return res.status(400).json({
+            errors: [
+              {
+                msg: `The email address ${email} is not associated with any account.`
+              }
+            ]
+          });
+        } else {
+          return Promise.reject(err);
+        }
+      })
+      .catch(next);
+
+    // if (!isMatch) {
+    //   return res.status(400).json({ errors: [{ msg: "Password incorrect" }] });
+    // }
+
+    //console.log(user);
   } catch (err) {
     log.error(err.message);
     res.status(500).send(`Server error: ${err.message}`);
@@ -45,19 +70,18 @@ const postLogin = async (req, res, next) => {
   // }
 };
 
-const _findUserByEmail = email => {
+const _findUserByEmail = email =>
   User.query()
     .where("email", email)
     .first()
     .then(user => {
-      console.log(`user!: `, user);
+      console.log(user);
 
       if (!user) {
         return Promise.reject(new Error("User not found"));
       }
       return Promise.resolve(user);
     });
-};
 
 const getCurrent = (req, res, next) => {
   User.query().then(user => {
