@@ -185,7 +185,7 @@ router.post("/login", (req, res) => {
               }
             );
           } else {
-            res.status(400).json("Bad Request");
+            res.status(400).json("incorrect password");
           }
         });
       })
@@ -262,7 +262,7 @@ router.get("/:id", (req, res) => {
 router.post("/logins", (req, res) => {
   database
     .select("id", "email", "password")
-    .where("email", "=", req.body.email)
+    .where("email", "=", req.body.email) 
     .from("users")
     .then(data => {
       if (data.length === 0) {

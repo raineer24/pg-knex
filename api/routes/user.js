@@ -7,6 +7,8 @@ const cloudinary = require("cloudinary");
 const jwt = require("jsonwebtoken");
 const checkAuth = require("../../middleware/check-auth");
 
+const Promise = require("bluebird");
+
 const User = require("../../models/users");
 const log = require("color-logs")(true, true, "User Account");
 
@@ -89,22 +91,45 @@ router.post("/register", upload.single("image"), (req, res) => {
 // @desc     Login User / Returning JWT Token
 // @access   Public
 router.post("/login", async (req, res) => {
-  console.log(req.body);
+  //console.log(req.body);
+
   const { email, password } = req.body;
   try {
+    const _findUserByEmail = email =>
+      User.query()
+        .where("email", req.body.email)
+        .first()
+        .then(user => {
+          console.log(`user!: `, user);
+
+          if (!user) {
+            return Promise.reject(new Error("User not found"));
+          }
+          return Promise.resolve(user);
+        });
+
+    let user = await _findUserByEmail({ email });
+    console.log(`user2sss: `, user);
     const existingUser = await User.query()
       .select("id", "email", "password")
       .where("email", "=", req.body.email);
 
-    console.log(existingUser);
+    // log.info(`existingUser: ${JSON.stringify(existingUser)}`);
 
-    if (!existingUser) {
-      return res.status(400).json({ errors: [{ msg: "User not found!" }] });
-    }
+    log.info("find by email", _findUserByEmail);
+
+    console.log(existingUser);
+    console.log(req.body.password);
     const isMatch = await bcrypt.compare(
       req.body.password,
       existingUser[0].password
     );
+
+    console.log(existingUser[0].password);
+
+    if (!existingUser) {
+      return res.status(400).json({ errors: [{ msg: "User not found!" }] });
+    }
     console.log("ismatch", isMatch);
 
     if (!isMatch) {
