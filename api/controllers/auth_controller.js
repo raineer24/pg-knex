@@ -1,5 +1,8 @@
 const User = require("../../models/users");
 const Promise = require("bluebird");
+const bcrypt = require("bcryptjs");
+const log = require("color-logs")(true, true, "User Account");
+
 //const postLogin = ()
 
 const postLogin = (req, res, next) => {};
@@ -17,3 +20,13 @@ const _findUserByEmail = email => {
       return Promise.resolve(user);
     });
 };
+
+const getCurrent = (req, res, next) => {
+  res
+    .json({
+      message: "Welcome Test Development"
+    })
+    .catch(next);
+};
+
+module.exports = { getCurrent };

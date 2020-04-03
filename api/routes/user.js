@@ -14,6 +14,8 @@ const log = require("color-logs")(true, true, "User Account");
 
 const multer = require("multer");
 
+const { getCurrent } = require("./../controllers/auth_controller");
+
 const storage = multer.diskStorage({
   filename(req, file, callback) {
     callback(null, Date.now() + file.originalname);
@@ -91,7 +93,8 @@ router.post("/register", upload.single("image"), (req, res) => {
 // @desc     Login User / Returning JWT Token
 // @access   Public
 router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
+  const email = String(req.body.email);
+  const password = String(req.body.password);
   try {
     const _findUserByEmail = email =>
       User.query()
@@ -141,5 +144,7 @@ router.post("/login", async (req, res) => {
     res.status(500).send(`Server error: ${err.message}`);
   }
 });
+
+router.route("/current1").get(getCurrent);
 
 module.exports = router;
