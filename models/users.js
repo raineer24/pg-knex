@@ -14,7 +14,6 @@ class User extends Model {
         password: { type: "string" },
         email: { type: "string", format: "email", maxLength: 30 },
         first_name: { type: "string", minLength: 1, maxLength: 40 },
-        created_at: { type: "string" },
         updated_at: { type: "string" },
         image_url: { type: "string", maxLength: 40 },
         token: { type: "string", maxLength: 40 },
@@ -23,6 +22,27 @@ class User extends Model {
       }
     };
   }
+
+  $formatJson(obj) {
+    obj = super.$formatJson(obj);
+    obj.avatar = this.avatar;
+    return _.omit(obj, hiddenFields);
+  }
+  $beforeInsert(queryContext) {
+    this.created_at = new Date().toISOString();
+    if (this.password) {
+      this.password = makeHash(this.password);
+    }
+  }
 }
 
 module.exports = User;
+/**
+ * Generate a hash based on bcrypt algorithm
+ * @param  {string} plainText input text string
+ * @return {string}           hashed string
+ */
+const makeHash = plainText => {
+  if (!plainText) return;
+  return bcrypt.hashSync(plainText, bcrypt.genSaltSync(10));
+};
