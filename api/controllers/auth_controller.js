@@ -19,13 +19,18 @@ const postLogin = async (req, res, next) => {
           log.error(
             `The email address ${email} is not associated with any account.`
           );
-          return res.status(400).json({
-            errors: [
-              {
-                msg: `The email address ${email} is not associated with any account.`
-              }
-            ]
-          });
+          // return res.status(400).json({
+          //   errors: [
+          //     {
+          //       msg: `The email address ${email} is not associated with any account.`
+          //     }
+          //   ]
+          // });
+          return Promise.reject(
+            new Error(
+              `The email address ${email} is not associated with any account.`
+            )
+          );
         } else {
           return Promise.reject(err);
         }
