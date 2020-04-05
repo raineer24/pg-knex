@@ -1,5 +1,9 @@
 const Model = require("objection").Model;
 require("./../objection");
+const _ = require("lodash");
+
+const hiddenFields = ["password", "created_at", "updated_at"];
+
 class User extends Model {
   static get tableName() {
     return "users";

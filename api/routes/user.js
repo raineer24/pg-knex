@@ -6,6 +6,7 @@ const bcrypt = require("bcryptjs");
 const cloudinary = require("cloudinary");
 const jwt = require("jsonwebtoken");
 const checkAuth = require("../../middleware/check-auth");
+const error = require("debug")("pg-knex:error");
 
 const Promise = require("bluebird");
 
@@ -129,6 +130,7 @@ router.post("/login", async (req, res) => {
       }
     );
   } catch (err) {
+    error(err.message);
     log.error(err.message);
     res.status(500).send(`Server error: ${err.message}`);
   }

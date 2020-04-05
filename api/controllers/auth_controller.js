@@ -2,7 +2,7 @@ const User = require("../../models/users");
 const Promise = require("bluebird");
 const bcrypt = require("bcryptjs");
 const log = require("color-logs")(true, true, "User Account");
-
+const error = require("debug")("pg-knex:error");
 //const postLogin = ()
 
 const postLogin = async (req, res, next) => {
@@ -16,6 +16,7 @@ const postLogin = async (req, res, next) => {
       })
       .catch(Error, err => {
         if (err.message === "User not found") {
+          error(err.message);
           log.error(
             `The email address ${email} is not associated with any account.`
           );

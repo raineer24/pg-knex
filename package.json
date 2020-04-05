@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon app.js",
-    "start": "node app.js"
+    "start": "node app.js",
+    "debug": "DEBUG=pg-knex:* nodemon app.js"
   },
   "author": "",
   "license": "ISC",
@@ -20,6 +21,7 @@
     "color-logs": "^0.6.1",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
+    "debug": "^2.2.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "gravatar": "^1.8.0",
