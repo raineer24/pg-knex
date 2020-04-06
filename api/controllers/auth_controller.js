@@ -3,12 +3,27 @@ const Promise = require("bluebird");
 const bcrypt = require("bcryptjs");
 const log = require("color-logs")(true, true, "User Account");
 const error = require("debug")("pg-knex:error");
-//const postLogin = ()
+const { createError, BAD_REQUEST } = require("../../helpers/error_helper");
 
+/**
+ * Signin
+ * @param {object} req
+ * @param {object} res
+ * @returns {object} user object
+ */
 const postLogin = async (req, res, next) => {
   const email = String(req.body.email);
   const password = String(req.body.password);
   console.log(req.body);
+
+  if (!email || !password)
+    next(
+      createError({
+        status: BAD_REQUEST,
+        message: "`username` + `password` are required fields"
+      })
+    );
+
   try {
     _findUserByEmail(email)
       .then(data => {
