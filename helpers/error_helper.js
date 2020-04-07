@@ -12,5 +12,7 @@ const createError = ({ status = 500, message = "Something went wrong" }) => {
 module.exports = {
   createError,
   BAD_REQUEST: 400,
-  CONFLICT: 409
+  CONFLICT: 409,
+  NOT_FOUND: 404,
+  GENERIC_ERROR: 500
 };

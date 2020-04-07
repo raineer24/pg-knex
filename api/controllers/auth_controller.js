@@ -3,7 +3,11 @@ const Promise = require("bluebird");
 const bcrypt = require("bcryptjs");
 const log = require("color-logs")(true, true, "User Account");
 const error = require("debug")("pg-knex:error");
-const { createError, BAD_REQUEST } = require("../../helpers/error_helper");
+const {
+  createError,
+  BAD_REQUEST,
+  GENERIC_ERROR
+} = require("../../helpers/error_helper");
 
 /**
  * Signin
@@ -16,93 +20,56 @@ const postLogin = async (req, res, next) => {
   const password = String(req.body.password);
   console.log(req.body);
 
-  if (!email || !password)
-    next(
-      createError({
-        status: BAD_REQUEST,
-        message: "`username` + `password` are required fields"
-      })
-    );
-
   try {
-    _findUserByEmail(email)
-      .then(data => {
-        res.json({ data });
-      })
-      .catch(Error, err => {
-        if (err.message === "User not found") {
-          error(err.message);
-          log.error(
-            `The email address ${email} is not associated with any account.`
-          );
-          // return res.status(400).json({
-          //   errors: [
-          //     {
-          //       msg: `The email address ${email} is not associated with any account.`
-          //     }
-          //   ]
-          // });
-          return Promise.reject(
-            new Error(
-              `The email address ${email} is not associated with any account.`
-            )
-          );
-        } else {
-          return Promise.reject(err);
-        }
-      })
-      .catch(next);
+    if (!email || !password) {
+      let err = new Error("`username` + `password` are required fields");
+      err.context = req.body.email;
+      err.status = BAD_REQUEST;
+      throw err;
+    }
 
-    // if (!isMatch) {
-    //   return res.status(400).json({ errors: [{ msg: "Password incorrect" }] });
+    // if (!email || !password)
+    //   next(
+    //     createError({
+    //       status: BAD_REQUEST,
+    //       message: "`username` + `password` are required fields"
+    //     })
+    //   );
+
+    let rows = await _findUserByEmail(email);
+    console.log("user", rows);
+    // const dbresponse = rows[0];
+    // console.log("dbresponse", dbresponse);
+    // if (!dbresponse) {
+    //   let err = new Error("Error creating user");
+    //   err.context = req.body.email;
+    //   err.status = BAD_REQUEST;
+    //   throw err;
     // }
-
-    //console.log(user);
   } catch (err) {
-    log.error(err.message);
-    res.status(500).send(`Server error: ${err.message}`);
+    return next(err);
   }
-
-  //console.log(user);
-
-  // try {
-  //   let user = await _findUserByEmail({ email });
-  //   console.log(user);
-
-  //   const isMatch = await bcrypt.compare(password, user.password);
-
-  //   const payload = { id: user.id, email: user.email };
-  //   jwt.sign(
-  //     payload,
-  //     process.env.SECRET_KEY,
-  //     { expiresIn: "1h" },
-  //     (err, token) => {
-  //       if (err) throw err;
-  //       log.info(`Logged into user account ${user.email}`);
-  //       res.status(200).json({ message: " Auth Successful", token: token });
-  //     }
-  //   );
-  // } catch (err) {
-  //   log.error(err.message);
-  //   res.status(500).send(`Server error: ${err.message}`);
-  // }
-  // if (!isMatch) {
-  //   return res.status(400).json({ errors: [{ msg: "Password incorrect" }] });
-  // }
 };
+
+// throwError = (code, errorType, errorMessage) => error => {
+//   if (!error) error = new Error(errorMessage || "Default Error");
+//   error.code = code;
+//   error.errorType = errorType;
+//   throw error;
+// };
 
 const _findUserByEmail = email =>
   User.query()
     .where("email", email)
-    .first()
-    .then(user => {
-      console.log(user);
-
-      if (!user) {
-        return Promise.reject(new Error("User not found"));
-      }
-      return Promise.resolve(user);
+    .then(data => {
+      return data[0];
     });
+
+// .then(user => {
+//   console.log("iser", user);
+
+//   return Promise.resolve(user);
+// });
 
 const getCurrent = (req, res, next) => {
   User.query().then(user => {

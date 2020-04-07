@@ -74,7 +74,7 @@ app.use("/api/v2/users", userRoute);
 app.use("/api/v2/user", userRoutes); //another route
 app.use("/api/v2/test", test);
 
-app.use(require("./middleware/error_middleware").exportables.badRequest);
+app.use(require("./middleware/error_middleware").all);
 
 app.listen(port, function(err) {
   if (err) throw err;
