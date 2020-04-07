@@ -28,25 +28,11 @@ const postLogin = async (req, res, next) => {
       throw err;
     }
 
-    // if (!email || !password)
-    //   next(
-    //     createError({
-    //       status: BAD_REQUEST,
-    //       message: "`username` + `password` are required fields"
-    //     })
-    //   );
-
-    let rows = await _findUserByEmail(email);
-    console.log("user", rows);
-    // const dbresponse = rows[0];
-    // console.log("dbresponse", dbresponse);
-    // if (!dbresponse) {
-    //   let err = new Error("Error creating user");
-    //   err.context = req.body.email;
-    //   err.status = BAD_REQUEST;
-    //   throw err;
-    // }
+    let user = await _findUserByEmail(email);
+    console.log("user", user);
   } catch (err) {
+    console.log(err.message);
+
     return next(err);
   }
 };
@@ -62,7 +48,14 @@ const _findUserByEmail = email =>
   User.query()
     .where("email", email)
     .then(data => {
-      return data[0];
+      let user = data[0];
+      if (!user) {
+        let err = new Error("User not found!");
+        // err.context = req.body.email;
+        err.status = BAD_REQUEST;
+        throw err;
+      }
+      return user;
     });
 
 // .then(user => {
