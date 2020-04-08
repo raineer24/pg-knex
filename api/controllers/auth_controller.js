@@ -8,14 +8,14 @@ const {
   BAD_REQUEST,
   GENERIC_ERROR
 } = require("../../helpers/error_helper");
-
+const asyncWrapper = require("../../middleware/asyncWrapper");
 /**
  * Signin
  * @param {object} req
  * @param {object} res
  * @returns {object} user object
  */
-const postLogin = async (req, res, next) => {
+const postLogin = asyncWrapper(async (req, res, next) => {
   const email = String(req.body.email);
   const password = String(req.body.password);
   console.log(req.body);
@@ -40,7 +40,7 @@ const postLogin = async (req, res, next) => {
 
     return next(err);
   }
-};
+});
 
 // throwError = (code, errorType, errorMessage) => error => {
 //   if (!error) error = new Error(errorMessage || "Default Error");
