@@ -29,7 +29,12 @@ const postLogin = async (req, res, next) => {
     }
 
     let user = await _findUserByEmail(email);
-    console.log("user", user);
+    if (!user) {
+      let err = new Error("`email doesn't exist");
+      err.context = req.body.email;
+      err.status = BAD_REQUEST;
+      throw err;
+    }
   } catch (err) {
     console.log(err.message);
 
