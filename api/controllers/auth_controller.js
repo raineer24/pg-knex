@@ -10,6 +10,7 @@ const {
 } = require("../../helpers/error_helper");
 const asyncWrapper = require("../../middleware/asyncWrapper");
 const handler = require("../../utils/responseHandler");
+const bcrypter = require("../../utils/bcrypter");
 
 /**
  * Signin
@@ -28,18 +29,23 @@ const postLogin = async (req, res, next) => {
 
     const user = rows[0];
 
-    if (!user) return handler.errorMessage(res, "lol, wtf");
+    if (!user)
+      return handler.errorMessage(
+        res,
+        `The email address ${email} is not associated with any account.`
+      );
 
-    console.log(user);
+    /* now check password */
+    const isValidPassword = await bcrypter.checkPassword(
+      password,
+      user.password
+    );
+    if (!isValidPassword)
+      return res.json({ status: false, message: "check creds" });
 
-    if (!email || !password) {
-      let err = new Error("`username` + `password` are required fields");
-      err.context = req.body.email;
-      err.status = BAD_REQUEST;
-      throw err;
-    }
+    res.json({ status: true, user });
   } catch (err) {
-    console.log(err.message);
+    console.log("error.message", err.message);
 
     return next(err);
   }
