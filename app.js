@@ -10,6 +10,10 @@ const userRoute = require("./api/routes/users");
 const userRoutes = require("./api/routes/user"); //another route
 
 const test = require("./api/test");
+const {
+  handle404Error,
+  handleDevErrors
+} = require("./middleware/errorHandler");
 
 const app = express();
 
@@ -74,7 +78,13 @@ app.use("/api/v2/users", userRoute);
 app.use("/api/v2/user", userRoutes); //another route
 app.use("/api/v2/test", test);
 
-app.use(require("./middleware/error_middleware").all);
+//app.use(require("./middleware/error_middleware").all);
+
+// catch 404 and forward to error handler
+app.use(handle404Error);
+
+// error handler
+app.use(handleDevErrors);
 
 app.listen(port, function(err) {
   if (err) throw err;
@@ -82,20 +92,20 @@ app.listen(port, function(err) {
   console.log("Blogs server listening on port %s.", port);
 });
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
+// // catch 404 and forward to error handler
+// app.use(function(req, res, next) {
+//   next(createError(404));
+// });
 
-// error handler
-// eslint-disable-next-line no-unused-vars
-app.use((err, req, res, _next) => {
-  // render the error page
-  res.status(err.status || 500);
-  res.json({
-    message: err.message,
-    error: req.app.get("env") === "development" ? err : {}
-  });
-});
+// // error handler
+// // eslint-disable-next-line no-unused-vars
+// app.use((err, req, res, _next) => {
+//   // render the error page
+//   res.status(err.status || 500);
+//   res.json({
+//     message: err.message,
+//     error: req.app.get("env") === "development" ? err : {}
+//   });
+// });
 
 module.exports = app;
