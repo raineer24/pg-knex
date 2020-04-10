@@ -19,22 +19,31 @@ const bcrypter = require("../../utils/bcrypter");
  * @returns {object} user object
  */
 
-const postLogin = asyncWrapper(async (req, res, next) => {
+const postLogin = async (req, res, next) => {
   const email = String(req.body.email);
   const password = String(req.body.password);
   console.log(req.body);
 
+  const isEmpty = input => {
+    if (input === undefined || input === "") {
+      return true;
+    }
+    if (input.replace(/\s/g, "").length) {
+      return false;
+    }
+    return true;
+  };
+
+  if (isEmpty(email) || isEmpty(password)) {
+    return res.json({
+      status: false,
+      message: "Email or Password detail is missing"
+    });
+  }
+
   try {
-    let rows = await User.query().where("email", email);
-    console.log("rows", rows);
-
-    const user = rows[0];
-
-    if (!user)
-      return handler.errorMessage(
-        res,
-        `The email address ${email} is not associated with any account.`
-      );
+    const user = await getUserEmail(email);
+    //console.log("yser", userEmail);
 
     /* now check password */
     const isValidPassword = await bcrypter.checkPassword(
@@ -43,14 +52,46 @@ const postLogin = asyncWrapper(async (req, res, next) => {
     );
     if (!isValidPassword)
       return res.json({ status: false, message: "check creds" });
-
     res.json({ status: true, user });
-  } catch (err) {
-    console.log("error.message", err.message);
-
-    return next(err);
+  } catch (error) {
+    console.log("error:", error);
+    res.status(500).json({ errors: error });
   }
-});
+
+  // try {
+  //   let rows = await User.query().where("email", email);
+  //   console.log("rows", rows);
+
+  //   const user = rows[0];
+
+  //   if (!user)
+  //     return handler.errorMessage(
+  //       res,
+  //       `The email address ${email} is not associated with any account.`
+  //     );
+
+  // } catch (err) {
+  //   console.log("error.message", err.message);
+
+  //   return next(err);
+  // }
+};
+
+function getUserEmail(email) {
+  return new Promise((resolve, reject) => {
+    User.query()
+      .where("email", email)
+      .then(result => {
+        const row = result[0];
+        if (!row) {
+          reject("email not found");
+          return;
+        }
+        resolve(row);
+      })
+      .catch(reject);
+  });
+}
 
 // throwError = (code, errorType, errorMessage) => error => {
 //   if (!error) error = new Error(errorMessage || "Default Error");
