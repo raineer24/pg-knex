@@ -10,6 +10,7 @@ const {
 } = require("../../helpers/error_helper");
 const asyncWrapper = require("../../middleware/asyncWrapper");
 const handler = require("../../utils/responseHandler");
+const tokenHandler = require("../../utils/tokenHelper");
 const bcrypter = require("../../utils/bcrypter");
 
 /**
@@ -35,10 +36,7 @@ const postLogin = async (req, res, next) => {
   };
 
   if (isEmpty(email) || isEmpty(password)) {
-    return res.json({
-      status: false,
-      message: "Email or Password detail is missing"
-    });
+    return handler.errorMessage(res, "lol, wtf");
   }
 
   try {
@@ -51,8 +49,13 @@ const postLogin = async (req, res, next) => {
       user.password
     );
     if (!isValidPassword)
-      return res.json({ status: false, message: "check creds" });
-    res.json({ status: true, user });
+      return res
+        .status(400)
+        .json({ status: false, message: "Password Incorrect" });
+
+    /** create token with some data */
+    const token = await tokenHandler.createToken({ data: user.id });
+    res.json({ status: true, user, token });
   } catch (error) {
     console.log("error:", error);
     res.status(500).json({ errors: error });

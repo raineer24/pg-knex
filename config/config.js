@@ -11,5 +11,6 @@ module.exports = {
     username: "	beybladebolo24@gmail.com",
     password: "batman489~"
   },
-  bycryptSalt: 13
+  bycryptSalt: 13,
+  secret_key: "123456"
 };
