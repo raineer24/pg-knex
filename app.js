@@ -7,7 +7,7 @@ const bodyParser = require("body-parser");
 
 const blogRoute = require("./api/routes/blogs");
 const userRoute = require("./api/routes/users");
-const userRoutes = require("./api/routes/user"); //another route
+const authRoutes = require("./api/routes/auth_route"); //another route
 
 const test = require("./api/test");
 const {
@@ -75,7 +75,7 @@ app.use((req, res, next) => {
 
 app.use("/api/v2/blogs", blogRoute);
 app.use("/api/v2/users", userRoute);
-app.use("/api/v2/user", userRoutes); //another route
+app.use("/api/v2/user", authRoutes); //another route
 app.use("/api/v2/test", test);
 
 //app.use(require("./middleware/error_middleware").all);
