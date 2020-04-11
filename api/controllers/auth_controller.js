@@ -60,25 +60,9 @@ const postLogin = async (req, res, next) => {
     console.log("error:", error);
     res.status(500).json({ errors: error });
   }
-
-  // try {
-  //   let rows = await User.query().where("email", email);
-  //   console.log("rows", rows);
-
-  //   const user = rows[0];
-
-  //   if (!user)
-  //     return handler.errorMessage(
-  //       res,
-  //       `The email address ${email} is not associated with any account.`
-  //     );
-
-  // } catch (err) {
-  //   console.log("error.message", err.message);
-
-  //   return next(err);
-  // }
 };
+
+const createUser = async (req, res, next) => {};
 
 function getUserEmail(email) {
   return new Promise((resolve, reject) => {
@@ -96,34 +80,10 @@ function getUserEmail(email) {
   });
 }
 
-// throwError = (code, errorType, errorMessage) => error => {
-//   if (!error) error = new Error(errorMessage || "Default Error");
-//   error.code = code;
-//   error.errorType = errorType;
-//   throw error;
-// };
-
-// const signInUserQuery = await User.query()
-//   .where("email", email)
-//   .then(data => {
-//     let user = data[0];
-//     if (!user) {
-//       //return Promise.reject(new Error("User not found"));
-//       return handler.errorMessage(res, "lol, wtf");
-//     }
-//     return Promise.resolve(user);
-//   });
-
-// .then(user => {
-//   console.log("iser", user);
-
-//   return Promise.resolve(user);
-// });
-
 const getCurrent = (req, res, next) => {
   User.query().then(user => {
     res.json({ user });
   });
 };
 
-module.exports = { getCurrent, postLogin };
+module.exports = { getCurrent, postLogin, createUser };
