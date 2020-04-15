@@ -80,11 +80,36 @@ app.use("/api/v2/test", test);
 
 //app.use(require("./middleware/error_middleware").all);
 
-// catch 404 and forward to error handler
-app.use(handle404Error);
+// // catch 404 and forward to error handler
+// app.use(handle404Error);
 
+function errorHandler(err, req, res, next) {
+  console.log("err status", err.status);
+  console.log("error:", err);
+  console.log("err.tostring()", err.toString());
+
+  if (err.status) {
+    return res.status(err.status).send(err.toString());
+  }
+  return res.status(500).send("Oops! Something went wrong");
+}
+
+app.use(errorHandler);
 // error handler
-app.use(handleDevErrors);
+// app.use(async (err, req, res, next) => {
+//   const environment = process.env.NODE_ENV || "development";
+//   console.log("process: ", environment);
+
+//   console.log("err.stack:", err.stack);
+//   if (environment === "development") {
+//     res.status(500).json(err.stack);
+//   }
+
+//   res.status(500).send("Something broke!");
+// });
+
+// // error handler
+// app.use(handleDevErrors);
 
 app.listen(port, function(err) {
   if (err) throw err;

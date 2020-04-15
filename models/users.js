@@ -27,6 +27,10 @@ class User extends Model {
     };
   }
 
+  static sample() {
+    $query;
+  }
+
   $formatJson(obj) {
     obj = super.$formatJson(obj);
     obj.avatar = this.avatar;

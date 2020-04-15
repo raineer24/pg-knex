@@ -1,0 +1,25 @@
+{"level":"error","message":"Error: That email already exists\n    at createUsers (/home/ner/workspace/pg-knex/api/controllers/auth_controller.js:86:13)\n    at <anonymous>\n    at process._tickCallback (internal/process/next_tick.js:188:7)","timestamp":"2020-04-11T18:24:19.044Z"}
+{"level":"error","message":"Error: That email already exists\n    at createUsers (/home/ner/workspace/pg-knex/api/controllers/auth_controller.js:86:13)\n    at <anonymous>\n    at process._tickCallback (internal/process/next_tick.js:188:7)","timestamp":"2020-04-11T18:25:19.432Z"}
+{"level":"error","message":"Error: That email already exists\n    at createUsers (/home/ner/workspace/pg-knex/api/controllers/auth_controller.js:86:13)\n    at <anonymous>\n    at process._tickCallback (internal/process/next_tick.js:188:7)","timestamp":"2020-04-11T18:28:45.044Z"}
+{"level":"error","message":"","timestamp":"2020-04-11T18:29:36.350Z"}
+{"level":"error","message":"","timestamp":"2020-04-11T18:31:13.072Z"}
+{"level":"error","message":"","timestamp":"2020-04-11T18:32:24.380Z"}
+{"level":"error","message":"","timestamp":"2020-04-11T18:35:01.789Z"}
+{"level":"error","message":"","timestamp":"2020-04-11T18:36:42.450Z"}
+{"level":"error","message":"","timestamp":"2020-04-11T18:37:32.622Z"}
+{"level":"error","message":"","timestamp":"2020-04-11T18:38:54.821Z"}
+{"level":"error","message":"","timestamp":"2020-04-11T18:39:22.314Z"}
+{"level":"error","message":"","timestamp":"2020-04-11T18:50:01.748Z"}
+{"level":"error","message":"","timestamp":"2020-04-11T18:53:38.259Z"}
+{"level":"error","message":"TypeError: next is not a function\n    at postLogin (/home/ner/workspace/pg-knex/api/controllers/auth_controller.js:79:12)\n    at <anonymous>\n    at process._tickCallback (internal/process/next_tick.js:188:7)","timestamp":"2020-04-11T18:55:09.857Z"}
+{"level":"error","message":"","timestamp":"2020-04-11T18:55:36.659Z"}
+{"level":"error","message":"","timestamp":"2020-04-11T18:58:49.981Z"}
+{"level":"error","message":"","timestamp":"2020-04-11T18:58:59.956Z"}
+{"level":"error","message":"","timestamp":"2020-04-11T19:16:35.105Z"}
+{"level":"error","message":"","timestamp":"2020-04-11T19:26:44.051Z"}
+{"level":"error","message":"","timestamp":"2020-04-11T19:36:11.621Z"}
+{"level":"error","message":"TypeError: Cannot read property 'password' of undefined\n    at postLogin (/home/ner/workspace/pg-knex/api/controllers/auth_controller.js:67:12)\n    at <anonymous>\n    at process._tickCallback (internal/process/next_tick.js:188:7)","timestamp":"2020-04-11T19:37:25.685Z"}
+{"level":"error","message":"","timestamp":"2020-04-11T19:37:53.078Z"}
+{"level":"error","message":"","timestamp":"2020-04-11T19:49:32.565Z"}
+{"level":"error","message":"","timestamp":"2020-04-11T19:50:20.695Z"}
+{"level":"error","message":"","timestamp":"2020-04-13T08:42:22.164Z"}

@@ -7,7 +7,7 @@ const cloudinary = require("cloudinary");
 const jwt = require("jsonwebtoken");
 const checkAuth = require("../../middleware/check-auth");
 const error = require("debug")("pg-knex:error");
-
+const asyncWrapper = require("../../middleware/asyncWrapper");
 const Promise = require("bluebird");
 
 const User = require("../../models/users");
