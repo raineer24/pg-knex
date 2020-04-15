@@ -7,6 +7,12 @@ const asyncWrapper = require("../../middleware/asyncWrapper");
 const handler = require("../../utils/responseHandler");
 const tokenHandler = require("../../utils/tokenHelper");
 const bcrypter = require("../../utils/bcrypter");
+const {
+  createError,
+  BAD_REQUEST,
+  UNAUTHORIZED,
+  CONFLICT
+} = require("../../helpers/error_helper");
 
 const createUser = async (req, res, next) => {
   const { email } = req.body;
@@ -68,14 +74,22 @@ const postLogin = async (req, res, next) => {
 
   try {
     const user = await getUserEmail(email);
-    console.log("post register user:", user);
+    //console.log("post register user:", user);
 
-    if (!user) {
-      console.log("User with this email does not exist");
-      let err = new Error("User with this email does not exist");
-      err.status = 404;
-      throw err;
-    }
+    // if (!user) {
+    //   console.log("User with this email does not exist");
+    //   let err = new Error("User with this email does not exist");
+    //   err.status = 404;
+    //   throw err;
+    // }
+
+    if (!user)
+      return next(
+        createError({
+          status: CONFLICT,
+          message: "User with this email does not exist"
+        })
+      );
 
     res.send(user);
 
@@ -93,7 +107,7 @@ const postLogin = async (req, res, next) => {
     //const token = await tokenHandler.createToken({ data: user.id });
     // res.json({ status: true, user, token });
   } catch (error) {
-    console.log("post signin user:/Error:", error);
+    console.log("post signin user:/Error::", error);
     return next(error);
   }
 };
@@ -103,15 +117,19 @@ async function createUsers(email) {
     let user = await getUserEmail(email);
     console.log("user", user);
 
-    if (user) {
-      let err = new Error("Email aready exists");
-      err.status = 422;
-      //err.context = req.body.email;
-      // console.log("err.status: ", err.status);
+    // if (user) {
+    //   let err = new Error("Email aready exists");
 
-      throw err;
-      //throw new Error("That email already exists");
-    }
+    //   throw err;
+    // }
+
+    // if (user)
+    //   return next(
+    //     createError({
+    //       status: CONFLICT,
+    //       message: "Email already exists"
+    //     })
+    //   );
 
     // if (user) res.json({ mesage: "email already exists" });
     // console.log(user);

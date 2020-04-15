@@ -78,7 +78,7 @@ app.use("/api/v2/users", userRoute);
 app.use("/api/v2/user", authRoutes); //another route
 app.use("/api/v2/test", test);
 
-//app.use(require("./middleware/error_middleware").all);
+app.use(require("./middleware/error_middleware").conflict);
 
 // // catch 404 and forward to error handler
 // app.use(handle404Error);
@@ -94,7 +94,7 @@ function errorHandler(err, req, res, next) {
   return res.status(500).send("Oops! Something went wrong");
 }
 
-app.use(errorHandler);
+//app.use(errorHandler);
 // error handler
 // app.use(async (err, req, res, next) => {
 //   const environment = process.env.NODE_ENV || "development";
