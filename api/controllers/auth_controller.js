@@ -3,11 +3,6 @@ const Promise = require("bluebird");
 const bcrypt = require("bcryptjs");
 const log = require("color-logs")(true, true, "User Account");
 const error = require("debug")("pg-knex:error");
-const {
-  createError,
-  BAD_REQUEST,
-  GENERIC_ERROR
-} = require("../../helpers/error_helper");
 const asyncWrapper = require("../../middleware/asyncWrapper");
 const handler = require("../../utils/responseHandler");
 const tokenHandler = require("../../utils/tokenHelper");
@@ -73,7 +68,16 @@ const postLogin = async (req, res, next) => {
 
   try {
     const user = await getUserEmail(email);
-    console.log("user:", user);
+    console.log("post register user:", user);
+
+    if (!user) {
+      console.log("User with this email does not exist");
+      let err = new Error("User with this email does not exist");
+      err.status = 404;
+      throw err;
+    }
+
+    res.send(user);
 
     // /* now check password */
     // const isValidPassword = await bcrypter.checkPassword(
@@ -86,10 +90,10 @@ const postLogin = async (req, res, next) => {
     //     .json({ status: false, message: "Password Incorrect" });
 
     /** create token with some data */
-    const token = await tokenHandler.createToken({ data: user.id });
-    res.json({ status: true, user, token });
+    //const token = await tokenHandler.createToken({ data: user.id });
+    // res.json({ status: true, user, token });
   } catch (error) {
-    //console.log("Error:", error);
+    console.log("post signin user:/Error:", error);
     return next(error);
   }
 };
