@@ -117,11 +117,12 @@ async function createUsers(email) {
     let user = await getUserEmail(email);
     console.log("user", user);
 
-    // if (user) {
-    //   let err = new Error("Email aready exists");
+    if (user) {
+      let err = new Error("Email aready exists");
+      err.status = CONFLICT;
 
-    //   throw err;
-    // }
+      throw err;
+    }
 
     // if (user)
     //   return next(

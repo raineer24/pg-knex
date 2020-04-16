@@ -78,7 +78,7 @@ app.use("/api/v2/users", userRoute);
 app.use("/api/v2/user", authRoutes); //another route
 app.use("/api/v2/test", test);
 
-app.use(require("./middleware/error_middleware").conflict);
+app.use(require("./middleware/error_middleware").all);
 
 // // catch 404 and forward to error handler
 // app.use(handle404Error);
