@@ -18,8 +18,14 @@ const createUser = async (req, res, next) => {
   const { email } = req.body;
 
   try {
-    let newUser = await createUsers(email);
+    let newUser = await getUserEmail(email);
     console.log("User", newUser);
+    if (newUser) {
+      let err = new Error("Email aready exists");
+      err.status = CONFLICT;
+
+      throw err;
+    }
   } catch (error) {
     console.log("auth controller", error);
 
@@ -112,32 +118,34 @@ const postLogin = async (req, res, next) => {
   }
 };
 
-async function createUsers(email) {
-  try {
-    let user = await getUserEmail(email);
-    console.log("user", user);
+// async function createUsers(email) {
+//   try {
+//     let user = await getUserEmail(email);
+//     console.log("user", user);
 
-    if (user) {
-      let err = new Error("Email aready exists");
-      err.status = CONFLICT;
+//     if (user) {
+//       let err = new Error("Email aready exists");
+//       err.status = CONFLICT;
 
-      throw err;
-    }
+//       throw err;
+//     }
 
-    // if (user)
-    //   return next(
-    //     createError({
-    //       status: CONFLICT,
-    //       message: "Email already exists"
-    //     })
-    //   );
+//     //User.query().insertAndFetch({email: req.body.email, password:})
 
-    // if (user) res.json({ mesage: "email already exists" });
-    // console.log(user);
-  } catch (err) {
-    throw err;
-  }
-}
+//     // if (user)
+//     //   return next(
+//     //     createError({
+//     //       status: CONFLICT,
+//     //       message: "Email already exists"
+//     //     })
+//     //   );
+
+//     // if (user) res.json({ mesage: "email already exists" });
+//     // console.log(user);
+//   } catch (err) {
+//     throw err;
+//   }
+// }
 
 // function getUserEmail(email) {
 //   return new Promise((resolve, reject) => {
