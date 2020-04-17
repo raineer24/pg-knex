@@ -33,24 +33,29 @@ class User extends Model {
 
   $formatJson(obj) {
     obj = super.$formatJson(obj);
+    console.log("obj", obj);
+
     obj.avatar = this.avatar;
     return _.omit(obj, hiddenFields);
   }
   $beforeInsert(queryContext) {
-    this.created_at = new Date().toISOString();
+    console.log("image url", this.image_url);
+
+    // this.created_at = new Date().toISOString();
     if (this.password) {
-      this.password = makeHash(this.password);
+      // this.password = makeHash(this.password);
+      console.log("user model.js", this.password);
     }
   }
 }
 
 module.exports = User;
-/**
- * Generate a hash based on bcrypt algorithm
- * @param  {string} plainText input text string
- * @return {string}           hashed string
- */
-const makeHash = plainText => {
-  if (!plainText) return;
-  return bcrypt.hashSync(plainText, bcrypt.genSaltSync(10));
-};
+// /**
+//  * Generate a hash based on bcrypt algorithm
+//  * @param  {string} plainText input text string
+//  * @return {string}           hashed string
+//  */
+// const makeHash = plainText => {
+//   if (!plainText) return;
+//   return bcrypt.hashSync(plainText, bcrypt.genSaltSync(10));
+// };

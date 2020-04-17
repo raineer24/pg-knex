@@ -15,17 +15,35 @@ const {
 } = require("../../helpers/error_helper");
 
 const createUser = async (req, res, next) => {
-  const { email } = req.body;
+  const { email, password } = req.body;
 
   try {
     let newUser = await getUserEmail(email);
-    console.log("User", newUser);
+    //console.log("User", newUser);
     if (newUser) {
       let err = new Error("Email aready exists");
       err.status = CONFLICT;
-
       throw err;
     }
+
+    const hashPassword = await bcrypter.encryptPassword(password);
+
+    const data = {
+      username: req.body.username,
+      password: hashPassword,
+      email: email,
+      image_url: req.body.image_url,
+      first_name: req.body.first_name
+    };
+
+    console.log("data", data);
+
+    const signup = await registerUser(data);
+    console.log("signup", signup);
+
+    return res.status(201).json({ status: true, data: signup });
+
+    //console.log("hashPassword: ", hashPassword);
   } catch (error) {
     console.log("auth controller", error);
 
@@ -171,6 +189,15 @@ async function getUserEmail(email) {
   try {
     const result = await User.query().where("email", email);
     return result[0] || false;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function registerUser(datus) {
+  try {
+    const result = await User.query().insertAndFetch(datus);
+    console.log(result);
   } catch (error) {
     throw error;
   }
