@@ -9,6 +9,7 @@ const checkAuth = require("../../middleware/check-auth");
 const error = require("debug")("pg-knex:error");
 const asyncWrapper = require("../../middleware/asyncWrapper");
 const Promise = require("bluebird");
+const fileUpload = require("../../middleware/image");
 
 const User = require("../../models/users");
 const log = require("color-logs")(true, true, "User Account");
@@ -54,7 +55,10 @@ router
   .all(checkAuth)
   .get(getCurrent);
 
-router.route("/register").post(createUser);
+router
+  .route("/register")
+  .all(fileUpload)
+  .post(createUser);
 
 router.route("/login").post(postLogin);
 

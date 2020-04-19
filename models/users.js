@@ -36,6 +36,8 @@ class User extends Model {
     console.log("obj", obj);
 
     obj.avatar = this.avatar;
+    console.log("obj username: ", obj.username);
+
     return _.omit(obj, hiddenFields);
   }
   $beforeInsert(queryContext) {
