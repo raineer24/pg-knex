@@ -13,7 +13,7 @@ const storage = multer.diskStorage({
   // }
   filename: (req, file, cb) => {
     let name = file.originalname
-      .toLocaleLowerCase()
+      .toLowerCase()
       .split(" ")
       .join("-");
     if (name.split(".").length > 1) {
@@ -23,8 +23,29 @@ const storage = multer.diskStorage({
     }
     name += "-" + Date.now();
     const ext = MIME_TYPE_MAP[file.mimetype];
+    cb(null, name + "." + ext);
   }
 });
+
+// const storage = multer.diskStorage({
+//   //Specify destination and validations
+
+//   //Store the file
+//   filename: (req, file, cb) => {
+//     let name = file.originalname
+//       .toLowerCase()
+//       .split(" ")
+//       .join("-");
+//     if (name.split(".").length > 1) {
+//       let tempName = name.split(".");
+//       tempName.pop();
+//       name = tempName.join(".");
+//     }
+//     name += "-" + Date.now();
+//     const ext = MIME_TYPE_MAP[file.mimetype];
+//     cb(null, name + "." + ext);
+//   }
+// });
 
 const imageFilter = (req, file, cb) => {
   console.log("req.file", req.file);
@@ -47,18 +68,18 @@ const imageFilter = (req, file, cb) => {
 };
 
 module.exports = (req, res, next) => {
-  multer({ storage: storage, fileFilter: imageFilter }).single("image")(
-    req,
-    res,
-    err => {
-      // catching and handling errors of multer
-      if (err instanceof multer.MulterError) {
-      } else if (err) {
-        throw err;
-      }
-      next();
+  console.log("image.jsreq.file: ", req.file);
+
+  multer({ storage: storage }).single("image")(req, res, err => {
+    // catching and handling errors of multer
+    if (err instanceof multer.MulterError) {
+    } else if (err) {
+      console.log("multer error", err);
+
+      throw err;
     }
-  );
+    next();
+  });
 };
 
 //const upload = multer({ storage, fileFilter: imageFilter });

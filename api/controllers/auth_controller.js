@@ -15,9 +15,11 @@ const {
 } = require("../../helpers/error_helper");
 
 const createUser = async (req, res, next) => {
-  console.log("req.file: ", req.file);
+  console.log("auth controller req.file: ", req.file);
 
   const { email, password } = req.body;
+
+  console.log("email", email);
 
   try {
     let newUser = await getUserEmail(email);

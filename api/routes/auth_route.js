@@ -22,28 +22,6 @@ const {
   createUser
 } = require("../controllers/auth_controller");
 
-const storage = multer.diskStorage({
-  filename(req, file, callback) {
-    callback(null, Date.now() + file.originalname);
-  }
-});
-
-const imageFilter = (req, file, cb) => {
-  // accept image files only
-  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
-    return cb(new Error("Only image files are allowed!"), false);
-  }
-  cb(null, true);
-};
-
-const upload = multer({ storage, fileFilter: imageFilter });
-
-cloudinary.config({
-  cloud_name: "dwsbpkgvr",
-  api_key: "246382268158277",
-  api_secret: "OEJwFk8xMOuNID7Z7L5MNDJ9nY8"
-});
-
 router.get("/current", checkAuth, (req, res) => {
   res.json({
     message: "Welcome Test Development"
