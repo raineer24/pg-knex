@@ -14,8 +14,21 @@ const {
   CONFLICT
 } = require("../../helpers/error_helper");
 
+const cloudinary = require("cloudinary");
+
+cloudinary.config({
+  cloud_name: "dwsbpkgvr",
+  api_key: "246382268158277",
+  api_secret: "OEJwFk8xMOuNID7Z7L5MNDJ9nY8"
+});
+
 const createUser = async (req, res, next) => {
-  console.log("auth controller req.file: ", req.file);
+  console.log("auth controller req.file: ", req.file.path);
+  //console.log("result", result);
+
+  let url = await uploadToCloudinary(req.file.path);
+  console.log("url", url.secure_url);
+  const image_link = url.secure_url;
 
   const { email, password } = req.body;
 
@@ -25,7 +38,7 @@ const createUser = async (req, res, next) => {
     let newUser = await getUserEmail(email);
     //console.log("User", newUser);
     if (newUser) {
-      let err = new Error("Email aready exists");
+      let err = new Error("Email already exists");
       err.status = CONFLICT;
       throw err;
     }
@@ -36,7 +49,7 @@ const createUser = async (req, res, next) => {
       username: req.body.username,
       password: hashPassword,
       email: email,
-      image_url: req.body.image_url,
+      image_url: image_link,
       first_name: req.body.first_name
     };
 
@@ -53,6 +66,7 @@ const createUser = async (req, res, next) => {
 
     return next(error);
   }
+
   // Promise.resolve()
   //   .then(function() {
   //     throw new Error("BROKEN");
@@ -206,6 +220,28 @@ async function registerUser(datus) {
     throw error;
   }
 }
+
+function uploadToCloudinary(image) {
+  return new Promise((resolve, reject) => {
+    cloudinary.v2.uploader.upload(image, (err, url) => {
+      if (err) return reject(err);
+      return resolve(url);
+    });
+  });
+}
+
+// async function uploadCloudinary(image) {
+//   return new Promise((resolve, reject) => {
+//     cloudinary.uploader
+//       .upload(image, (err, url) => {
+//         if (err) return reject(err);
+//         console.log("url", url);
+
+//         return resolve(url);
+//       })
+//       .catch(reject);
+//   });
+// }
 
 // function getUserEmail(email) {
 //   return new Promise((resolve, reject) => {
