@@ -63,7 +63,7 @@ const createUser = async (req, res, next) => {
 
     //console.log("hashPassword: ", hashPassword);
   } catch (error) {
-    log.error(`Auth controller: Failed to send ${err}`);
+    log.error(`Authcontroller[createUser]: Failed to send ${err}`);
 
     return next(error);
   }
@@ -126,23 +126,24 @@ const postLogin = async (req, res, next) => {
         })
       );
 
-    res.send(user);
-
-    // /* now check password */
-    // const isValidPassword = await bcrypter.checkPassword(
-    //   password,
-    //   user.password
-    // );
-    // if (!isValidPassword)
-    //   return res
-    //     .status(400)
-    //     .json({ status: false, message: "Password Incorrect" });
+    /* now check password */
+    const isValidPassword = await bcrypter.checkPassword(
+      password,
+      user.password
+    );
+    if (!isValidPassword)
+      return next(
+        createError({
+          status: CONFLICT,
+          message: "Password Incorrect"
+        })
+      );
 
     /** create token with some data */
-    //const token = await tokenHandler.createToken({ data: user.id });
-    // res.json({ status: true, user, token });
+    const token = await tokenHandler.createToken({ data: user.id });
+    res.json({ status: true, user, token });
   } catch (error) {
-    console.log("post signin user:/Error::", error);
+    log.error(`Authcontroller[createUser]: Failed to send ${error}`);
     return next(error);
   }
 };
