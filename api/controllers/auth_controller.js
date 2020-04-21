@@ -62,7 +62,7 @@ const createUser = async (req, res, next) => {
 
     //console.log("hashPassword: ", hashPassword);
   } catch (error) {
-    console.log("auth controller", error);
+    log.error(`Auth controller: Failed to send ${err}`);
 
     return next(error);
   }
