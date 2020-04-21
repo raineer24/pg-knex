@@ -21,6 +21,9 @@ const app = express();
 // Passport middleware
 app.use(passport.initialize());
 
+// passport config
+require("./config/passport")(passport);
+
 const port = process.env.PORT || 3000;
 
 const morgan = require("morgan");
