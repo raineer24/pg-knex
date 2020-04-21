@@ -185,7 +185,7 @@ router.post("/login", (req, res) => {
               }
             );
           } else {
-            res.status(400).json("Bad Request");
+            res.status(400).json("incorrect password");
           }
         });
       })
@@ -250,6 +250,47 @@ router.get("/:id", (req, res) => {
     .then(data => {
       res.status(201).json({
         data
+      });
+    });
+});
+
+// user backup
+
+// @route    GET api/users/login
+// @desc     Login User / Returning JWT Token
+// @access   Public
+router.post("/logins", (req, res) => {
+  database
+    .select("id", "email", "password")
+    .where("email", "=", req.body.email) 
+    .from("users")
+    .then(data => {
+      if (data.length === 0) {
+        return res.status(404).json({ email: "User not found" });
+      }
+
+      //Check is password
+      bcrypt.compare(req.body.password, data[0].password).then(isMatch => {
+        if (isMatch) {
+          // User Matched
+          const payload = { id: data[0].id, email: data[0].email };
+
+          // Sign Token
+          jwt.sign(
+            payload,
+            process.env.SECRET_KEY,
+            { expiresIn: "1h" },
+            (err, token) => {
+              if (err) throw err;
+              res.status(200).json({
+                success: true,
+                token: "Bearer " + token
+              });
+            }
+          );
+        } else {
+          return res.status(400).json({ password: "Password incorrect" });
+        }
       });
     });
 });
