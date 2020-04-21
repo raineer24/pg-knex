@@ -140,7 +140,7 @@ const postLogin = async (req, res, next) => {
       );
 
     /** create token with some data */
-    const token = await tokenHandler.createToken({ data: user.id });
+    const token = await tokenHandler.createToken({ ...user });
     res.json({ status: true, user, token });
   } catch (error) {
     log.error(`Authcontroller[createUser]: Failed to send ${error}`);
