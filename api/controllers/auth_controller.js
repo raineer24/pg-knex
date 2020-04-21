@@ -257,7 +257,11 @@ function uploadToCloudinary(image) {
 
 const getCurrent = (req, res, next) => {
   User.query().then(user => {
-    res.json({ user });
+    res.json({
+      id: req.user.id,
+      first_name: req.user.first_name,
+      email: req.user.email
+    });
   });
 };
 
