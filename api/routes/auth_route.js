@@ -14,7 +14,7 @@ const fileUpload = require("../../middleware/image");
 const User = require("../../models/users");
 const log = require("color-logs")(true, true, "User Account");
 
-const multer = require("multer");
+const passport = require("passport");
 
 const {
   getCurrent,
@@ -22,16 +22,21 @@ const {
   createUser
 } = require("../controllers/auth_controller");
 
-router.get("/current", checkAuth, (req, res) => {
-  res.json({
-    message: "Welcome Test Development"
-  });
-});
+// router.get("/current", checkAuth, (req, res) => {
+//   res.json({
+//     message: "Welcome Test Development"
+//   });
+// });
 
 router
-  .route("/current1")
-  .all(checkAuth)
+  .route("/current")
+  .all(passport.authenticate("jwt", { session: false }))
   .get(getCurrent);
+
+// router
+//   .route("/current1")
+//   .all(checkAuth)
+//   .get(getCurrent);
 
 router
   .route("/register")

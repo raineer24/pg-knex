@@ -13,6 +13,7 @@ const {
   UNAUTHORIZED,
   CONFLICT
 } = require("../../helpers/error_helper");
+const passport = require("passport");
 
 const cloudinary = require("cloudinary");
 
