@@ -116,14 +116,6 @@ const postLogin = async (req, res, next) => {
 
   try {
     const user = await getUserEmail(email);
-    //console.log("post register user:", user);
-
-    // if (!user) {
-    //   console.log("User with this email does not exist");
-    //   let err = new Error("User with this email does not exist");
-    //   err.status = 404;
-    //   throw err;
-    // }
 
     if (!user)
       return next(
