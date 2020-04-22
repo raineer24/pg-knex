@@ -28,7 +28,6 @@ const createUser = async (req, res, next) => {
   //console.log("result", result);
 
   let url = await uploadToCloudinary(req.file.path);
-  console.log("url", url.secure_url);
   const image_link = url.secure_url;
 
   const { email, password } = req.body;
@@ -37,7 +36,6 @@ const createUser = async (req, res, next) => {
 
   try {
     let newUser = await getUserEmail(email);
-    //console.log("User", newUser);
     if (newUser) {
       let err = new Error("Email already exists");
       err.status = CONFLICT;
@@ -147,20 +145,6 @@ const postLogin = async (req, res, next) => {
     return next(error);
   }
 };
-
-// async function createUsers(email) {
-//   try {
-//     let user = await getUserEmail(email);
-//     console.log("user", user);
-
-//     if (user) {
-//       let err = new Error("Email aready exists");
-//       err.status = CONFLICT;
-
-//       throw err;
-//     }
-
-//     //User.query().insertAndFetch({email: req.body.email, password:})
 
 //     // if (user)
 //     //   return next(
