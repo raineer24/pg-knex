@@ -13,7 +13,6 @@ const {
   UNAUTHORIZED,
   CONFLICT
 } = require("../../helpers/error_helper");
-const passport = require("passport");
 
 const cloudinary = require("cloudinary");
 
@@ -23,10 +22,15 @@ cloudinary.config({
   api_secret: "OEJwFk8xMOuNID7Z7L5MNDJ9nY8"
 });
 
-const createUser = async (req, res, next) => {
-  console.log("auth controller req.file: ", req.file.path);
-  //console.log("result", result);
+// Load Input Validation
+const validateRegisterInput = require("../../validation/register");
 
+const createUser = async (req, res, next) => {
+  const { errors, isValid } = validateRegisterInput(req.body);
+  // Check validation
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
   let url = await uploadToCloudinary(req.file.path);
   const image_link = url.secure_url;
 
@@ -57,7 +61,10 @@ const createUser = async (req, res, next) => {
     const signup = await registerUser(data);
     console.log("signup", signup);
 
-    return res.status(201).json({ status: true, data: signup });
+    return res.status(201).json({
+      status: true,
+      data: signup
+    });
 
     //console.log("hashPassword: ", hashPassword);
   } catch (error) {
@@ -65,27 +72,6 @@ const createUser = async (req, res, next) => {
 
     return next(error);
   }
-
-  // Promise.resolve()
-  //   .then(function() {
-  //     throw new Error("BROKEN");
-  //   })
-  //   .catch(next); // Errors will be passed
-
-  // try {
-  //   const user = await createUsers(email);
-  //   console.log("user:: ", user);
-
-  //   // if (user === "undefined") {
-  //   //   console.log("undefined");
-  //   // }
-
-  //   // console.log("typeof:", typeof user);
-  // } catch (err) {
-  //   //console.log("error::!", err.stack);
-  //   return next(err);
-  //   // res.status(500).json({ errors: { msg: "email already exist" } });
-  // }
 };
 
 /**
