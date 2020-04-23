@@ -24,6 +24,7 @@ cloudinary.config({
 
 // Load Input Validation
 const validateRegisterInput = require("../../validation/register");
+const validateLoginInput = require("../../validation/login");
 
 const createUser = async (req, res, next) => {
   const { errors, isValid } = validateRegisterInput(req.body);
@@ -83,32 +84,29 @@ const createUser = async (req, res, next) => {
 const postLogin = async (req, res, next) => {
   const email = String(req.body.email);
   const password = String(req.body.password);
-  console.log(req.body);
-
-  const isEmpty = input => {
-    if (input === undefined || input === "") {
-      return true;
-    }
-    if (input.replace(/\s/g, "").length) {
-      return false;
-    }
-    return true;
-  };
-
-  if (isEmpty(email) || isEmpty(password)) {
-    return handler.errorMessage(res, "lol, wtf");
+  const { errors, isValid } = validateLoginInput(req.body);
+  // Check validation
+  if (!isValid) {
+    return res.status(400).json(errors);
   }
 
   try {
     const user = await getUserEmail(email);
 
-    if (!user)
-      return next(
-        createError({
-          status: CONFLICT,
-          message: "User with this email does not exist"
-        })
-      );
+    // if (!user)
+    //   return next(
+    //     createError({
+    //       status: CONFLICT,
+    //       message: "User with this email does not exist"
+    //     })
+    //   );
+
+    if (!user) {
+      //let err = new Error("User with this email does not exist");
+      errors.email = "User with this email does not exist!";
+      errors.status = CONFLICT;
+      throw errors;
+    }
 
     /* now check password */
     const isValidPassword = await bcrypter.checkPassword(
