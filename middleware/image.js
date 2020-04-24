@@ -37,6 +37,8 @@ module.exports = (req, res, next) => {
     req,
     res,
     err => {
+      console.log("multer error", err);
+
       if (err)
         return next(
           createError({
