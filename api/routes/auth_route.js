@@ -16,6 +16,8 @@ const log = require("color-logs")(true, true, "User Account");
 
 const passport = require("passport");
 
+const validateUser = require("../../validation/express-register");
+
 const {
   getCurrent,
   postLogin,
@@ -36,11 +38,15 @@ router
   .all(passport.authenticate("jwt", { session: false }))
   .get(getCurrent);
 
-router
-  .route("/register")
-  .all(fileUpload)
-  .post(createUser);
+// router
+//   .route("/register")
+//   .all(fileUpload)
+//   .post(createUser);
 
-router.route("/login").post(postLogin);
+router.post("/register", fileUpload, createUser);
+
+//router.route("/login").post(postLogin);
+
+router.post("/login", postLogin);
 
 module.exports = router;

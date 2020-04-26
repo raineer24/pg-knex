@@ -5,6 +5,7 @@ const createError = require("http-errors");
 const express = require("express");
 const bodyParser = require("body-parser");
 const passport = require("passport");
+const expressValidator = require("express-validator");
 
 const blogRoute = require("./api/routes/blogs");
 const userRoute = require("./api/routes/users");
@@ -29,6 +30,9 @@ const port = process.env.PORT || 3000;
 const morgan = require("morgan");
 
 const cors = require("cors");
+
+//An express.js middleware for node-validator.
+app.use(expressValidator());
 
 app.use(morgan("combined"));
 app.use(bodyParser.json({ limit: "50mb" }));

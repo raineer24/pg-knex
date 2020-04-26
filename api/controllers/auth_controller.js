@@ -25,15 +25,19 @@ cloudinary.config({
 // Load Input Validation
 const validateRegisterInput = require("../../validation/register");
 const validateLoginInput = require("../../validation/login");
+const expressTest = require("../../validation/express-register");
 
 const createUser = async (req, res, next) => {
-  const { errors, isValid } = validateRegisterInput(req.body);
+  // const { errors, isValid } = validateRegisterInput(req.body);
+  //const test = expressTest(req.body);
   // Check validation
-  if (!isValid) {
-    return res.status(400).json(errors);
-  }
+  // if (!isValid) {
+  //   return res.status(400).json(errors);
+  // }
   let url = await uploadToCloudinary(req.file.path);
   const image_link = url.secure_url;
+
+  //console.log("test: ", test);
 
   const { email, password } = req.body;
 
