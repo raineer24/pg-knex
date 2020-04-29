@@ -6,14 +6,31 @@ const { validationResult } = require("express-validator");
 // };
 
 exports.validateUser = [
-  check("email", "Email is required")
+  check("email")
     .not()
-    .isEmpty(),
+    .isEmpty()
+    .isEmail()
+    .withMessage("Invalid Email Address"),
+  check("username")
+    .not()
+    .isEmpty()
+    .isLength({ min: 3, max: 20 })
+    .withMessage("Username is required"),
+  check("first_name")
+    .not()
+    .isEmpty()
+    .isLength({ min: 3, max: 20 })
+    .withMessage("Firstname is required"),
   (req, res, next) => {
+    const errors = validationResult(req);
+    error = errors.array();
     if (!errors.isEmpty()) {
+      console.log("error!");
       let err = new Error(error[0].msg);
+
       throw err;
     }
+    next();
   }
 ];
 

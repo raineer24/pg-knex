@@ -28,7 +28,9 @@ const validateRegisterInput = require("../../validation/register");
 const validateLoginInput = require("../../validation/login");
 const expressTest = require("../../validation/express-register");
 
-const createUser = async (req, res, next) => {};
+const createUser = async (req, res, next) => {
+  console.log(req.body.first_name);
+};
 
 // const createUser = async (req, res, next) => {
 //   const errors = validationResult(req);
