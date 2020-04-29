@@ -10,8 +10,10 @@ exports.validateUser = [
     .not()
     .isEmpty(),
   (req, res, next) => {
-    const errors = validationResult(req);
-    console.log("auth controller errors", errors.array());
+    if (!errors.isEmpty()) {
+      let err = new Error(error[0].msg);
+      throw err;
+    }
   }
 ];
 

@@ -28,10 +28,7 @@ const validateRegisterInput = require("../../validation/register");
 const validateLoginInput = require("../../validation/login");
 const expressTest = require("../../validation/express-register");
 
-const createUser = async (req, res, next) => {
-  const errors = validationResult(req);
-  console.log("auth controller errors", errors.array());
-};
+const createUser = async (req, res, next) => {};
 
 // const createUser = async (req, res, next) => {
 //   const errors = validationResult(req);
