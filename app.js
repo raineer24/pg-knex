@@ -32,7 +32,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 
 //An express.js middleware for node-validator.
-app.use(expressValidator());
+//app.use(expressValidator());
 
 app.use(morgan("combined"));
 app.use(bodyParser.json({ limit: "50mb" }));

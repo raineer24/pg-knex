@@ -1,22 +1,17 @@
 //const expressValidator = require("express-validator");
-const { check, validationResult } = require("express-validator/check");
-
+const { check } = require("express-validator");
+const { validationResult } = require("express-validator");
 // module.exports = data = (req, res, next) => {
 //   console.log("data.username: ", data);
 // };
 
 exports.validateUser = [
-  check("email")
-    .trim()
-    .normalizeEmail()
+  check("email", "Email is required")
     .not()
-    .isEmpty()
-    .withMessage("Invalid email address!"),
+    .isEmpty(),
   (req, res, next) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty())
-      return res.status(422).json({ errors: errors.array() });
-    next();
+    console.log("auth controller errors", errors.array());
   }
 ];
 

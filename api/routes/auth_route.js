@@ -16,7 +16,7 @@ const log = require("color-logs")(true, true, "User Account");
 
 const passport = require("passport");
 
-const validateUser = require("../../validation/express-register");
+const validation = require("../../validation/express-register");
 
 const {
   getCurrent,
@@ -43,7 +43,7 @@ router
 //   .all(fileUpload)
 //   .post(createUser);
 
-router.post("/register", fileUpload, createUser);
+router.post("/register", fileUpload, validation.validateUser, createUser);
 
 //router.route("/login").post(postLogin);
 
