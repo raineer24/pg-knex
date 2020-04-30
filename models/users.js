@@ -17,7 +17,7 @@ class User extends Model {
         id: { type: "string" },
         password: { type: "string" },
         email: { type: "string", format: "email", maxLength: 30 },
-        first_name: { type: "string", minLength: 1, maxLength: 40 },
+        first_name: { type: "string", minLength: 3, maxLength: 40 },
         updated_at: { type: "string" },
         image_url: { type: "string" },
         token: { type: "string", maxLength: 40 },

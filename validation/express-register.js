@@ -10,17 +10,33 @@ exports.validateUser = [
     .not()
     .isEmpty()
     .isEmail()
-    .withMessage("Invalid Email Address"),
+    .withMessage("Invalid Email Address")
+    .bail(),
   check("username")
     .not()
     .isEmpty()
-    .isLength({ min: 3, max: 20 })
-    .withMessage("Username is required"),
+    .isLength({ min: 4, max: 20 })
+    .withMessage("Username is required")
+    .bail(),
   check("first_name")
+    .isLength({ min: 4, max: 20 })
+    .withMessage("Firstname is required")
+    .bail(),
+  // check("password")
+  //   .exists()
+  //   .isLength({ min: 6, max: 20 })
+  //   .withMessage("Password must be at least 6 characters")
+  //   .bail(),
+  check("password", "Your password must be at least 6 characters")
     .not()
     .isEmpty()
-    .isLength({ min: 3, max: 20 })
-    .withMessage("Firstname is required"),
+    .isLength({ min: 6, max: 20 }),
+  check("password2", "Password do not match")
+    .not()
+    .isEmpty()
+    .isLength({ min: 6, max: 20 })
+    .custom((value, { req }) => value === req.body.password),
+
   (req, res, next) => {
     const errors = validationResult(req);
     error = errors.array();
