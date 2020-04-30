@@ -29,66 +29,56 @@ const validateLoginInput = require("../../validation/login");
 const expressTest = require("../../validation/express-register");
 
 const createUser = async (req, res, next) => {
-  console.log(req.body.first_name);
+  // if (!req.file) {
+  //   let error = new Error("Please select an image to upload");
+  //   error.status = CONFLICT;
+  //   throw error;
+  // }
+
+  let url = await uploadToCloudinary(req.file.path);
+  const image_link = url.secure_url;
+
+  //console.log("test: ", test);
+
+  const { email, password } = req.body;
+
+  console.log("email", email);
+
+  try {
+    let newUser = await getUserEmail(email);
+    if (newUser) {
+      let error = new Error("Email already exists");
+      error.status = CONFLICT;
+      throw error;
+    }
+
+    const hashPassword = await bcrypter.encryptPassword(password);
+
+    const data = {
+      username: req.body.username,
+      password: hashPassword,
+      email: email,
+      image_url: image_link,
+      first_name: req.body.first_name
+    };
+
+    console.log("data", data);
+
+    const signup = await registerUser(data);
+    //console.log("signup", signup);
+
+    return res.status(201).json({
+      status: true,
+      data: signup
+    });
+
+    //console.log("hashPassword: ", hashPassword);
+  } catch (error) {
+    log.error(`Authcontroller[createUser]: Failed to send ${error}`);
+
+    return next(error);
+  }
 };
-
-// const createUser = async (req, res, next) => {
-//   const errors = validationResult(req);
-//   // console.log("auth controller errors", errors.array());
-
-//   if (!errors.isEmpty()) {
-//     console.log(errors.array());
-//   }
-//   // const { errors, isValid } = validateRegisterInput(req.body);
-//   //const test = expressTest(req.body);
-//   // Check validation
-//   // if (!isValid) {
-//   //   return res.status(400).json(errors);
-//   // }
-//   let url = await uploadToCloudinary(req.file.path);
-//   const image_link = url.secure_url;
-
-//   //console.log("test: ", test);
-
-//   const { email, password } = req.body;
-
-//   console.log("email", email);
-
-//   try {
-//     let newUser = await getUserEmail(email);
-//     if (newUser) {
-//       let err = new Error("Email already exists");
-//       err.status = CONFLICT;
-//       throw err;
-//     }
-
-//     const hashPassword = await bcrypter.encryptPassword(password);
-
-//     const data = {
-//       username: req.body.username,
-//       password: hashPassword,
-//       email: email,
-//       image_url: image_link,
-//       first_name: req.body.first_name
-//     };
-
-//     console.log("data", data);
-
-//     const signup = await registerUser(data);
-//     console.log("signup", signup);
-
-//     return res.status(201).json({
-//       status: true,
-//       data: signup
-//     });
-
-//     //console.log("hashPassword: ", hashPassword);
-//   } catch (error) {
-//     log.error(`Authcontroller[createUser]: Failed to send ${err}`);
-
-//     return next(error);
-//   }
-// };
 
 /**
  * Signin
@@ -183,8 +173,11 @@ const postLogin = async (req, res, next) => {
 async function getUserEmail(email) {
   try {
     const result = await User.query().where("email", email);
-    return result[0] || false;
+    //return result[0] || false;
+    console.log("result", result);
   } catch (error) {
+    console.log("error: ", error);
+
     throw error;
   }
 }
