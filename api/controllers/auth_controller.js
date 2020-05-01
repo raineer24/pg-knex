@@ -24,35 +24,44 @@ cloudinary.config({
 });
 
 // Load Input Validation
-const validateRegisterInput = require("../../validation/register");
-const validateLoginInput = require("../../validation/login");
 const expressTest = require("../../validation/express-register");
 
 const createUser = async (req, res, next) => {
-  // if (!req.file) {
-  //   let error = new Error("Please select an image to upload");
-  //   error.status = CONFLICT;
-  //   throw error;
-  // }
-
-  let url = await uploadToCloudinary(req.file.path);
-  const image_link = url.secure_url;
-
-  //console.log("test: ", test);
-
   const { email, password } = req.body;
 
-  console.log("email", email);
+  if (!req.file) {
+    //let error = new Error("Please select an image to upload");
+    // error.status = CONFLICT;
+    // throw error;
+    return next(
+      createError({
+        status: CONFLICT,
+        message: "Please select an image to upload"
+      })
+    );
+  }
+
+  // //console.log("test: ", test);
+
+  // console.log("email", email);
 
   try {
     let newUser = await getUserEmail(email);
-    if (newUser) {
-      let error = new Error("Email already exists");
-      error.status = CONFLICT;
-      throw error;
-    }
+
+    if (newUser)
+      return next(
+        createError({
+          status: CONFLICT,
+          message: "Email already exist"
+        })
+      );
+
+    console.log("newUser", newUser);
 
     const hashPassword = await bcrypter.encryptPassword(password);
+
+    let url = await uploadToCloudinary(req.file.path);
+    const image_link = url.secure_url;
 
     const data = {
       username: req.body.username,
@@ -89,29 +98,26 @@ const createUser = async (req, res, next) => {
 const postLogin = async (req, res, next) => {
   const email = String(req.body.email);
   const password = String(req.body.password);
-  const { errors, isValid } = validateLoginInput(req.body);
-  // Check validation
-  if (!isValid) {
-    return res.status(400).json(errors);
-  }
 
   try {
     const user = await getUserEmail(email);
 
-    // if (!user)
-    //   return next(
-    //     createError({
-    //       status: CONFLICT,
-    //       message: "User with this email does not exist"
-    //     })
-    //   );
+    console.log("newuser: ", user);
 
-    if (!user) {
-      //let err = new Error("User with this email does not exist");
-      errors.email = "User with this email does not exist!";
-      errors.status = CONFLICT;
-      throw errors;
-    }
+    if (!user)
+      return next(
+        createError({
+          status: CONFLICT,
+          message: "User with this email does not exist"
+        })
+      );
+
+    // if (!user) {
+    //   //let err = new Error("User with this email does not exist");
+    //   errors.email = "User with this email does not exist!";
+    //   errors.status = CONFLICT;
+    //   throw errors;
+    // }
 
     /* now check password */
     const isValidPassword = await bcrypter.checkPassword(
@@ -134,21 +140,6 @@ const postLogin = async (req, res, next) => {
     return next(error);
   }
 };
-
-//     // if (user)
-//     //   return next(
-//     //     createError({
-//     //       status: CONFLICT,
-//     //       message: "Email already exists"
-//     //     })
-//     //   );
-
-//     // if (user) res.json({ mesage: "email already exists" });
-//     // console.log(user);
-//   } catch (err) {
-//     throw err;
-//   }
-// }
 
 // function getUserEmail(email) {
 //   return new Promise((resolve, reject) => {
@@ -173,8 +164,7 @@ const postLogin = async (req, res, next) => {
 async function getUserEmail(email) {
   try {
     const result = await User.query().where("email", email);
-    //return result[0] || false;
-    console.log("result", result);
+    return result[0] || false;
   } catch (error) {
     console.log("error: ", error);
 
@@ -185,7 +175,7 @@ async function getUserEmail(email) {
 async function registerUser(datus) {
   try {
     const result = await User.query().insertAndFetch(datus);
-    console.log(result);
+    return result;
   } catch (error) {
     throw error;
   }
