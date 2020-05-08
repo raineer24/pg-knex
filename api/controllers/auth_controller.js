@@ -26,6 +26,9 @@ cloudinary.config({
 // Load Input Validation
 const expressTest = require("../../validation/express-register");
 
+// @route GET api/users/register
+// @desc Register a user
+// @ access Public
 const createUser = async (req, res, next) => {
   const { email, password } = req.body;
 
