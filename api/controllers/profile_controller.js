@@ -2,4 +2,8 @@ const getTest = (req, res, next) => {
   res.json({ msg: "Profile works" });
 };
 
-module.exports = { getTest };
+const createProfile = (req, res, next) => {
+  res.json({ msg: "Profile works" });
+};
+
+module.exports = { getTest, createProfile };

@@ -28,7 +28,7 @@ const expressTest = require("../../validation/express-register");
 
 // @route GET api/users/register
 // @desc Register a user
-// @ access Public
+// @access Public
 const createUser = async (req, res, next) => {
   const { email, password } = req.body;
 
