@@ -10,6 +10,7 @@ const expressValidator = require("express-validator");
 const blogRoute = require("./api/routes/blogs");
 const userRoute = require("./api/routes/users");
 const authRoutes = require("./api/routes/auth_route"); //another route
+const profileRoutes = require("./api/routes/profile_route");
 
 const test = require("./api/test");
 const {
@@ -63,6 +64,7 @@ app.use((req, res, next) => {
 app.use("/api/v2/blogs", blogRoute);
 app.use("/api/v2/users", userRoute);
 app.use("/api/v2/user", authRoutes); //another route
+app.use("/api/v2/user/profile", profileRoutes);
 app.use("/api/v2/test", test);
 
 app.use(require("./middleware/error_middleware").all);
