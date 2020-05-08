@@ -12,6 +12,10 @@ router.get("/test", getTest);
 //@route POST /api/v2/user/profile
 //@desc Create user profile
 //@access Private
-router.post("/", createProfile);
+router.post(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  createProfile
+);
 
 module.exports = router;
