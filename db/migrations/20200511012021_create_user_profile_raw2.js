@@ -1,6 +1,5 @@
 exports.up = function(knex, Promise) {
-  return knex.raw(`
-    CREATE TABLE IF NOT EXISTS user_profile 
+  return knex.raw(`CREATE TABLE IF NOT EXISTS user_profile 
              ( 
                           id SERIAL PRIMARY KEY, 
                           company_name              VARCHAR(40), 
@@ -15,14 +14,11 @@ exports.up = function(knex, Promise) {
                           created_at TIMESTAMP with time zone NOT NULL DEFAULT now(), 
                           updated_at timestamp WITH time zone NOT NULL DEFAULT now(), 
                           FOREIGN KEY (id) REFERENCES users (id) 
-             );
-               
-  `);
+             );`);
 };
 
 exports.down = function(knex, Promise) {
-  return knex.raw(`
-  CREATE TABLE IF NOT EXISTS user_profile 
+  return knex.raw(`CREATE TABLE IF NOT EXISTS user_profile 
              ( 
                           id SERIAL PRIMARY KEY, 
                           company_name              VARCHAR(40), 
@@ -37,8 +33,5 @@ exports.down = function(knex, Promise) {
                           created_at TIMESTAMP with time zone NOT NULL DEFAULT now(), 
                           updated_at timestamp WITH time zone NOT NULL DEFAULT now(), 
                           FOREIGN KEY (id) REFERENCES users (id) 
-             ); 
-                
-
-  `);
+             );`);
 };

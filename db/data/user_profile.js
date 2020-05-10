@@ -30,5 +30,16 @@ module.exports = [
     twitter_handle: "@honeybee",
     facebook_handle: "honeybee/fb",
     instagram_handle: "honeybeeIG"
+  },
+  {
+    company_name: "Richi rich Lending",
+    website: "richunlinnetwork.tk",
+    job_location: "Barangay Luz, Banilad",
+    bio: "Kobe 19",
+    status: "Instructor",
+    youtube_handle: "richunlixtv",
+    twitter_handle: "@richunli2tv",
+    facebook_handle: "richunli2tv/fb",
+    instagram_handle: "richunli2tvIG"
   }
 ];
