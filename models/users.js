@@ -1,6 +1,9 @@
 const Model = require("objection").Model;
 require("./../objection");
 const _ = require("lodash");
+const path = require("path");
+const filePath = path.join(__dirname, "/user_profile.js");
+console.log("DIRNAME", filePath);
 
 const hiddenFields = ["password", "created_at", "updated_at"];
 
@@ -46,7 +49,7 @@ class User extends Model {
     // this.created_at = new Date().toISOString();
     if (this.password) {
       // this.password = makeHash(this.password);
-      console.log("user model.js", this.password);
+      console.log(this.password);
     }
   }
 }
