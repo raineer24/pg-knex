@@ -224,14 +224,12 @@ function uploadToCloudinary(image) {
 //   });
 // }
 
-const getCurrent = (req, res, next) => {
+const getUsers = (req, res, next) => {
   User.query().then(user => {
     res.json({
-      id: req.user.id,
-      first_name: req.user.first_name,
-      email: req.user.email
+      user
     });
   });
 };
 
-module.exports = { getCurrent, postLogin, createUser };
+module.exports = { getUsers, postLogin, createUser };

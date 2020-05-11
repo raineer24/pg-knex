@@ -19,7 +19,7 @@ const passport = require("passport");
 const validation = require("../../validation/express-register");
 
 const {
-  getCurrent,
+  getUsers,
   postLogin,
   createUser
 } = require("../controllers/auth_controller");
@@ -34,9 +34,9 @@ const {
 // @desc    Return current user
 // @access  Private
 router
-  .route("/current")
+  .route("/")
   .all(passport.authenticate("jwt", { session: false }))
-  .get(getCurrent);
+  .get(getUsers);
 
 // router
 //   .route("/register")
