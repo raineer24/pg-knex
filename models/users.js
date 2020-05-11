@@ -15,6 +15,7 @@ class User extends Model {
   static get jsonSchema() {
     return {
       type: "object",
+
       required: ["email"],
       properties: {
         id: { type: "string" },
@@ -26,6 +27,20 @@ class User extends Model {
         token: { type: "string", maxLength: 40 },
         emailverified: { type: "string" },
         tokenusedbefore: { type: "string" }
+      }
+    };
+  }
+
+  static get relationMappings() {
+    const UserProfile = require("./user_profile");
+    return {
+      user_profile: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: UserProfile,
+        join: {
+          from: "users.id",
+          to: "user_profile.id"
+        }
       }
     };
   }

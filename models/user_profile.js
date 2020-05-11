@@ -24,6 +24,25 @@ class UserProfile extends Model {
   //   };
   // }
 
+  static get jsonSchema() {
+    return {
+      type: "object",
+
+      properties: {
+        id: { type: "integer" },
+        company_name: { type: "string" },
+        website: { type: "string" },
+        job_location: { type: "string" },
+        status: { type: "string" },
+        bio: { type: "string" },
+        youtube_handle: { type: "string" },
+        twitter_handle: { type: "string" },
+        facebook_handle: { type: "string" },
+        instagram_handle: { type: "string" }
+      }
+    };
+  }
+
   static get relationMappings() {
     const User = require("./users");
     return {
@@ -31,7 +50,7 @@ class UserProfile extends Model {
         relation: Model.BelongsToOneRelation,
         modelClass: User,
         join: {
-          from: "user_profile.user_id",
+          from: "user_profile.id",
           to: "users.id"
         }
       }

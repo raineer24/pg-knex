@@ -11,7 +11,7 @@ const {
 //@route GET /api/v2/user/profile
 //@desc Tests profile route
 //@access Public
-router.get("/", getProfile);
+router.get("/", passport.authenticate("jwt", { session: false }), getProfile);
 
 //@route POST /api/v2/user/profile
 //@desc Create user profile
