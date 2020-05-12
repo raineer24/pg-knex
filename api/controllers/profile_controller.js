@@ -13,6 +13,9 @@ const getTest = (req, res, next) => {
   res.json({ msg: "Profile works" });
 };
 
+// @route    GET /api/v2/user/profile
+// @desc     Get current user's profile
+// @access   Private
 const getProfile = async (req, res, next) => {
   try {
     const user = UserProfile.query()
@@ -20,7 +23,7 @@ const getProfile = async (req, res, next) => {
       .eager("user")
       .then(userprofile => {
         console.log("userprofile", userprofile);
-        if (userprofile === undefined) {
+        if (userprofile === "undefined") {
           return next(
             createError({
               status: CONFLICT,
@@ -34,8 +37,10 @@ const getProfile = async (req, res, next) => {
   }
 };
 
+// @route  POST /api/v2/user/profile
+// @desc   Create or Edit user profile
+// @access Private - use jwt strategy to authenticate
 const createProfile = (req, res, next) => {
-  //passport.authenticate("jwt", { session: false });
   res.json({ msg: "Profile works" });
 };
 

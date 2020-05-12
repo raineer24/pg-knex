@@ -9,13 +9,13 @@ const {
 } = require("../controllers/profile_controller");
 
 //@route GET /api/v2/user/profile
-//@desc Tests profile route
-//@access Public
+// @desc  Get current user's profile
+// @access Private - use jwt strategy to authenticate
 router.get("/", passport.authenticate("jwt", { session: false }), getProfile);
 
 //@route POST /api/v2/user/profile
-//@desc Create user profile
-//@access Private
+// @desc   Create or Edit user profile
+// @access Private - use jwt strategy to authenticate
 router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
