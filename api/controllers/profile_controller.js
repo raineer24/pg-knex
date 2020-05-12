@@ -41,7 +41,11 @@ const getProfile = async (req, res, next) => {
 // @desc   Create or Edit user profile
 // @access Private - use jwt strategy to authenticate
 const createProfile = (req, res, next) => {
-  res.json({ msg: "Profile works" });
+  // Get all fields needed for a user profile
+  const profileFields = {};
+
+  profileFields.user = req.user.id;
+  console.log("profilefields.user", profileFields.user);
 };
 
 module.exports = { getTest, createProfile, getProfile };
