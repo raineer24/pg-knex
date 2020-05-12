@@ -18,7 +18,7 @@ const getTest = (req, res, next) => {
 // @access   Private
 const getProfile = async (req, res, next) => {
   try {
-    const user = UserProfile.query()
+    const user = await UserProfile.query()
       .findById(req.user.id)
       .eager("user")
       .then(userprofile => {
@@ -32,6 +32,8 @@ const getProfile = async (req, res, next) => {
           );
         }
       });
+
+    console.log("user", user);
   } catch (error) {
     throw error;
   }
@@ -40,12 +42,58 @@ const getProfile = async (req, res, next) => {
 // @route  POST /api/v2/user/profile
 // @desc   Create or Edit user profile
 // @access Private - use jwt strategy to authenticate
-const createProfile = (req, res, next) => {
+const createProfile = async (req, res, next) => {
   // Get all fields needed for a user profile
   const profileFields = {};
 
   profileFields.user = req.user.id;
-  console.log("profilefields.user", profileFields.user);
+
+  //Check for other form data
+
+  if (req.body.handle) profileFields.handle = req.body.handle;
+  if (req.body.company_name) profileFields.company_name = req.body.company_name;
+  if (req.body.website) profileFields.website = req.body.website;
+  if (req.body.job_location) profileFields.job_location = req.body.job_location;
+  if (req.body.status) profileFields.status = req.body.status;
+  if (req.body.bio) profileFields.bio = req.body.bio;
+  if (req.body.youtube_handle)
+    profileFields.youtube_handle = req.body.youtube_handle;
+  if (req.body.twitter_handle)
+    profileFields.twitter_handle = req.body.twitter_handle;
+  if (req.body.facebook_handle)
+    profileFields.facebook_handle = req.body.facebook_handle;
+  if (req.body.instagram_handle)
+    profileFields.instagram_handle = req.body.instagram_handle;
+
+  // const user = await UserProfile.query()
+  //   .findById(req.user.id)
+  //   .eager("user");
+
+  const user = await UserProfile.query()
+    .findById(req.user.id)
+    .then(profile => {
+      if (profile) {
+      } else {
+        //create
+        const handle = UserProfile.query().findOne(
+          "handle",
+          profileFields.handle
+        );
+        console.log("handle", handle);
+      }
+    });
+  // console.log("user", user);
+
+  // if (user) {
+  //   //update
+  // } else {
+  //   //create
+  //   const handle = await UserProfile.query().findOne(
+  //     "handle",
+  //     profileFields.handle
+  //   );
+  //   console.log("handle", handle);
+  // }
 };
 
 module.exports = { getTest, createProfile, getProfile };
