@@ -2,7 +2,7 @@ const Model = require("objection").Model;
 require("./../objection");
 
 class UserSkillSet extends Model {
-  skill_set_name: Array<string>;
+  //skill_set_name: Array<string>;
   static get tableName() {
     return "user_skill_set";
   }

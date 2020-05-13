@@ -1,5 +1,6 @@
 const UserProfile = require("../../models/user_profile");
 const User = require("../../models/users");
+const UserSkillSet = require("../../models/user_skill_set");
 const passport = require("passport");
 
 const {
@@ -69,19 +70,22 @@ const createProfile = async (req, res, next) => {
   //   .findById(req.user.id)
   //   .eager("user");
 
-  const user = await UserProfile.query()
-    .findById(req.user.id)
-    .then(profile => {
-      if (profile) {
-      } else {
-        //create
-        const handle = UserProfile.query().findOne(
-          "handle",
-          profileFields.handle
-        );
-        console.log("handle", handle);
-      }
-    });
+  // const user = await UserProfile.query()
+  //   .findById(req.user.id)
+  //   .then(profile => {
+  //     if (profile) {
+  //     } else {
+  //       //create
+  //       const handle = UserProfile.query().findOne(
+  //         "handle",
+  //         profileFields.handle
+  //       );
+  //       console.log("handle", handle);
+  //     }
+  //   });
+
+  const user = await UserSkillSet.query();
+  console.log("user", user);
 
   // return User.query()
   //   .where("user_id", req.user.id)
