@@ -82,6 +82,12 @@ const createProfile = async (req, res, next) => {
         console.log("handle", handle);
       }
     });
+
+  // return User.query()
+  //   .where("user_id", req.user.id)
+  //   .join("userprojects", "user.id", "=", "userprojects.user_id")
+  //   .join("project", "project.id", "=", "userprojects.project_id")
+  //   .select("user.id", "userprojects.project_id", "project.name");
   // console.log("user", user);
 
   // if (user) {

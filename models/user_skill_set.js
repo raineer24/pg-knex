@@ -22,19 +22,19 @@ class UserSkillSet extends Model {
     return ["skill_set_name"];
   }
 
-  static get relationMappings() {
-    const User = require("./user_profile");
-    return {
-      user: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: User,
-        join: {
-          from: "user_skill_set.user_skill_set_id",
-          to: "users.id"
-        }
-      }
-    };
-  }
+  // static get relationMappings() {
+  //   const User = require("./user_profile");
+  //   return {
+  //     user: {
+  //       relation: Model.BelongsToOneRelation,
+  //       modelClass: User,
+  //       join: {
+  //         from: "user_skill_set.user_skill_set_id",
+  //         to: "users.id"
+  //       }
+  //     }
+  //   };
+  // }
 }
 
 module.exports = UserSkillSet;
