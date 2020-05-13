@@ -1,8 +1,8 @@
 const Model = require("objection").Model;
 require("./../objection");
+const _ = require("lodash");
 
 class UserSkillSet extends Model {
-  //skill_set_name: Array<string>;
   static get tableName() {
     return "user_skill_set";
   }
@@ -20,6 +20,35 @@ class UserSkillSet extends Model {
 
   static get jsonAttributes() {
     return ["skill_set_name"];
+  }
+
+  $formatJson(obj) {
+    obj = super.$formatJson(obj);
+    console.log("obj", obj);
+
+    obj.avatar = this.avatar;
+    console.log("obj username: ", obj.skill_set_name);
+
+    return _.omit(obj);
+  }
+  $beforeInsert(queryContext) {
+    console.log(queryContext);
+
+    console.log("image url", this.image_url);
+
+    // this.created_at = new Date().toISOString();
+    if (this.password) {
+      // this.password = makeHash(this.password);
+      console.log(this.password);
+    }
+  }
+  $formatDatabaseJson(json) {
+    // if (json.languages) {
+    //   json.languages = lit(json.languages).asArray();
+    // }
+
+    obj = super.$formatDatabaseJson(json);
+    console.log("obj", obj);
   }
 
   // static get relationMappings() {

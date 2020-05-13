@@ -1,7 +1,6 @@
 const Model = require("objection").Model;
 require("./../objection");
 const path = require("path");
-const filePath = path.join(__dirname, "/users.js");
 
 class UserProfile extends Model {
   static get tableName() {
@@ -44,17 +43,27 @@ class UserProfile extends Model {
   }
 
   static get relationMappings() {
-    const User = require("./users");
+    const UserSkillSet = require("./user_skill_set");
     return {
-      user: {
+      user_skill_set: {
         relation: Model.BelongsToOneRelation,
-        modelClass: User,
+        modelClass: UserSkillSet,
         join: {
           from: "user_profile.id",
-          to: "users.id"
+          to: "user_skill_set.user_skill_set_id"
         }
       }
     };
+  }
+
+  $formatJson(obj) {
+    obj = super.$formatJson(obj);
+    console.log("obj: ", obj);
+
+    //obj.avatar = this.avatar;
+    console.log("obj username: ", obj.youtube_handle);
+
+    //return _.omit(obj, hiddenFields);
   }
 }
 

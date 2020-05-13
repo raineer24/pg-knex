@@ -75,7 +75,7 @@ const createProfile = async (req, res, next) => {
   //   .then(profile => {
   //     if (profile) {
   //     } else {
-  //       //create
+  //       //create+
   //       const handle = UserProfile.query().findOne(
   //         "handle",
   //         profileFields.handle
@@ -84,10 +84,16 @@ const createProfile = async (req, res, next) => {
   //     }
   //   });
 
-  const user = await UserSkillSet.query();
-  console.log("user", user);
+  //const user = await UserSkillSet.query();
+  const user = await User.query()
+    .eager("user_profile.[user_skill_set]")
+    .findById(req.user.id);
 
-  // return User.query()
+  const skills1 = user.user_profile[0];
+  const skills = user.user_profile[0].user_skill_set.skill_set_name.skills;
+  console.log("user", typeof skills1);
+
+  // return User.query()+
   //   .where("user_id", req.user.id)
   //   .join("userprojects", "user.id", "=", "userprojects.user_id")
   //   .join("project", "project.id", "=", "userprojects.project_id")

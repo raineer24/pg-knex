@@ -32,7 +32,7 @@ class User extends Model {
     const UserProfile = require("./user_profile");
     return {
       user_profile: {
-        relation: Model.BelongsToOneRelation,
+        relation: Model.HasManyRelation,
         modelClass: UserProfile,
         join: {
           from: "users.id",
@@ -51,11 +51,13 @@ class User extends Model {
     console.log("obj", obj);
 
     obj.avatar = this.avatar;
-    console.log("obj username: ", obj.username);
+    console.log("obj username: ", obj.first_name);
 
     return _.omit(obj, hiddenFields);
   }
   $beforeInsert(queryContext) {
+    console.log("this.username", this.username);
+
     console.log("image url", this.image_url);
 
     // this.created_at = new Date().toISOString();
