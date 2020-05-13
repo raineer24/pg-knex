@@ -70,6 +70,11 @@ const createProfile = async (req, res, next) => {
   //   .findById(req.user.id)
   //   .eager("user");
 
+  const data = {
+    skill_set_name: req.body.skill_set_name
+  };
+  console.log("data", data);
+
   // const user = await UserProfile.query()
   //   .findById(req.user.id)
   //   .then(profile => {
@@ -84,14 +89,16 @@ const createProfile = async (req, res, next) => {
   //     }
   //   });
 
-  //const user = await UserSkillSet.query();
-  const user = await User.query()
-    .eager("user_profile.[user_skill_set]")
-    .findById(req.user.id);
+  const user = await UserSkillSet.query();
+  // const user = await User.query()
+  //   .eager("user_profile.[user_skill_set]")
+  //   .findById(req.user.id);
+  console.log("user", user);
 
-  const skills1 = user.user_profile[0];
-  const skills = user.user_profile[0].user_skill_set.skill_set_name.skills;
-  console.log("user", typeof skills1);
+  //const signup = await registerUser(data);
+  // const skills1 = user.user_profile[0];
+  // const skills = user.user_profile[0].user_skill_set.skill_set_name.skills;
+  // console.log("user", typeof skills1);
 
   // return User.query()+
   //   .where("user_id", req.user.id)
@@ -111,5 +118,14 @@ const createProfile = async (req, res, next) => {
   //   console.log("handle", handle);
   // }
 };
+
+async function registerUser(datus) {
+  try {
+    const result = await UserSkillSet.query().insertAndFetch(datus);
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
 
 module.exports = { getTest, createProfile, getProfile };

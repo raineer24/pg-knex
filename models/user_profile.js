@@ -56,15 +56,15 @@ class UserProfile extends Model {
     };
   }
 
-  $formatJson(obj) {
-    obj = super.$formatJson(obj);
-    console.log("obj: ", obj);
+  // $formatJson(obj) {
+  //   obj = super.$formatJson(obj);
+  //   console.log("obj: ", obj);
 
-    //obj.avatar = this.avatar;
-    console.log("obj username: ", obj.youtube_handle);
+  //   //obj.avatar = this.avatar;
+  //   console.log("obj username: ", obj.youtube_handle);
 
-    //return _.omit(obj, hiddenFields);
-  }
+  //   //return _.omit(obj, hiddenFields);
+  // }
 }
 
 module.exports = UserProfile;

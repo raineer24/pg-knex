@@ -12,25 +12,29 @@ class UserSkillSet extends Model {
       type: "object",
 
       properties: {
-        id: { type: "integer" },
-        skill_set_name: { type: "array" }
+        user_skill_set_id: { type: "integer" },
+        skill_set_name: { type: "string" }
       }
     };
+  }
+
+  static get idColumn() {
+    return ["user_skill_set_id"];
   }
 
   static get jsonAttributes() {
     return ["skill_set_name"];
   }
 
-  $formatJson(obj) {
-    obj = super.$formatJson(obj);
-    console.log("obj", obj);
+  // $formatJson(obj) {
+  //   obj = super.$formatJson(obj);
+  //   console.log("obj", obj.skill_set_name);
 
-    obj.avatar = this.avatar;
-    console.log("obj username: ", obj.skill_set_name);
+  //   obj.avatar = this.avatar;
+  //   console.log("obj username: ", obj.skill_set_name);
 
-    return _.omit(obj);
-  }
+  //   return _.omit(obj);
+  // }
   $beforeInsert(queryContext) {
     console.log(queryContext);
 
@@ -42,13 +46,45 @@ class UserSkillSet extends Model {
       console.log(this.password);
     }
   }
-  $formatDatabaseJson(json) {
-    // if (json.languages) {
-    //   json.languages = lit(json.languages).asArray();
-    // }
+  // $formatDatabaseJson(json) {
+  //   // if (json.languages) {
+  //   //   json.languages = lit(json.languages).asArray();
+  //   // }
+  //   let skills = json.skill_set_name;
+  //   console.log("skills", skills);
 
-    obj = super.$formatDatabaseJson(json);
-    console.log("obj", obj);
+  //   //obj = super.$formatDatabaseJson(json);
+  //   //console.log("obj", obj);
+  // }
+
+  // $formatDatabaseJson(json) {
+  //   if (json.languages) {
+  //     json.languages = lit(json.languages).asArray();
+  //   }
+
+  //   return super.$formatDatabaseJson(json);
+  // }
+
+  $parseDatabaseJson(json) {
+    // json = super.$parseDatabaseJson(json);
+    //let location = json.location;
+    let skills = json.skill_set_name;
+    //console.log("skill", skills);
+
+    // let x = JSON.stringify(skills);
+    // let xx = JSON.parse(x);
+    // console.log("xx", typeof xx.skills);
+
+    // let x = JSON.parse(skills);
+    // console.log("x");
+
+    if (skills) {
+      skills = JSON.parse(JSON.stringify(skills));
+    }
+    console.log("log", typeof skills);
+
+    return Object.assign({}, json, { skills });
+    // return super.$parseDatabaseJson(json);
   }
 
   // static get relationMappings() {
