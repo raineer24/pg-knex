@@ -1,9 +1,6 @@
 const Model = require("objection").Model;
 require("./../objection");
 const _ = require("lodash");
-const path = require("path");
-const filePath = path.join(__dirname, "/user_profile.js");
-console.log("DIRNAME", filePath);
 
 const hiddenFields = ["password", "created_at", "updated_at"];
 
