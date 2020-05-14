@@ -71,7 +71,7 @@ const createProfile = async (req, res, next) => {
   //   .eager("user");
 
   const data = {
-    skill_set_name: [{ skills: req.body.skill_set_name }]
+    skill_set_name: [req.body.skill_set_name]
   };
   console.log("data", data);
 
@@ -89,12 +89,12 @@ const createProfile = async (req, res, next) => {
   //     }
   //   });
 
-  const obj = { skill_set_name: [{ skills: "c#, dot.net" }] };
+  const obj = { skill_set_name: { skills: "c#, dot.net" } };
 
-  UserSkillSet.query()
-    .insert(data)
-    .then(console.log)
-    .catch(console.error);
+  // UserSkillSet.query()
+  //   .insert(data)
+  //   .then(console.log)
+  //   .catch(console.error);
 
   // const user = await UserSkillSet.query().whereJsonSupersetOf(
   //   "skill_set_name",
@@ -120,10 +120,22 @@ const createProfile = async (req, res, next) => {
   //   .toString();
 
   // // select skills
-  // const user = UserSkillSet.query()
-  //   .select("skill_set_name")
-  //   .map(data => data.skills)
-  //   .then(skills => console.log(skills));
+  const user = UserSkillSet.query()
+    .select("skill_set_name")
+    .map(data => data.skills)
+    .then(skills => {
+      //console.log(skills[1]);
+      let x = skills[1];
+      //var array = x.split(",");
+      a = x[0];
+      //a.split(",");
+      let arr = a.split(",");
+      console.log(arr);
+
+      // if (Array.isArray(x)) {
+      //   console.log("array!");
+      // }
+    });
 
   //const signup = await registerUser(data);
   // const skills1 = user.user_profile[0];

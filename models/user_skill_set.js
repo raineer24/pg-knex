@@ -15,7 +15,7 @@ class UserSkillSet extends Model {
         user_skill_set_id: { type: "integer" },
         skill_set_name: {
           type: "array",
-          items: { type: "object" }
+          items: { type: "strings" }
         }
       }
     };
