@@ -89,11 +89,25 @@ const createProfile = async (req, res, next) => {
   //     }
   //   });
 
-  const user = await UserSkillSet.query();
+  //const user = await UserSkillSet.query();
   // const user = await User.query()
   //   .eager("user_profile.[user_skill_set]")
   //   .findById(req.user.id);
-  console.log("user", user);
+  //console.log("user", user);
+
+  // var query = Knex.insert("messages")
+  //   .insert({
+  //     key: 12345,
+  //     references: ["abc", "def", "ghi"],
+  //     data: { a: 1, b: 2 }
+  //   })
+  //   .toString();
+
+  // select skills
+  const user = UserSkillSet.query()
+    .select("skill_set_name")
+    .map(data => data.skills)
+    .then(skills => console.log(skills));
 
   //const signup = await registerUser(data);
   // const skills1 = user.user_profile[0];
@@ -122,6 +136,7 @@ const createProfile = async (req, res, next) => {
 async function registerUser(datus) {
   try {
     const result = await UserSkillSet.query().insertAndFetch(datus);
+
     return result;
   } catch (error) {
     throw error;

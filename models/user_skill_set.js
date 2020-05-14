@@ -12,8 +12,8 @@ class UserSkillSet extends Model {
       type: "object",
 
       properties: {
-        user_skill_set_id: { type: "integer" },
-        skill_set_name: { type: "string" }
+        user_skill_set_id: { type: "integer" }
+        //skill_set_name: { type: "string" }
       }
     };
   }
@@ -36,7 +36,7 @@ class UserSkillSet extends Model {
   //   return _.omit(obj);
   // }
   $beforeInsert(queryContext) {
-    console.log(queryContext);
+    console.log("query", queryContext);
 
     console.log("image url", this.image_url);
 
@@ -66,24 +66,23 @@ class UserSkillSet extends Model {
   // }
 
   $parseDatabaseJson(json) {
-    // json = super.$parseDatabaseJson(json);
+    json = super.$parseDatabaseJson(json);
     //let location = json.location;
     let skills = json.skill_set_name;
+    console.log("obhect", skills);
     //console.log("skill", skills);
-
     // let x = JSON.stringify(skills);
     // let xx = JSON.parse(x);
     // console.log("xx", typeof xx.skills);
-
     // let x = JSON.parse(skills);
     // console.log("x");
-
     if (skills) {
       skills = JSON.parse(JSON.stringify(skills));
     }
-    console.log("log", typeof skills);
-
+    //  skills = JSON.parse(JSON.stringify(skills));
+    //console.log("log skill", skills.skills);
     return Object.assign({}, json, { skills });
+    //console.log("object json", Object.assign({}, json, { skills }));
     // return super.$parseDatabaseJson(json);
   }
 
