@@ -12,8 +12,11 @@ class UserSkillSet extends Model {
       type: "object",
 
       properties: {
-        user_skill_set_id: { type: "integer" }
-        //skill_set_name: { type: "string" }
+        user_skill_set_id: { type: "integer" },
+        skill_set_name: {
+          type: "array",
+          items: { type: "object" }
+        }
       }
     };
   }
@@ -69,7 +72,8 @@ class UserSkillSet extends Model {
     json = super.$parseDatabaseJson(json);
     //let location = json.location;
     let skills = json.skill_set_name;
-    console.log("obhect", skills);
+    let x = JSON.stringify(skills);
+    console.log("obhect", x);
     //console.log("skill", skills);
     // let x = JSON.stringify(skills);
     // let xx = JSON.parse(x);
@@ -78,7 +82,10 @@ class UserSkillSet extends Model {
     // console.log("x");
     if (skills) {
       skills = JSON.parse(JSON.stringify(skills));
+      //skills = JSON.parse(skills);
     }
+    console.log("json stringify", typeof skills);
+
     //  skills = JSON.parse(JSON.stringify(skills));
     //console.log("log skill", skills.skills);
     return Object.assign({}, json, { skills });
