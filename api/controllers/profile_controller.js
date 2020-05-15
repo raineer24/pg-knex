@@ -48,6 +48,8 @@ const createProfile = async (req, res, next) => {
 
   //Check for other form data
 
+  let areaExpertise = req.body.areas_of_expertise;
+
   const {
     company,
     website,
@@ -57,11 +59,13 @@ const createProfile = async (req, res, next) => {
     youtube_handle,
     twitter_handle,
     facebook_handle,
-    instagram_handle,
-    skill_set_name
+    instagram_handle
   } = req.body;
 
-  const profileFields = {
+  const skill_set_name =
+    typeof areaExpertise === "string" ? [areaExpertise] : areaExpertise;
+
+  const data = {
     user: req.user.id,
     company,
     job_location,
@@ -70,35 +74,12 @@ const createProfile = async (req, res, next) => {
     youtube_handle,
     twitter_handle,
     facebook_handle,
-    instagram_handle,
-    skill_set_name
+    instagram_handle
   };
 
-  console.log("skill_set_name", skill_set_name);
-  console.log("profilefields", typeof profileFields);
+  profileFields = Object.assign(data, { skill_set_name });
 
-  const skills = profileFields.skill_set_name;
-
-  const skill_set_name = typeof skills === "string" ? [skills] : skills;
-  xprofileFields = Object.assign(profileFields, { arr });
-  console.log("xprofilefields", xprofileFields);
-
-  console.log("arr", typeof arr);
-
-  // if (req.body.handle) profileFields.handle = req.body.handle;
-  // if (req.body.company_name) profileFields.company_name = req.body.company_name;
-  // if (req.body.website) profileFields.website = req.body.website;
-  // if (req.body.job_location) profileFields.job_location = req.body.job_location;
-  // if (req.body.status) profileFields.status = req.body.status;
-  // if (req.body.bio) profileFields.bio = req.body.bio;
-  // if (req.body.youtube_handle)
-  //   profileFields.youtube_handle = req.body.youtube_handle;
-  // if (req.body.twitter_handle)
-  //   profileFields.twitter_handle = req.body.twitter_handle;
-  // if (req.body.facebook_handle)
-  //   profileFields.facebook_handle = req.body.facebook_handle;
-  // if (req.body.instagram_handle)
-  //   profileFields.instagram_handle = req.body.instagram_handle;
+  console.log("data", profileFields);
 
   // const user = await UserProfile.query()
   //   .findById(req.user.id)
@@ -123,12 +104,12 @@ const createProfile = async (req, res, next) => {
   //     }
   //   });
 
-  const obj = { skill_set_name: { skills: "c#, dot.net" } };
+  // const obj = { skill_set_name: { skills: "c#, dot.net" } };
 
-  UserSkillSet.query()
-    .insert(profileFields)
-    .then(console.log)
-    .catch(console.error);
+  // UserSkillSet.query()
+  //   .insert(profileFields)
+  //   .then(console.log)
+  //   .catch(console.error);
 
   //const user = await UserSkillSet.query();
   // const user = await User.query()
