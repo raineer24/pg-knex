@@ -14,30 +14,39 @@ const fileUpload = require("../../middleware/image");
 const User = require("../../models/users");
 const log = require("color-logs")(true, true, "User Account");
 
-const multer = require("multer");
+const passport = require("passport");
+
+const validation = require("../../validation/express-register");
 
 const {
-  getCurrent,
+  getUsers,
   postLogin,
   createUser
 } = require("../controllers/auth_controller");
 
-router.get("/current", checkAuth, (req, res) => {
-  res.json({
-    message: "Welcome Test Development"
-  });
-});
+// router.get("/current", checkAuth, (req, res) => {
+//   res.json({
+//     message: "Welcome Test Development"
+//   });
+// });
 
+// @route   GET api/users/current
+// @desc    Return current user
+// @access  Private
 router
-  .route("/current1")
-  .all(checkAuth)
-  .get(getCurrent);
+  .route("/")
+  .all(passport.authenticate("jwt", { session: false }))
+  .get(getUsers);
 
-router
-  .route("/register")
-  .all(fileUpload)
-  .post(createUser);
+// router
+//   .route("/register")
+//   .all(fileUpload)
+//   .post(createUser);
 
-router.route("/login").post(postLogin);
+router.post("/register", fileUpload, validation.validateUser, createUser);
+
+//router.route("/login").post(postLogin);
+
+router.post("/login", postLogin);
 
 module.exports = router;
