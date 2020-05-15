@@ -168,8 +168,14 @@ const createProfile = async (req, res, next) => {
     .findById(req.user.id)
     .debug()
     .then(data => {
-      //console.log("DATA", data.user_skill);
       console.log("DATA", data.user_skill);
+      skill = data.user_skill;
+      if (Array.isArray(skill)) {
+        console.log("array!");
+      }
+      skill.forEach(function(item) {
+        console.log(item.skill_set_name);
+      });
     });
 
   // const user = await User.query()
