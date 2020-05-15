@@ -68,30 +68,30 @@ class UserSkillSet extends Model {
   //   return super.$formatDatabaseJson(json);
   // }
 
-  $parseDatabaseJson(json) {
-    json = super.$parseDatabaseJson(json);
-    //let location = json.location;
-    let skills = json.skill_set_name;
-    let x = JSON.stringify(skills);
-    console.log("obhect", x);
-    //console.log("skill", skills);
-    // let x = JSON.stringify(skills);
-    // let xx = JSON.parse(x);
-    // console.log("xx", typeof xx.skills);
-    // let x = JSON.parse(skills);
-    // console.log("x");
-    if (skills) {
-      skills = JSON.parse(JSON.stringify(skills));
-      //skills = JSON.parse(skills);
-    }
-    console.log("json stringify", typeof skills);
+  // $parseDatabaseJson(json) {
+  //   json = super.$parseDatabaseJson(json);
+  //   //let location = json.location;
+  //   let skills = json.skill_set_name;
+  //   let x = JSON.stringify(skills);
+  //   console.log("obhect", x);
+  //   //console.log("skill", skills);
+  //   // let x = JSON.stringify(skills);
+  //   // let xx = JSON.parse(x);
+  //   // console.log("xx", typeof xx.skills);
+  //   // let x = JSON.parse(skills);
+  //   // console.log("x");
+  //   if (skills) {
+  //     skills = JSON.parse(JSON.stringify(skills));
+  //     //skills = JSON.parse(skills);
+  //   }
+  //   console.log("json stringify", typeof skills);
 
-    //  skills = JSON.parse(JSON.stringify(skills));
-    //console.log("log skill", skills.skills);
-    return Object.assign({}, json, { skills });
-    //console.log("object json", Object.assign({}, json, { skills }));
-    // return super.$parseDatabaseJson(json);
-  }
+  //   //  skills = JSON.parse(JSON.stringify(skills));
+  //   //console.log("log skill", skills.skills);
+  //   return Object.assign({}, json, { skills });
+  //   //console.log("object json", Object.assign({}, json, { skills }));
+  //   // return super.$parseDatabaseJson(json);
+  // }
 
   // static get relationMappings() {
   //   const User = require("./user_profile");

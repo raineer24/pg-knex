@@ -51,7 +51,7 @@ const createProfile = async (req, res, next) => {
   let areaExpertise = req.body.areas_of_expertise;
 
   const {
-    company,
+    company_name,
     website,
     job_location,
     status,
@@ -66,8 +66,8 @@ const createProfile = async (req, res, next) => {
     typeof areaExpertise === "string" ? [areaExpertise] : areaExpertise;
 
   const data = {
-    user: req.user.id,
-    company,
+    //user: req.user.id,
+    company_name,
     job_location,
     status,
     bio,
@@ -77,18 +77,47 @@ const createProfile = async (req, res, next) => {
     instagram_handle
   };
 
-  profileFields = Object.assign(data, { skill_set_name });
+  console.log("data: ", data);
 
-  console.log("data", profileFields);
+  // profileFields = Object.assign(data, { skill_set_name });
+
+  //console.log("data", profileFields);
 
   // const user = await UserProfile.query()
   //   .findById(req.user.id)
-  //   .eager("user");
+  //   .eager("user_skill_set");
 
   // const data = {
   //   skill_set_name: [req.body.skill_set_name]
   // };
-  //console.log("data", data);
+  //console.log("data", user);
+
+  async function saveSale() {
+    // const newSale = {
+    //   subtotal: 10,
+    //   taxes: 8,
+    //   total: 18,
+    //   // property details because that's how we
+    //   // call it in the relationMappings
+    //   details: [
+    //     {
+    //       product: "Tomato",
+    //       quantity: 1,
+    //       price: 4
+    //     },
+    //     {
+    //       product: "Potato",
+    //       quantity: 2,
+    //       price: 3
+    //     }
+    //   ]
+    // };
+    const profileUser = await UserProfile.query().insertGraph(data);
+    console.log(`New Profile Id is ${profileUser.id}`);
+    return profileUser;
+  }
+
+  saveSale();
 
   // const user = await UserProfile.query()
   //   .findById(req.user.id)
@@ -112,10 +141,11 @@ const createProfile = async (req, res, next) => {
   //   .catch(console.error);
 
   //const user = await UserSkillSet.query();
+
   // const user = await User.query()
   //   .eager("user_profile.[user_skill_set]")
   //   .findById(req.user.id);
-  //console.log("user", user);
+  // console.log("user", user);
 
   // var query = Knex.insert("messages")
   //   .insert({
