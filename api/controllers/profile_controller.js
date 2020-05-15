@@ -65,9 +65,12 @@ const createProfile = async (req, res, next) => {
   const skill_set_name =
     typeof areaExpertise === "string" ? [areaExpertise] : areaExpertise;
 
+  console.log(skill_set_name);
+
   const data = {
     //user: req.user.id,
     company_name,
+    website,
     job_location,
     status,
     bio,
@@ -75,21 +78,14 @@ const createProfile = async (req, res, next) => {
     twitter_handle,
     facebook_handle,
     instagram_handle,
-    details: [
+    user_skill_set: [
       {
-        product: "Tomato",
-        quantity: 1,
-        price: 4
-      },
-      {
-        product: "Potato",
-        quantity: 2,
-        price: 3
+        skill_set_name: skill_set_name
       }
     ]
   };
 
-  // console.log("data: ", data);
+  console.log("data: ", data);
 
   // profileFields = Object.assign(data, { skill_set_name });
 
@@ -99,39 +95,39 @@ const createProfile = async (req, res, next) => {
   //   .findById(req.user.id)
   //   .eager("user_skill_set");
 
-  // const data = {
-  //   skill_set_name: [req.body.skill_set_name]
-  // };
-  //console.log("data", user);
+  // // const data = {
+  // //   skill_set_name: [req.body.skill_set_name]
+  // // };
+  // console.log("data", user);
 
-  // async function saveProfile() {
-  //   // const newSale = {
-  //   //   subtotal: 10,
-  //   //   taxes: 8,
-  //   //   total: 18,
-  //   //   // property details because that's how we
-  //   //   // call it in the relationMappings
-  //   //   details: [
-  //   //     {
-  //   //       product: "Tomato",
-  //   //       quantity: 1,
-  //   //       price: 4
-  //   //     },
-  //   //     {
-  //   //       product: "Potato",
-  //   //       quantity: 2,
-  //   //       price: 3
-  //   //     }
-  //   //   ]
-  //   // };
+  async function saveProfile() {
+    // const newSale = {
+    //   subtotal: 10,
+    //   taxes: 8,
+    //   total: 18,
+    //   // property details because that's how we
+    //   // call it in the relationMappings
+    //   details: [
+    //     {
+    //       product: "Tomato",
+    //       quantity: 1,
+    //       price: 4
+    //     },
+    //     {
+    //       product: "Potato",
+    //       quantity: 2,
+    //       price: 3
+    //     }
+    //   ]
+    // };
 
-  //   // end here
-  //   const profileUser = await UserProfile.query().insertGraph(data);
-  //   console.log(`New Profile Id is ${profileUser.id}`);
-  //   return profileUser;
-  // }
+    // end here
+    const profileUser = await UserProfile.query().insertGraph(data);
+    console.log(`New Profile Id is ${profileUser.id}`);
+    return profileUser;
+  }
 
-  // saveProfile();
+  saveProfile();
 
   // const user = await UserProfile.query()
   //   .findById(req.user.id)
@@ -161,24 +157,24 @@ const createProfile = async (req, res, next) => {
   //   .findById(req.user.id);
   // console.log("user", user);
 
-  const user = await User.query()
-    .eager("user_skill")
-    .modifyEager("user_skill", builder => builder.select("skill_set_name"))
-    //.whereIn('has_skills.id', skillIds)
-    .findById(req.user.id)
-    .debug()
-    .then(data => {
-      console.log("DATA", data.user_skill);
-      skill = data.user_skill;
-      if (Array.isArray(skill)) {
-        console.log("array!");
-      }
-      skill.forEach(function(item) {
-        console.log(item.skill_set_name);
-      });
-    });
-
   // const user = await User.query()
+  //   .eager("user_skill")
+  //   .modifyEager("user_skill", builder => builder.select("skill_set_name"))
+  //   //.whereIn('has_skills.id', skillIds)
+  //   .findById(req.user.id)
+  //   .debug()
+  //   .then(data => {
+  //     console.log("DATA", data.user_skill);
+  //     skill = data.user_skill;
+  //     if (Array.isArray(skill)) {
+  //       console.log("array!");
+  //     }
+  //     skill.forEach(function(item) {
+  //       console.log(item.skill_set_name);
+  //     });
+  //   });
+
+  //const user = await User.query();
   //   //select("users")
   //   // Use .eager instead of .joinEager as pagination doesn't work with it due to joins.
   //   .eager("user_skill")

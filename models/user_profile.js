@@ -46,7 +46,7 @@ class UserProfile extends Model {
     const UserSkillSet = require("./user_skill_set");
     return {
       user_skill_set: {
-        relation: Model.BelongsToOneRelation,
+        relation: Model.HasManyRelation,
         modelClass: UserSkillSet,
         join: {
           from: "user_profile.id",
