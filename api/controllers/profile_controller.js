@@ -34,7 +34,7 @@ const getProfile = async (req, res, next) => {
         }
       });
 
-    console.log("user", user);
+    // console.log("user", user);
   } catch (error) {
     throw error;
   }
@@ -74,10 +74,22 @@ const createProfile = async (req, res, next) => {
     youtube_handle,
     twitter_handle,
     facebook_handle,
-    instagram_handle
+    instagram_handle,
+    details: [
+      {
+        product: "Tomato",
+        quantity: 1,
+        price: 4
+      },
+      {
+        product: "Potato",
+        quantity: 2,
+        price: 3
+      }
+    ]
   };
 
-  console.log("data: ", data);
+  // console.log("data: ", data);
 
   // profileFields = Object.assign(data, { skill_set_name });
 
@@ -92,32 +104,34 @@ const createProfile = async (req, res, next) => {
   // };
   //console.log("data", user);
 
-  async function saveSale() {
-    // const newSale = {
-    //   subtotal: 10,
-    //   taxes: 8,
-    //   total: 18,
-    //   // property details because that's how we
-    //   // call it in the relationMappings
-    //   details: [
-    //     {
-    //       product: "Tomato",
-    //       quantity: 1,
-    //       price: 4
-    //     },
-    //     {
-    //       product: "Potato",
-    //       quantity: 2,
-    //       price: 3
-    //     }
-    //   ]
-    // };
-    const profileUser = await UserProfile.query().insertGraph(data);
-    console.log(`New Profile Id is ${profileUser.id}`);
-    return profileUser;
-  }
+  // async function saveProfile() {
+  //   // const newSale = {
+  //   //   subtotal: 10,
+  //   //   taxes: 8,
+  //   //   total: 18,
+  //   //   // property details because that's how we
+  //   //   // call it in the relationMappings
+  //   //   details: [
+  //   //     {
+  //   //       product: "Tomato",
+  //   //       quantity: 1,
+  //   //       price: 4
+  //   //     },
+  //   //     {
+  //   //       product: "Potato",
+  //   //       quantity: 2,
+  //   //       price: 3
+  //   //     }
+  //   //   ]
+  //   // };
 
-  saveSale();
+  //   // end here
+  //   const profileUser = await UserProfile.query().insertGraph(data);
+  //   console.log(`New Profile Id is ${profileUser.id}`);
+  //   return profileUser;
+  // }
+
+  // saveProfile();
 
   // const user = await UserProfile.query()
   //   .findById(req.user.id)
@@ -147,6 +161,49 @@ const createProfile = async (req, res, next) => {
   //   .findById(req.user.id);
   // console.log("user", user);
 
+  const user = await User.query()
+    .eager("user_skill")
+    .modifyEager("user_skill", builder => builder.select("skill_set_name"))
+    //.whereIn('has_skills.id', skillIds)
+    .findById(req.user.id)
+    .debug()
+    .then(data => {
+      //console.log("DATA", data.user_skill);
+      console.log("DATA", data.user_skill);
+    });
+
+  // const user = await User.query()
+  //   //select("users")
+  //   // Use .eager instead of .joinEager as pagination doesn't work with it due to joins.
+  //   .eager("user_skill")
+  //   // Optional: Populating the matched skills
+  //   .modifyEager("user_skill", builder => builder.select("user_skill"))
+  //   .then(console.log);
+  //console.log("user  : ", user);
+
+  // User.query()
+  //   .findById(req.user.id)
+  //   .select("id")
+  //   .eager("user_skill")
+  //   .filterEager("user_skill", builder => {
+  //     builder.select("skill_set_name");
+  //   })
+  //   .debug()
+  //   .then(console.log);
+
+  // User.query()
+  //   .findById(req.user.id)
+  //   .select("id")
+  //   .eager("user_skill")
+  //   .filterEager("user_skill", builder => {
+  //     builder.select("skill_set_name");
+  //   })
+  //   .debug()
+  //   .then(data => {
+  //     //console.log("DATA", data.user_skill);
+  //     console.log("DATA", data);
+  //   });
+
   // var query = Knex.insert("messages")
   //   .insert({
   //     key: 12345,
@@ -154,6 +211,12 @@ const createProfile = async (req, res, next) => {
   //     data: { a: 1, b: 2 }
   //   })
   //   .toString();
+
+  // .filterEager('purchases', builder => {
+  //   builder.select('id', 'transaction_id');
+  // })
+  // .debug()
+  // .then(console.log);
 
   // // select skills
   // const user = UserSkillSet.query()
