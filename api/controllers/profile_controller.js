@@ -93,6 +93,14 @@ const createProfile = async (req, res, next) => {
   }
   updateProfile();
 
+  async function saveProfile() {
+    const profileUser = await UserProfile.query().insertGraph(data);
+    console.log(`New Profile Id is ${profileUser.id}`);
+    return profileUser;
+  }
+
+  saveProfile();
+
   // const user = await UserProfile.query()
   //   .findById(req.user.id)
   //   .then(profile => {
