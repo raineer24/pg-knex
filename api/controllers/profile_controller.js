@@ -68,7 +68,6 @@ const createProfile = async (req, res, next) => {
   console.log(skill_set_name);
 
   const data = {
-    //user: req.user.id,
     company_name,
     website,
     job_location,
@@ -85,36 +84,13 @@ const createProfile = async (req, res, next) => {
     ]
   };
 
-  console.log("data: ", data);
-
-  // profileFields = Object.assign(data, { skill_set_name });
-
-  //console.log("data", profileFields);
-
-  // const user = await UserProfile.query()
-  //   .findById(req.user.id)
-  //   .eager("user_skill_set");
-
-  // // const data = {
-  // //   skill_set_name: [req.body.skill_set_name]
-  // // };
-  // console.log("data", user);
-
   async function updateProfile() {
     const updateProfile = await UserProfile.query()
       .findById(req.user.id)
       .patch({ website: "richcoooper.com.ph", bio: "kobe killah" })
       .returning("*");
-
-    //console.log(updateJennifer.updatedAt); // NOW()-ish
-    console.log(updateProfile.website);
-
-    // end here
-    //const profileUser = await UserProfile.query().insertGraph(data);
-    //console.log(`New Profile Id is ${profileUser.id}`);
     return updateProfile;
   }
-
   updateProfile();
 
   // const user = await UserProfile.query()
