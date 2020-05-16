@@ -71,24 +71,26 @@ const createProfile = async (req, res, next) => {
 
   console.log(skill_set_name);
 
-  const data = {
-    company_name,
-    website,
-    job_location,
-    status,
-    bio,
-    youtube_handle,
-    twitter_handle,
-    facebook_handle,
-    instagram_handle,
-    user_skill_set: [
-      {
-        skill_set_name: skill_set_name
-      }
-    ]
-  };
-
   try {
+    const data = {
+      company_name,
+      website,
+      job_location,
+      status,
+      bio,
+      youtube_handle,
+      twitter_handle,
+      facebook_handle,
+      instagram_handle,
+      user_skill_set: [
+        {
+          skill_set_name: skill_set_name
+        }
+      ]
+    };
+
+    console.log("data", data);
+
     const profileCreate = await registerProfile(data);
   } catch (error) {
     log.error(`Profile controller[createProfile]: Failed to send ${error}`);
