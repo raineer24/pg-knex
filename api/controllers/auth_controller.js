@@ -16,16 +16,12 @@ const {
 } = require("../../helpers/error_helper");
 
 const cloudinary = require("cloudinary");
-const { validationResult } = require("express-validator");
 
 cloudinary.config({
   cloud_name: "dwsbpkgvr",
   api_key: "246382268158277",
   api_secret: "OEJwFk8xMOuNID7Z7L5MNDJ9nY8"
 });
-
-// Load Input Validation
-const expressTest = require("../../validation/express-register");
 
 // @route GET api/users/register
 // @desc Register a user
