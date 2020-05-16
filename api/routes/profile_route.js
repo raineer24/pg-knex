@@ -8,6 +8,8 @@ const {
   getProfile
 } = require("../controllers/profile_controller");
 
+const validation = require("../../validation/express-profile");
+
 //@route GET /api/v2/user/profile
 // @desc  Get current user's profile
 // @access Private - use jwt strategy to authenticate
@@ -19,6 +21,7 @@ router.get("/", passport.authenticate("jwt", { session: false }), getProfile);
 router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
+  validation.validateProfile,
   createProfile
 );
 
