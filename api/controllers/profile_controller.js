@@ -100,22 +100,22 @@ const createProfile = async (req, res, next) => {
   // // };
   // console.log("data", user);
 
-  async function saveProfile() {
-    const updateJennifer = await jennifer
-      .$query()
-      .patch({ firstName: "J.", lastName: "Lawrence" })
+  async function updateProfile() {
+    const updateProfile = await UserProfile.query()
+      .findById(req.user.id)
+      .patch({ website: "richcoooper.com.ph", bio: "kobe killah" })
       .returning("*");
 
-    console.log(updateJennifer.updatedAt); // NOW()-ish
-    console.log(updateJennifer.firstName);
+    //console.log(updateJennifer.updatedAt); // NOW()-ish
+    console.log(updateProfile.website);
 
     // end here
-    const profileUser = await UserProfile.query().insertGraph(data);
-    console.log(`New Profile Id is ${profileUser.id}`);
-    return profileUser;
+    //const profileUser = await UserProfile.query().insertGraph(data);
+    //console.log(`New Profile Id is ${profileUser.id}`);
+    return updateProfile;
   }
 
-  saveProfile();
+  updateProfile();
 
   // const user = await UserProfile.query()
   //   .findById(req.user.id)
