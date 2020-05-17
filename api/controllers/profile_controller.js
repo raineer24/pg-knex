@@ -108,6 +108,7 @@ const createProfile = async (req, res, next) => {
       );
     } else {
       const profileCreate = await registerProfile(data);
+      return res.status(200).json(profileCreate);
     }
   } catch (error) {
     log.error(`Profile controller[createProfile]: Failed to send ${error}`);
