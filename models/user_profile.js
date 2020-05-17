@@ -46,14 +46,6 @@ class UserProfile extends Model {
     const UserSkillSet = require("./user_skill_set");
     const Users = require("./users");
     return {
-      user: {
-        relation: Model.BelongsToOneRelation,
-        ModelClass: Users,
-        join: {
-          from: "user_profile.id",
-          to: "users.id"
-        }
-      },
       user_skill_set: {
         relation: Model.HasManyRelation,
         modelClass: UserSkillSet,
@@ -64,16 +56,6 @@ class UserProfile extends Model {
       }
     };
   }
-
-  // $formatJson(obj) {
-  //   obj = super.$formatJson(obj);
-  //   console.log("obj: ", obj);
-
-  //   //obj.avatar = this.avatar;
-  //   console.log("obj username: ", obj.youtube_handle);
-
-  //   //return _.omit(obj, hiddenFields);
-  // }
 }
 
 module.exports = UserProfile;
