@@ -25,7 +25,7 @@ const getProfile = async (req, res, next) => {
   try {
     const user = await UserProfile.query()
       .findById(req.user.id)
-      //.eager("user_profile")
+      .eager("user_skill_set")
       .then(userprofile => {
         console.log("userprofile", userprofile);
         if (userprofile === "undefined") {
@@ -36,6 +36,7 @@ const getProfile = async (req, res, next) => {
             })
           );
         }
+        res.json(userprofile);
       });
 
     // const user = await User.query()
