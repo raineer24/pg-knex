@@ -44,7 +44,16 @@ class UserProfile extends Model {
 
   static get relationMappings() {
     const UserSkillSet = require("./user_skill_set");
+    const Users = require("./users");
     return {
+      user: {
+        relation: Model.BelongsToOneRelation,
+        ModelClass: Users,
+        join: {
+          from: "user_profile.id",
+          to: "users.id"
+        }
+      },
       user_skill_set: {
         relation: Model.HasManyRelation,
         modelClass: UserSkillSet,

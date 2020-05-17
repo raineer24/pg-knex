@@ -73,6 +73,7 @@ const createProfile = async (req, res, next) => {
 
   try {
     const data = {
+      users_id: req.user.id,
       company_name,
       website,
       job_location,
