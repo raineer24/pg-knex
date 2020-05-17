@@ -25,7 +25,7 @@ const getProfile = async (req, res, next) => {
   try {
     const user = await UserProfile.query()
       .findById(req.user.id)
-      .eager("user")
+      .eager("user_skill_set")
       .then(userprofile => {
         console.log("userprofile", userprofile);
         if (userprofile === "undefined") {
@@ -36,7 +36,13 @@ const getProfile = async (req, res, next) => {
             })
           );
         }
+        res.json(userprofile);
       });
+
+    // const user = await User.query()
+    //   .eager("user_profile")
+    //   .findById(req.user.id);
+    // console.log("user", user);
 
     // console.log("user", user);
   } catch (error) {
@@ -73,6 +79,7 @@ const createProfile = async (req, res, next) => {
 
   try {
     const data = {
+      users_id: req.user.id,
       company_name,
       website,
       job_location,
@@ -89,9 +96,19 @@ const createProfile = async (req, res, next) => {
       ]
     };
 
-    console.log("data", data);
+    //console.log("data", data);
 
-    const profileCreate = await registerProfile(data);
+    const profile = await UserProfile.query().findById(req.user.id);
+    if (profile) {
+      return next(
+        createError({
+          status: CONFLICT,
+          message: "Already added profile"
+        })
+      );
+    } else {
+      const profileCreate = await registerProfile(data);
+    }
   } catch (error) {
     log.error(`Profile controller[createProfile]: Failed to send ${error}`);
 

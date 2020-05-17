@@ -44,6 +44,7 @@ class UserProfile extends Model {
 
   static get relationMappings() {
     const UserSkillSet = require("./user_skill_set");
+    const Users = require("./users");
     return {
       user_skill_set: {
         relation: Model.HasManyRelation,
@@ -55,16 +56,6 @@ class UserProfile extends Model {
       }
     };
   }
-
-  // $formatJson(obj) {
-  //   obj = super.$formatJson(obj);
-  //   console.log("obj: ", obj);
-
-  //   //obj.avatar = this.avatar;
-  //   console.log("obj username: ", obj.youtube_handle);
-
-  //   //return _.omit(obj, hiddenFields);
-  // }
 }
 
 module.exports = UserProfile;
