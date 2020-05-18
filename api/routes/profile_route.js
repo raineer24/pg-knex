@@ -3,9 +3,10 @@ const router = express.Router();
 const passport = require("passport");
 
 const {
-  getTest,
+  getTest1,
   createProfile,
-  getProfile
+  getProfile,
+  createExpProfile
 } = require("../controllers/profile_controller");
 
 const validation = require("../../validation/express-profile");
@@ -23,6 +24,15 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   validation.validateProfile,
   createProfile
+);
+
+// @route POST api/profile/experience
+// @desc  Add experience to profile
+// @access Private
+router.post(
+  "/experience",
+  passport.authenticate("jwt", { session: false }),
+  createExpProfile
 );
 
 module.exports = router;

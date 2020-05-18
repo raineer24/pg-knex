@@ -15,8 +15,12 @@ const getTest = (req, res, next) => {
   res.json({ msg: "Profile works" });
 };
 
-// Load Input Validation
-const expressTest = require("../../validation/express-profile");
+// @route POST api/profile/experience
+// @desc  Add experience to profile
+// @access Private
+const createExpProfile = (req, res, next) => {
+  res.json({ msg: "Profile works" });
+};
 
 // @route    GET /api/v2/user/profile
 // @desc     Get current user's profile
@@ -128,4 +132,4 @@ async function registerProfile(datus) {
   }
 }
 
-module.exports = { getTest, createProfile, getProfile };
+module.exports = { getTest, createProfile, getProfile, createExpProfile };
