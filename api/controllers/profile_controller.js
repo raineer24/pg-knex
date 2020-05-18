@@ -1,6 +1,7 @@
 const UserProfile = require("../../models/user_profile");
 const User = require("../../models/users");
 const UserSkillSet = require("../../models/user_skill_set");
+const UserExperience = require("../../models/user_exp");
 const passport = require("passport");
 const log = require("color-logs")(true, true, "User Profile");
 
@@ -18,8 +19,27 @@ const getTest = (req, res, next) => {
 // @route POST api/profile/experience
 // @desc  Add experience to profile
 // @access Private
-const createExpProfile = (req, res, next) => {
-  res.json({ msg: "Profile works" });
+const createExpProfile = async (req, res, next) => {
+  try {
+    const profile = await UserExperience.query().findById(req.user.id);
+    if (profile) {
+      return next(
+        createError({
+          status: CONFLICT,
+          message: "Already added experience profile"
+        })
+      );
+    } else {
+      console.log("experience profile doesn`t exist");
+
+      //const profileCreate = await registerProfile(data);
+      //return res.status(200).json(profileCreate);
+    }
+  } catch (error) {
+    log.error(`Profile controller[createExpProfile]: Failed to send ${error}`);
+
+    return next(error);
+  }
 };
 
 // @route    GET /api/v2/user/profile
@@ -78,8 +98,6 @@ const createProfile = async (req, res, next) => {
 
   const skill_set_name =
     typeof areaExpertise === "string" ? [areaExpertise] : areaExpertise;
-
-  console.log(skill_set_name);
 
   try {
     const data = {
