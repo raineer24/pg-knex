@@ -36,12 +36,12 @@ router.post(
   createProfile
 );
 
-// @route POST api/profile/experience
+// @route POST api/v2/users/profile/experience
 // @desc  Add experience to profile
 // @access Private
 router.post(
   "/experience",
-  passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", { session: false }), validation.validateExpProfile
   createExpProfile
 );
 
