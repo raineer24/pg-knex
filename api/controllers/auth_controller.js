@@ -221,6 +221,9 @@ function uploadToCloudinary(image) {
 //   });
 // }
 
+// @route    GET api/v2/users
+// @desc     Get all users
+// @access   Public
 const getUsers = (req, res, next) => {
   User.query().then(user => {
     res.json({

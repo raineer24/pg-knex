@@ -20,6 +20,26 @@ const getTest = (req, res, next) => {
 // @desc  Add experience to profile
 // @access Private
 const createExpProfile = async (req, res, next) => {
+  const {
+    job_title,
+    company_name,
+    job_location,
+    start_date,
+    end_date,
+    current,
+    description
+  } = req.body;
+
+  const newExp = {
+    job_title,
+    company_name,
+    job_location,
+    start_date,
+    end_date,
+    current,
+    description
+  };
+
   try {
     const profile = await UserExperience.query().findById(req.user.id);
     if (profile) {
@@ -32,8 +52,8 @@ const createExpProfile = async (req, res, next) => {
     } else {
       console.log("experience profile doesn`t exist");
 
-      //const profileCreate = await registerProfile(data);
-      //return res.status(200).json(profileCreate);
+      const profileExpCreate = await registerExpProfile(data);
+      return res.status(200).json(profileExpCreate);
     }
   } catch (error) {
     log.error(`Profile controller[createExpProfile]: Failed to send ${error}`);
@@ -143,6 +163,15 @@ async function registerProfile(datus) {
   try {
     // const result = await UserSkillSet.query().insertAndFetch(datus);
     const result = await UserProfile.query().insertGraph(datus);
+
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
+async function registerExpProfile(datus) {
+  try {
+    const result = await UserExperience.query().insertGraph(datus);
 
     return result;
   } catch (error) {
