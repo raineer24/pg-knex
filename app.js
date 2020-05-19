@@ -63,7 +63,7 @@ app.use((req, res, next) => {
 
 app.use("/api/v2/blogs", blogRoute);
 app.use("/api/v2/users", authRoutes);
-app.use("/api/v2/user/profile", profileRoutes);
+app.use("/api/v2/users/profile", profileRoutes);
 app.use("/api/v2/test", test);
 
 app.use(require("./middleware/error_middleware").all);

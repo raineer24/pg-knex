@@ -52,7 +52,7 @@ const createExpProfile = async (req, res, next) => {
     } else {
       console.log("experience profile doesn`t exist");
 
-      const profileExpCreate = await registerExpProfile(data);
+      const profileExpCreate = await registerExpProfile(newExp);
       return res.status(200).json(profileExpCreate);
     }
   } catch (error) {
