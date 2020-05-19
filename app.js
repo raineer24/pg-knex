@@ -62,8 +62,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/v2/blogs", blogRoute);
-app.use("/api/v2/users", userRoute);
-app.use("/api/v2/user", authRoutes); //another route
+app.use("/api/v2/users", authRoutes);
 app.use("/api/v2/user/profile", profileRoutes);
 app.use("/api/v2/test", test);
 

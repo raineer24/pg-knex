@@ -30,13 +30,10 @@ const {
 //   });
 // });
 
-// @route   GET api/users/current
-// @desc    Return current user
-// @access  Private
-router
-  .route("/")
-  .all(passport.authenticate("jwt", { session: false }))
-  .get(getUsers);
+// @route   GET api/v2/users/
+// @desc    Return all users
+// @access  Public
+router.route("/").get(getUsers);
 
 // router
 //   .route("/register")
