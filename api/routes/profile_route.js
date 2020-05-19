@@ -6,17 +6,27 @@ const {
   getTest1,
   createProfile,
   getProfile,
-  createExpProfile
+  createExpProfile,
+  AllProfiles
 } = require("../controllers/profile_controller");
 
 const validation = require("../../validation/express-profile");
 
-//@route GET /api/v2/user/profile
+//@route GET /api/v2/users/profile/getProfiles
+// @desc     Get all profiles
+// @access   Public
+router.get("/getProfiles", AllProfiles);
+
+//@route GET /api/v2/users/profile
 // @desc  Get current user's profile
 // @access Private - use jwt strategy to authenticate
-router.get("/", passport.authenticate("jwt", { session: false }), getProfile);
+router.get(
+  "/current",
+  passport.authenticate("jwt", { session: false }),
+  getProfile
+);
 
-//@route POST /api/v2/user/profile
+//@route POST /api/v2/users/profile
 // @desc   Create or Edit user profile
 // @access Private - use jwt strategy to authenticate
 router.post(

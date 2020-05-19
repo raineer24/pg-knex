@@ -16,6 +16,10 @@ const getTest = (req, res, next) => {
   res.json({ msg: "Profile works" });
 };
 
+const AllProfiles = (req, res, next) => {
+  res.json({ msg: "Profile works" });
+};
+
 // @route POST api/profile/experience
 // @desc  Add experience to profile
 // @access Private
@@ -53,7 +57,7 @@ const createExpProfile = async (req, res, next) => {
       console.log("experience profile doesn`t exist");
 
       const profileExpCreate = await registerExpProfile(newExp);
-      return res.status(200).json(profileExpCreate);
+      return res.status(200).json({ success: true, profileExpCreate });
     }
   } catch (error) {
     log.error(`Profile controller[createExpProfile]: Failed to send ${error}`);
@@ -62,7 +66,7 @@ const createExpProfile = async (req, res, next) => {
   }
 };
 
-// @route    GET /api/v2/user/profile
+// @route    GET /api/v2/user/profile/current
 // @desc     Get current user's profile
 // @access   Private
 const getProfile = async (req, res, next) => {
@@ -179,4 +183,10 @@ async function registerExpProfile(datus) {
   }
 }
 
-module.exports = { getTest, createProfile, getProfile, createExpProfile };
+module.exports = {
+  getTest,
+  createProfile,
+  getProfile,
+  createExpProfile,
+  AllProfiles
+};
