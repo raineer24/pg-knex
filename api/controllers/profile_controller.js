@@ -67,8 +67,6 @@ const createExpProfile = async (req, res, next) => {
         })
       );
     } else {
-      console.log("experience profile doesn`t exist");
-
       const profileExpCreate = await registerExpProfile(newExp);
       return res.status(200).json({ success: true, profileExpCreate });
     }
@@ -105,7 +103,17 @@ const createEducation = async (req, res, next) => {
     };
 
     const profileEducation = await UserEducation.query().findById(req.user.id);
-    console.log("profileEducation", profileEducation);
+    if (profileEducation) {
+      return next(
+        createError({
+          status: CONFLICT,
+          message: "Already added education profile"
+        })
+      );
+    } else {
+      const profileEduCreate = await registerExpProfile(newEdu);
+      return res.status(200).json({ success: true, profileEduCreate });
+    }
   } catch (error) {
     log.error(`Profile controller[createEducation]: Failed to send ${error}`);
 
@@ -213,6 +221,16 @@ async function registerProfile(datus) {
 async function registerExpProfile(datus) {
   try {
     const result = await UserExperience.query().insertGraph(datus);
+
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function registerExpProfile(datus) {
+  try {
+    const result = await UserEducation.query().insertGraph(datus);
 
     return result;
   } catch (error) {
