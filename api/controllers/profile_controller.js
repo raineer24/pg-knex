@@ -2,6 +2,7 @@ const UserProfile = require("../../models/user_profile");
 const User = require("../../models/users");
 const UserSkillSet = require("../../models/user_skill_set");
 const UserExperience = require("../../models/user_exp");
+const UserEducation = require("../../models/user_edu");
 const passport = require("passport");
 const log = require("color-logs")(true, true, "User Profile");
 
@@ -84,24 +85,27 @@ const createExpProfile = async (req, res, next) => {
 const createEducation = async (req, res, next) => {
   try {
     const {
-      school,
-      degree,
-      fieldofstudy,
-      from,
-      to,
+      school_name,
+      degree_name,
+      major_fieldofstudy,
+      start_date,
+      end_date,
       current,
       description
     } = req.body;
 
     const newEdu = {
-      school,
-      degree,
-      fieldofstudy,
-      from,
-      to,
+      school_name,
+      degree_name,
+      major_fieldofstudy,
+      start_date,
+      end_date,
       current,
       description
     };
+
+    const profileEducation = await UserEducation.query().findById(req.user.id);
+    console.log("profileEducation", profileEducation);
   } catch (error) {
     log.error(`Profile controller[createEducation]: Failed to send ${error}`);
 
@@ -129,13 +133,6 @@ const getProfile = async (req, res, next) => {
         }
         res.json(userprofile);
       });
-
-    // const user = await User.query()
-    //   .eager("user_profile")
-    //   .findById(req.user.id);
-    // console.log("user", user);
-
-    // console.log("user", user);
   } catch (error) {
     throw error;
   }
