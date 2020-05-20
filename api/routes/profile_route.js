@@ -7,7 +7,8 @@ const {
   createProfile,
   getProfile,
   createExpProfile,
-  AllProfiles
+  AllProfiles,
+  createEducation
 } = require("../controllers/profile_controller");
 
 const validation = require("../../validation/express-profile");
@@ -52,5 +53,10 @@ router.post(
   validate,
   createExpProfile
 );
+
+// @route POST /api/v2/users/profile/education
+// @desc  Add profile education
+// @access Private
+router.post("/education", createEducation);
 
 module.exports = router;

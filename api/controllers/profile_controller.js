@@ -32,7 +32,7 @@ const AllProfiles = async (req, res, next) => {
   }
 };
 
-// @route POST api/profile/experience
+// @route POST /api/v2/users/profile/experience
 // @desc  Add experience to profile
 // @access Private
 const createExpProfile = async (req, res, next) => {
@@ -76,6 +76,13 @@ const createExpProfile = async (req, res, next) => {
 
     return next(error);
   }
+};
+
+// @route POST /api/v2/users/profile/education
+// @desc  Add profile education
+// @access Private
+const createEducation = async (req, res, next) => {
+  res.json({ msg: "Education Profile works" });
 };
 
 // @route    GET /api/v2/user/profile/current
@@ -197,5 +204,6 @@ module.exports = {
   createProfile,
   getProfile,
   createExpProfile,
-  AllProfiles
+  AllProfiles,
+  createEducation
 };
