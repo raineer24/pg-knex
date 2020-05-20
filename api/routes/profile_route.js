@@ -15,6 +15,7 @@ const validation = require("../../validation/express-profile");
 const {
   userExperienceProfileValidationRules,
   userProfileValidationRules,
+  userEducationProfileValidationRules,
   validate
 } = require("./../../validation/validation");
 
@@ -60,6 +61,8 @@ router.post(
 router.post(
   "/education",
   passport.authenticate("jwt", { session: false }),
+  userEducationProfileValidationRules(),
+  validate,
   createEducation
 );
 
