@@ -82,7 +82,31 @@ const createExpProfile = async (req, res, next) => {
 // @desc  Add profile education
 // @access Private
 const createEducation = async (req, res, next) => {
-  res.json({ msg: "Education Profile works" });
+  try {
+    const {
+      school,
+      degree,
+      fieldofstudy,
+      from,
+      to,
+      current,
+      description
+    } = req.body;
+
+    const newEdu = {
+      school,
+      degree,
+      fieldofstudy,
+      from,
+      to,
+      current,
+      description
+    };
+  } catch (error) {
+    log.error(`Profile controller[createEducation]: Failed to send ${error}`);
+
+    return next(error);
+  }
 };
 
 // @route    GET /api/v2/user/profile/current

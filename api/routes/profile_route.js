@@ -57,6 +57,10 @@ router.post(
 // @route POST /api/v2/users/profile/education
 // @desc  Add profile education
 // @access Private
-router.post("/education", createEducation);
+router.post(
+  "/education",
+  passport.authenticate("jwt", { session: false }),
+  createEducation
+);
 
 module.exports = router;
