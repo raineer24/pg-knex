@@ -55,6 +55,55 @@ class User extends Model {
     };
   }
 
+  //   join: {
+  //   from: projects
+  //   throught: {
+  //     join: {
+  //       from: project_memberships
+  //       to: project_membership_roles
+  //   }
+  //   to: roles
+  // }
+
+  // projects -> project_members -> project_member_roles -> roles
+
+  // select "projects"."id" as "id", "projects"."name" as "name", "role"."id" as "role:id", "role"."created_by" as "role:created_by", "role"."updated_by" as "role:updated_by",
+  // "role"."created_at" as "role:created_at",
+  // "role"."updated_at" as "role:updated_at",
+  // "role"."name" as "role:name",
+  // "role"."slug" as "role:slug",
+  // from "projects"
+  // left join "projects_memberships_roles" as "role_join" on "role_join"."project_id" = "projects"."id"
+  // left join (select "roles".* from "roles" where "membership_id" = $1) as "role" on "role_join"."role_id" = "role"."id"
+  // where "projects"."account_id" = $2 - column "membership_id" does not exist"
+
+  // // in Project:
+  // projectMembership: {
+  //   relation: BaseModel.HasOneRelation,
+  //   modelClass: "ProjectMembership",
+  //   join: {
+  //     from: "projects.id",
+  //     to: "project_memberships.projectId"
+  //   }
+  // };
+  // // in ProjectMembership
+  // role: {
+  //   relation: BaseModel.HasOneThroughRelation,
+  //   modelClass: "Role",
+  //   join: {
+  //     from: "project_memberships.id",
+  //     through: {
+  //       from: "project_membership_roles.projectMembershipId",
+  //       to: "project_membership_roles.roleId"
+  //     },
+  //     to: "roles.id"
+  //   }
+  // };
+
+  // Project.query()
+  // .eager('projectMembership.role.permissions')
+  // .modifyEager('projectMembership', builder => builder.where('membershipId', identity.id))
+
   static sample() {
     $query;
   }

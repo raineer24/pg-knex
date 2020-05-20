@@ -16,8 +16,20 @@ const getTest = (req, res, next) => {
   res.json({ msg: "Profile works" });
 };
 
-const AllProfiles = (req, res, next) => {
-  res.json({ msg: "Profile works" });
+const AllProfiles = async (req, res, next) => {
+  try {
+    UserProfile.query()
+      .eager("[user_experience,user_skill_set]")
+      .then(profiles => {
+        res.json({
+          profiles
+        });
+      });
+  } catch (error) {
+    log.error(`Profile controller[AllProfiles]: Failed to send ${error}`);
+
+    return next(error);
+  }
 };
 
 // @route POST api/profile/experience
@@ -142,8 +154,6 @@ const createProfile = async (req, res, next) => {
       ]
     };
 
-    //console.log("data", data);
-
     const profile = await UserProfile.query().findById(req.user.id);
     if (profile) {
       return next(
@@ -165,7 +175,6 @@ const createProfile = async (req, res, next) => {
 
 async function registerProfile(datus) {
   try {
-    // const result = await UserSkillSet.query().insertAndFetch(datus);
     const result = await UserProfile.query().insertGraph(datus);
 
     return result;

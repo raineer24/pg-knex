@@ -45,13 +45,44 @@ class UserProfile extends Model {
   static get relationMappings() {
     const UserSkillSet = require("./user_skill_set");
     const Users = require("./users");
+    const UserExperience = require("./user_exp");
     return {
+      // user_experience: {
+      //   relation: Model.ManyToManyRelation,
+      //   modelClass: UserExperience,
+      //   from: "users.id",
+      //   through: {
+      //     from: "user_profile.id",
+      //     to: "user_profile.id"
+      //   },
+      //   to: "user_experience_detail.user_experience_detail_id"
+      // },
       user_skill_set: {
         relation: Model.HasManyRelation,
         modelClass: UserSkillSet,
         join: {
           from: "user_profile.id",
           to: "user_skill_set.user_skill_set_id"
+        }
+      },
+      // user_profile: {
+      //   relation: Model.HasManyRelation,
+      //   modelClass: UserProfile,
+      //   join: {
+      //     from: "users.id",
+      //     to: "user_profile.id"
+      //   }
+      // },
+      user_experience: {
+        relation: Model.ManyToManyRelation,
+        modelClass: UserExperience,
+        join: {
+          from: "user_profile.id",
+          through: {
+            from: "user_profile.id",
+            to: "user_profile.id"
+          },
+          to: "user_experience_detail.user_experience_detail_id"
         }
       }
     };

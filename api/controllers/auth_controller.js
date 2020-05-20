@@ -49,8 +49,6 @@ const createUser = async (req, res, next) => {
         })
       );
 
-    console.log("newUser", newUser);
-
     const hashPassword = await bcrypter.encryptPassword(password);
 
     let url = await uploadToCloudinary(req.file.path);
@@ -63,8 +61,6 @@ const createUser = async (req, res, next) => {
       image_url: image_link,
       first_name: req.body.first_name
     };
-
-    console.log("data", data);
 
     const signup = await registerUser(data);
 

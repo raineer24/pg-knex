@@ -11,6 +11,11 @@ const {
 } = require("../controllers/profile_controller");
 
 const validation = require("../../validation/express-profile");
+const {
+  userExperienceProfileValidationRules,
+  userProfileValidationRules,
+  validate
+} = require("./../../validation/validation");
 
 //@route GET /api/v2/users/profile/getProfiles
 // @desc     Get all profiles
@@ -32,7 +37,8 @@ router.get(
 router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
-  validation.validateProfile,
+  userProfileValidationRules(),
+  validate,
   createProfile
 );
 
@@ -41,7 +47,9 @@ router.post(
 // @access Private
 router.post(
   "/experience",
-  passport.authenticate("jwt", { session: false }), validation.validateExpProfile
+  passport.authenticate("jwt", { session: false }),
+  userExperienceProfileValidationRules(),
+  validate,
   createExpProfile
 );
 
