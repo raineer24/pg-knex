@@ -23,7 +23,11 @@ const {
 // @route    DELETE /api/v2/users/profile/experience/:exp_id
 // @desc     Delete experience from profile
 // @access   Private
-router.delete("/experience/:exp_id", deleteExp);
+router.delete(
+  "/experience/:exp_id",
+  passport.authenticate("jwt", { session: false }),
+  deleteExp
+);
 
 //@route GET /api/v2/users/profile/getProfiles
 // @desc     Get all profiles

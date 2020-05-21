@@ -20,8 +20,40 @@ const getTest = (req, res, next) => {
 // @route    DELETE /api/v2/users/profile/experience/:exp_id
 // @desc     Delete experience from profile
 // @access   Private
-const deleteExp = (req, res, next) => {
-  res.json({ msg: "Profile works" });
+const deleteExp = async (req, res, next) => {
+  try {
+    const profile = await UserExperience.query().findById(req.params.exp_id);
+    console.log("profile", profile);
+
+    if (!profile) {
+      return next(
+        createError({
+          status: CONFLICT,
+          message: "No experience profile found"
+        })
+      );
+    } else {
+      const profileExpDeleted = await UserExperience.query().deleteById(
+        req.params.exp_id
+      );
+      return res.status(200).json({ success: true, profileExpDeleted });
+    }
+  } catch (error) {
+    log.error(`Profile controller[DeleteExpProfile]: Failed to send ${error}`);
+
+    return next(error);
+  }
+  // const profileExp = await UserProfile.query()
+  //   .eager("[user_experience,user_skill_set]")
+  //   .findById(req.user.id)
+  //   .then(data => {
+  //     const removeIndex = data.user_experience
+  //       .map(item => item.user_experience_detail_id)
+  //       .indexOf(req.params.exp_id);
+
+  //     //splice out of array
+  //     data.user_experience.splice(removeIndex, -1);
+  //   });
 };
 
 //@route GET /api/v2/users/profile/getProfiles
@@ -69,11 +101,16 @@ const createExpProfile = async (req, res, next) => {
 
   try {
     const profile = await UserExperience.query().findById(req.user.id);
-    if (profile) {
+    // const profile = await UserExperience.query();
+    console.log("profile", profile);
+
+    //Array.isArray(profile) && profile.length == 0;
+
+    if (!profile) {
       return next(
         createError({
           status: CONFLICT,
-          message: "Already added experience profile"
+          message: "Already added user experience"
         })
       );
     } else {
