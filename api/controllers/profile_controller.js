@@ -17,6 +17,16 @@ const getTest = (req, res, next) => {
   res.json({ msg: "Profile works" });
 };
 
+// @route    DELETE /api/v2/users/profile/experience/:exp_id
+// @desc     Delete experience from profile
+// @access   Private
+const deleteExp = (req, res, next) => {
+  res.json({ msg: "Profile works" });
+};
+
+//@route GET /api/v2/users/profile/getProfiles
+// @desc     Get all profiles
+// @access   Public
 const AllProfiles = async (req, res, next) => {
   try {
     UserProfile.query()
@@ -244,5 +254,6 @@ module.exports = {
   getProfile,
   createExpProfile,
   AllProfiles,
-  createEducation
+  createEducation,
+  deleteExp
 };
