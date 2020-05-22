@@ -23,9 +23,8 @@ const getTest = (req, res, next) => {
 const deleteExp = async (req, res, next) => {
   try {
     const profile = await UserExperience.query().findById(req.params.exp_id);
-    console.log("profile", profile);
 
-    if (!profile) {
+    if (Array.isArray(profile) && profile.length == 0) {
       return next(
         createError({
           status: CONFLICT,
@@ -61,15 +60,13 @@ const deleteExp = async (req, res, next) => {
 // @access   Public
 const AllProfiles = async (req, res, next) => {
   try {
-    const profile = await UserExperience.query();
-    console.log("profile", profile);
-    // UserProfile.query()
-    //   .eager("[user_experience,user_skill_set]")
-    //   .then(profiles => {
-    //     res.json({
-    //       profiles
-    //     });
-    //   });
+    UserProfile.query()
+      .eager("[user_experience,user_skill_set]")
+      .then(profiles => {
+        res.json({
+          profiles
+        });
+      });
   } catch (error) {
     log.error(`Profile controller[AllProfiles]: Failed to send ${error}`);
 
@@ -103,18 +100,27 @@ const createExpProfile = async (req, res, next) => {
 
   try {
     //const profile = await UserExperience.query().findById(req.user.id);
-    const profile = await UserExperience.query()
-      .debug()
-      .findById(req.user.id);
-    console.log("profile", profile);
+    const profile = await UserProfile.query()
+      .findById(req.user.id)
+      .debug();
+
+    const profile1 = await UserExperience.query().findById(req.user.id);
+    console.log("profile1", profile1);
 
     //Array.isArray(profile) && profile.length == 0;
 
-    if (Array.isArray(profile) && profile.length == 0) {
+    if (!profile) {
       return next(
         createError({
           status: CONFLICT,
-          message: "No experience profile data found!"
+          message: "No User profile data found!"
+        })
+      );
+    } else if (typeof profile1 === "object") {
+      return next(
+        createError({
+          status: CONFLICT,
+          message: "User experience already created!"
         })
       );
     } else {
