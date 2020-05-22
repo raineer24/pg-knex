@@ -30,7 +30,7 @@ class UserExperience extends Model {
   static get jsonSchema() {
     return {
       type: "object",
-      required: ["job_title", "company_name", "start_date"],
+      //required: ["job_title", "company_name", "start_date"],
 
       properties: {
         user_experience_detail_id: { type: "integer" },

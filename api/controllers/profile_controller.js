@@ -61,13 +61,15 @@ const deleteExp = async (req, res, next) => {
 // @access   Public
 const AllProfiles = async (req, res, next) => {
   try {
-    UserProfile.query()
-      .eager("[user_experience,user_skill_set]")
-      .then(profiles => {
-        res.json({
-          profiles
-        });
-      });
+    const profile = await UserExperience.query();
+    console.log("profile", profile);
+    // UserProfile.query()
+    //   .eager("[user_experience,user_skill_set]")
+    //   .then(profiles => {
+    //     res.json({
+    //       profiles
+    //     });
+    //   });
   } catch (error) {
     log.error(`Profile controller[AllProfiles]: Failed to send ${error}`);
 
@@ -100,17 +102,19 @@ const createExpProfile = async (req, res, next) => {
   };
 
   try {
-    const profile = await UserExperience.query().findById(req.user.id);
-    // const profile = await UserExperience.query();
+    //const profile = await UserExperience.query().findById(req.user.id);
+    const profile = await UserExperience.query()
+      .debug()
+      .findById(req.user.id);
     console.log("profile", profile);
 
     //Array.isArray(profile) && profile.length == 0;
 
-    if (!profile) {
+    if (Array.isArray(profile) && profile.length == 0) {
       return next(
         createError({
           status: CONFLICT,
-          message: "Already added user experience"
+          message: "No experience profile data found!"
         })
       );
     } else {
@@ -275,7 +279,7 @@ async function registerExpProfile(datus) {
   }
 }
 
-async function registerExpProfile(datus) {
+async function registerEduProfile(datus) {
   try {
     const result = await UserEducation.query().insertGraph(datus);
 
