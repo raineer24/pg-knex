@@ -105,8 +105,9 @@ const createExpProfile = async (req, res, next) => {
       .findById(req.user.id)
       .debug();
 
-    const profile1 = await UserExperience.query().findById(req.user.id);
+    const profile1 = await UserExperience.query();
     console.log("profile1", profile1);
+    //console.log("profile1", Object.keys(profile1).length); //0
 
     //Array.isArray(profile) && profile.length == 0;
 
@@ -117,7 +118,7 @@ const createExpProfile = async (req, res, next) => {
           message: "No User profile data found!"
         })
       );
-    } else if (typeof profile1 === "object") {
+    } else if (Object.keys(profile1).length > 0) {
       return next(
         createError({
           status: CONFLICT,

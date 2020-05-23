@@ -31,6 +31,7 @@ class User extends Model {
   static get relationMappings() {
     const UserProfile = require("./user_profile");
     const UserSkillSet = require("./user_skill_set");
+    const UserExperience = require("./user_exp");
     return {
       user_profile: {
         relation: Model.HasManyRelation,
@@ -41,6 +42,18 @@ class User extends Model {
         }
       },
       user_skill: {
+        relation: Model.ManyToManyRelation,
+        modelClass: UserSkillSet,
+        join: {
+          from: "users.id",
+          through: {
+            from: "user_profile.id",
+            to: "user_profile.id"
+          },
+          to: "user_skill_set.user_skill_set_id"
+        }
+      },
+      user_experience: {
         relation: Model.ManyToManyRelation,
         modelClass: UserSkillSet,
         join: {

@@ -152,12 +152,16 @@ function uploadToCloudinary(image) {
 // @route    GET api/v2/users
 // @desc     Get all users
 // @access   Public
-const getUsers = (req, res, next) => {
-  User.query().then(user => {
-    res.json({
-      user
-    });
-  });
+const getUsers = async (req, res, next) => {
+  // User.query().then(user => {
+  //   res.json({
+  //     user
+  //   });
+  // });
+  const users = await User.query().eager("[user_profile]");
+  console.log("usrs", users);
+  res.status(200).json({ status: true, users });
+  //return res.status(200).json({ success: true, profileExpCreate });
 };
 
 module.exports = { getUsers, postLogin, createUser };

@@ -82,7 +82,7 @@ class UserProfile extends Model {
             from: "user_profile.id",
             to: "user_profile.id"
           },
-          to: "user_experience_detail.user_experience_detail_id"
+          to: "user_experience_detail.users_id"
         }
       }
     };
