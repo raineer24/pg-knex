@@ -154,7 +154,7 @@ function uploadToCloudinary(image) {
 // @access   Public
 const getUsers = async (req, res, next) => {
   const user = await User.query()
-    .eager("[user_skill, user_experience]")
+    .eager("[user_profile,user_experience, user_skill,]")
     .debug()
     .then(data => {
       //console.log("data: ", data);

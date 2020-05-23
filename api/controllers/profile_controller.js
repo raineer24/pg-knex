@@ -140,7 +140,8 @@ const createExpProfile = async (req, res, next) => {
       return next(
         createError({
           status: CONFLICT,
-          message: "No User profile data found!"
+          message:
+            "No User profile data found! You might want to add user profile data"
         })
       );
     } else if (Object.keys(users).length > 0) {
