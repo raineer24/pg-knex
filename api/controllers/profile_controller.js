@@ -28,7 +28,7 @@ const deleteExp = async (req, res, next) => {
       return next(
         createError({
           status: CONFLICT,
-          message: "No experience profile found"
+          message: "No experience profile data found"
         })
       );
     } else {
