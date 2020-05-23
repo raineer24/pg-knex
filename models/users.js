@@ -55,14 +55,14 @@ class User extends Model {
       },
       user_experience: {
         relation: Model.ManyToManyRelation,
-        modelClass: UserSkillSet,
+        modelClass: UserExperience,
         join: {
           from: "users.id",
           through: {
             from: "user_profile.id",
             to: "user_profile.id"
           },
-          to: "user_skill_set.user_skill_set_id"
+          to: "user_experience_detail.users_id"
         }
       }
     };

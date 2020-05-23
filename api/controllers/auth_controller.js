@@ -158,7 +158,7 @@ const getUsers = async (req, res, next) => {
   //     user
   //   });
   // });
-  const users = await User.query().eager("[user_profile]");
+  const users = await User.query().eager("[user_profile,user_experience]");
   console.log("usrs", users);
   res.status(200).json({ status: true, users });
   //return res.status(200).json({ success: true, profileExpCreate });
