@@ -153,14 +153,24 @@ function uploadToCloudinary(image) {
 // @desc     Get all users
 // @access   Public
 const getUsers = async (req, res, next) => {
-  // User.query().then(user => {
-  //   res.json({
-  //     user
-  //   });
-  // });
-  const users = await User.query().eager("[user_profile,user_experience]");
-  console.log("usrs", users);
-  res.status(200).json({ status: true, users });
+  const user = await User.query()
+    .eager("[user_skill, user_experience]")
+    .debug()
+    .then(data => {
+      //console.log("data: ", data);
+      //return data.user_skill;
+      // skill = data.user_skill;
+      // if (Array.isArray(skill)) {
+      //   console.log("array!");
+      // }
+      // skill.forEach(function(item) {
+      //   console.log(item.skill_set_name);
+      // });
+      return data;
+    });
+  // const users = await User.query().eager("[user_profile,user_experience]");
+  // console.log("usrs", users);
+  res.status(200).json({ status: true, user });
   //return res.status(200).json({ success: true, profileExpCreate });
 };
 

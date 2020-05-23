@@ -105,8 +105,33 @@ const createExpProfile = async (req, res, next) => {
       .findById(req.user.id)
       .debug();
 
-    const profile1 = await UserExperience.query();
-    console.log("profile1", profile1);
+    // const profile1 = await UserExperience.query();
+    console.log("profile1", profile);
+
+    const users = await User.query()
+      .eager("[user_skill, user_experience]")
+      .findById(req.user.id)
+      .debug()
+      .then(data => {
+        user_exp = data.user_experience;
+        console.log("user", user_exp.length);
+
+        if (Array.isArray(user_exp)) {
+          console.log("is array");
+        }
+        return user_exp;
+      });
+    // .then(data => {
+    //   console.log("data: ", data);
+    //   //return data.user_skill;
+    //   // skill = data.user_skill;
+    //   // if (Array.isArray(skill)) {
+    //   //   console.log("array!");
+    //   // }
+    //   // skill.forEach(function(item) {
+    //   //   console.log(item.skill_set_name);
+    //   // });
+    // });
     //console.log("profile1", Object.keys(profile1).length); //0
 
     //Array.isArray(profile) && profile.length == 0;
@@ -118,7 +143,7 @@ const createExpProfile = async (req, res, next) => {
           message: "No User profile data found!"
         })
       );
-    } else if (Object.keys(profile1).length > 0) {
+    } else if (Object.keys(users).length > 0) {
       return next(
         createError({
           status: CONFLICT,
