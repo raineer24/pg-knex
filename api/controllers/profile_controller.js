@@ -89,6 +89,7 @@ const createExpProfile = async (req, res, next) => {
   } = req.body;
 
   const newExp = {
+    users_id: req.user.id,
     job_title,
     company_name,
     job_location,
