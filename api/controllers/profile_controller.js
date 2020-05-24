@@ -23,14 +23,16 @@ const getTest = (req, res, next) => {
 const deleteExp = async (req, res, next) => {
   try {
     const profile = await UserExperience.query().findById(req.params.exp_id);
+    console.log("profiile", profile);
 
-    if (Array.isArray(profile) && profile.length == 0) {
+    if (typeof profile == "undefined") {
       return next(
         createError({
           status: CONFLICT,
           message: "No experience profile data found"
         })
       );
+      console.log("wtf");
     } else {
       const profileExpDeleted = await UserExperience.query().deleteById(
         req.params.exp_id
