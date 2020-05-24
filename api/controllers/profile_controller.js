@@ -22,39 +22,97 @@ const getTest = (req, res, next) => {
 // @access   Private
 const deleteExp = async (req, res, next) => {
   try {
-    const profile = await UserExperience.query().findById(req.params.exp_id);
-    console.log("profiile", profile);
+    // const profile = await UserExperience.query().findById(
+    //   req.params.exp_id
+    // );
 
-    if (typeof profile == "undefined") {
-      return next(
-        createError({
-          status: CONFLICT,
-          message: "No experience profile data found"
-        })
-      );
-      console.log("wtf");
-    } else {
-      const profileExpDeleted = await UserExperience.query().deleteById(
-        req.params.exp_id
-      );
-      return res.status(200).json({ success: true, profileExpDeleted });
-    }
+    // const profileExp = await UserProfile.query()
+    //   .eager("[user_experience,user_skill_set]")
+    //   .findById(req.user.id)
+    //   .select("user_experience");
+
+    // const profileExp = await UserProfile.relatedQuery("user_experience");
+
+    // console.log("ser_Exp:", profileExp);
+
+    const profileExp = await UserProfile.query().findById(req.user.id);
+
+    const prof = await profileExp
+      .$relatedQuery("user_experience")
+      .delete()
+      .whereIn("users_id", req.params.exp_id);
+
+    console.log("ser_Exp:", prof);
+
+    // idUser = profileExp.user_experience.filter(
+    //   exp => exp.users_id.toString() !== req.params.exp_id
+    // );
+    // console.log("iduser: ", idUser);
+
+    // const removeIndex = profileExp.user_experience
+    //   .map(item => {
+    //     console.log("item:", item);
+
+    //     console.log("items: ", item.user_experience_detail_id);
+    //   })
+    //   .indexOf(req.params.exp_id);
+
+    // indexer = profileExp.user_experience.splice(removeIndex, -1);
+
+    // console.log("indexer", removeIndex);
+
+    // const profileExp = await UserProfile.query()
+    //   .eager("[user_experience,user_skill_set]")
+    //   .findById(req.params.exp_id)
+    //   .then(data => {
+    //     console.log("data: ", data);
+
+    //     const removeIndex = data.user_experience
+    //       .map(item => {
+    //         console.log("item:", item);
+
+    //         console.log("items: ", item.user_experience_detail_id);
+    //       })
+    //       .indexOf(req.params.exp_id);
+    //     // const index = data.user_experience.filter(
+    //     //   exp => exp.users_id.toString() == req.params.exp_id
+    //     // );
+    //     console.log("index", removeIndex);
+
+    //     //splice out of array
+    //     indexer = data.user_experience.splice(removeIndex, -1);
+    //     console.log("index: ", indexer);
+    //   });
+
+    // const x = await UserProfile.query()
+    //   .select()
+    //   .whereExists(
+    //     UserProfile.relatedQuery("user_experience").where(
+    //       "user_experience.job_title",
+    //       "senior software engineer"
+    //     )
+    //   )
+    //   .debug();
+
+    // if (typeof profile == "undefined") {
+    //   return next(
+    //     createError({
+    //       status: CONFLICT,
+    //       message: "No experience profile data found"
+    //     })
+    //   );
+    //   console.log("wtf");
+    // } else {
+    //   const profileExpDeleted = await UserExperience.query().deleteById(
+    //     req.params.exp_id
+    //   );
+    //   return res.status(200).json({ success: true, profileExpDeleted });
+    // }
   } catch (error) {
     log.error(`Profile controller[DeleteExpProfile]: Failed to send ${error}`);
 
     return next(error);
   }
-  // const profileExp = await UserProfile.query()
-  //   .eager("[user_experience,user_skill_set]")
-  //   .findById(req.user.id)
-  //   .then(data => {
-  //     const removeIndex = data.user_experience
-  //       .map(item => item.user_experience_detail_id)
-  //       .indexOf(req.params.exp_id);
-
-  //     //splice out of array
-  //     data.user_experience.splice(removeIndex, -1);
-  //   });
 };
 
 //@route GET /api/v2/users/profile/getProfiles
