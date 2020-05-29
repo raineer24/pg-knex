@@ -329,7 +329,8 @@ const createProfile = async (req, res, next) => {
       facebook_handle,
       instagram_handle,
       user_skill_set: [
-        {
+        { 
+          users_id: req.user.id,
           skill_set_name: skill_set_name
         }
       ]
