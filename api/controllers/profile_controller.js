@@ -149,7 +149,7 @@ const createExpProfile = async (req, res, next) => {
   } = req.body;
 
   const newExp = {
-    users_id: req.user.id,
+    usersp_id: req.user.id,
     job_title,
     company_name,
     job_location,
@@ -291,7 +291,7 @@ const getProfile = async (req, res, next) => {
   }
 };
 
-// @route  POST /api/v2/user/profile
+// @route  POST /api/v2/users/profile
 // @desc   Create or Edit user profile
 // @access Private - use jwt strategy to authenticate
 const createProfile = async (req, res, next) => {
