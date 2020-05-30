@@ -77,10 +77,10 @@ class UserProfile extends Model {
         relation: Model.ManyToManyRelation,
         modelClass: UserExperience,
         join: {
-          from: "user_profile.id",
+          from: "user_profile.users_id",
           through: {
-            from: "user_profile.id",
-            to: "user_profile.id"
+            from: "user_profile.users_id",
+            to: "user_profile.users_id"
           },
           to: "user_experience_detail.users_id"
         }

@@ -149,7 +149,7 @@ const createExpProfile = async (req, res, next) => {
   } = req.body;
 
   const newExp = {
-    usersp_id: req.user.id,
+    users_id: req.user.id,
     job_title,
     company_name,
     job_location,
@@ -161,26 +161,26 @@ const createExpProfile = async (req, res, next) => {
 
   try {
     //const profile = await UserExperience.query().findById(req.user.id);
-    const profile = await UserProfile.query()
-      .findById(req.user.id)
-      .debug();
+    // const profile = await UserProfile.query()
+    //   //.findById(req.user.id)
+    //   .debug();
 
-    // const profile1 = await UserExperience.query();
-    console.log("profile1", profile);
+    // // const profile1 = await UserExperience.query();
+    // console.log("profile1", profile);
 
-    const users = await User.query()
-      .eager("[user_skill, user_experience]")
-      .findById(req.user.id)
-      .debug()
-      .then(data => {
-        user_exp = data.user_experience;
-        console.log("user", user_exp.length);
+    // const users  = await User.query()
+    //   .eager("[user_skill, user_experience]")
+    //   .findById(req.user.id)
+    //   .debug()
+    //   .then(data => {
+    //     user_exp = data.user_experience;
+    //     //console.log("user", user_exp.length);
 
-        if (Array.isArray(user_exp)) {
-          console.log("is array");
-        }
-        return user_exp;
-      });
+    //     // if (Array.isArray(user_exp)) {
+    //     //   console.log("is array");
+    //     // }
+    //     //return user_exp;
+    //   });
     // .then(data => {
     //   console.log("data: ", data);
     //   //return data.user_skill;
@@ -192,29 +192,63 @@ const createExpProfile = async (req, res, next) => {
     //   //   console.log(item.skill_set_name);
     //   // });
     // });
-    //console.log("profile1", Object.keys(profile1).length); //0
+    //console.log("profile1", Object.keys(users).length); //0
+    const users = await User.query().findById(req.user.id);
+    const user_prof = await users.$relatedQuery('user_experience');
+    console.log('userprof', user_prof);
 
+
+    // FILTER
+
+  //   PurchaseTransaction
+  // .query()
+  // .findById(490)
+  // .select('id')
+  // .eager('purchases')
+  // .filterEager('purchases', builder => {
+  //   builder.select('id', 'transaction_id');
+  // })
+  // .debug()
+  // .then(console.log);
+    
+    
+ // user_exp.forEach(function(item) {
+      //   console.log('item',item);
+      // });
     //Array.isArray(profile) && profile.length == 0;
 
-    if (!profile) {
-      return next(
-        createError({
-          status: CONFLICT,
-          message:
-            "No User profile data found! You might want to add user profile data"
-        })
-      );
-    } else if (Object.keys(users).length > 0) {
-      return next(
-        createError({
-          status: CONFLICT,
-          message: "User experience already created!"
-        })
-      );
-    } else {
-      const profileExpCreate = await registerExpProfile(newExp);
-      return res.status(200).json({ success: true, profileExpCreate });
-    }
+    // if (!profile) {
+    //   return next(
+    //     createError({
+    //       status: CONFLICT,const users  = await User.query()
+    //   .eager("[user_skill, user_exconsole.log('data',data.user_experience);perience]")
+    //   .findById(reconsole.log('data',data.user_experience);q.user.id)
+    //   .debug()
+    //   .then(data => {
+    //     user_exp = data.user_experience;
+    //     //console.log("user", user_exp.length);
+
+    //     // if (Array.isArray(user_exp)) {
+    //     //   console.log("is array");
+    //     // }
+    //     //return user_exp;
+    //   });
+    //       message:
+    //         "No User profile data found! You might want to add user profile data"
+    //     })
+    //   );
+    // // } else if (Object.keys(users).length > 0) {
+    // //   return next(
+    // //     createError({
+    // //       status: CONFLICT,
+    // //       message: "User experience already created!"
+    // //     })
+    // //   );
+    // } 
+    // else {
+    //   const profileExpCreate = await registerExpProfile(newExp);
+    //   return res.status(200).json({ success: true, profileExpCreate });
+    // }
   } catch (error) {
     log.error(`Profile controller[createExpProfile]: Failed to send ${error}`);
 
@@ -266,7 +300,7 @@ const createEducation = async (req, res, next) => {
   }
 };
 
-// @route    GET /api/v2/user/profile/current
+// @route    GET /api/v2/users/profile/current
 // @desc     Get current user's profile
 // @access   Private
 const getProfile = async (req, res, next) => {
