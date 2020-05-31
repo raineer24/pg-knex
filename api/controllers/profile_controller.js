@@ -276,6 +276,21 @@ const createExpProfile = async (req, res, next) => {
       //const profileExpCreate = await registerExpProfile(newExp);
       //return res.status(200).json({ success: true, profileExpCreate });
     // }
+
+
+    if (Array.isArray(users) && Object.keys(users).length > 0) {
+      return next(
+            createError({
+              status: CONFLICT,
+              message: "User experience already created!"
+            })
+          );
+      
+    } else {
+    const profileExpCreate = await registerExpProfile(newExp);
+    return res.status(200).json({ success: true, profileExpCreate });
+      
+    }
   } catch (error) {
     log.error(`Profile controller[createExpProfile]: Failed to send ${error}`);
 
