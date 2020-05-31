@@ -215,6 +215,16 @@ const createExpProfile = async (req, res, next) => {
     // const user_prof = await users.$relatedQuery('user_experience');
    const usersLength = Object.keys(users).length//0
 
+   const userProfile  = await User.query().findById(req.user.id).eager('user_profile').then(data => {
+    return data.user_profile;
+    
+  });
+
+  const usersProfileLength = Object.keys(userProfile).length//0
+
+   console.log('usersprofilelength: ', usersProfileLength);
+   
+
     // FILTER
 
   //   PurchaseTransaction
@@ -246,7 +256,7 @@ const createExpProfile = async (req, res, next) => {
     // if (!profile) {
     //   return next(
     //     createError({
-    //       status: CONFLICT,const users  = await User.query()
+    //       status: CONFLICT,
     //   .eager("[user_skill, user_exconsole.log('data',data.user_experience);perience]")
     //   .findById(reconsole.log('data',data.user_experience);q.user.id)
     //   .debug()
@@ -285,7 +295,12 @@ const createExpProfile = async (req, res, next) => {
             })
           );
       
-    } else if (Array.isArray(users) && usersLength == 0) {
+    } else if (Array.isArray(userProfile) && usersProfileLength === 0) {
+
+      
+      console.log('users: ', users);
+      
+
       return next(
         createError({
           status: CONFLICT,
