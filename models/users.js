@@ -38,7 +38,7 @@ class User extends Model {
         modelClass: UserProfile,
         join: {
           from: "users.id",
-          to: "user_profile.id"
+          to: "user_profile.users_id"
         }
       },
       user_skill: {
@@ -59,8 +59,8 @@ class User extends Model {
         join: {
           from: "users.id",
           through: {
-            from: "user_profile.id",
-            to: "user_profile.id"
+            from: "user_profile.users_id",
+            to: "user_profile.users_id"
           },
           to: "user_experience_detail.users_id"
         }

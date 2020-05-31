@@ -193,12 +193,25 @@ const createExpProfile = async (req, res, next) => {
     //   // });
     // });
     //console.log("profile1", Object.keys(users).length); //0
-    const users = await User.query().findById(req.user.id);
-    const user_prof = await users.$relatedQuery('user_experience');
-    console.log('userprof', user_prof);
+    const users = await User.query().findById(req.user.id).select('id').eager('user_experience');
+    // const users = await User.query().findById(req.user.id).select('id').eager('user_experience')
+    // .filterEager('user_experience', builder => {
+    //   builder.select('*')
+    // }).debug();
+    // const user_prof = await users.$relatedQuery('user_experience');
+     console.log('users', users);
 
 
     // FILTER
+
+  //   PurchaseTransaction
+  // .query()
+  // .findById(490)
+  // .select('id')
+  // .eager('purchases')
+  // .pick(Purchase, ['id'])
+  // .debug()
+  // .then(console.log);
 
   //   PurchaseTransaction
   // .query()
