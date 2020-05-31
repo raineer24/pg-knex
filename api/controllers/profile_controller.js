@@ -192,15 +192,29 @@ const createExpProfile = async (req, res, next) => {
     //   //   console.log(item.skill_set_name);
     //   // });
     // });
-    //console.log("profile1", Object.keys(users).length); //0
-    const users = await User.query().findById(req.user.id).select('id').eager('user_experience');
+   
+    const users = await User.query().findById(req.user.id).select('id').eager('user_experience').then(data => {
+      let user_exp = data.user_experience;
+
+      return user_exp;
+
+      // console.log('user_Exp', user_exp);
+
+      // if (Array.isArray(user_exp)) {
+      //      console.log("is array");
+      //   }
+       
+      
+      
+      
+    });
     // const users = await User.query().findById(req.user.id).select('id').eager('user_experience')
     // .filterEager('user_experience', builder => {
     //   builder.select('*')
     // }).debug();
     // const user_prof = await users.$relatedQuery('user_experience');
      console.log('users', users);
-
+       console.log("profile1", Object.keys(users).length); //0
 
     // FILTER
 
@@ -259,8 +273,8 @@ const createExpProfile = async (req, res, next) => {
     // //   );
     // } 
     // else {
-    //   const profileExpCreate = await registerExpProfile(newExp);
-    //   return res.status(200).json({ success: true, profileExpCreate });
+      //const profileExpCreate = await registerExpProfile(newExp);
+      //return res.status(200).json({ success: true, profileExpCreate });
     // }
   } catch (error) {
     log.error(`Profile controller[createExpProfile]: Failed to send ${error}`);
