@@ -213,8 +213,7 @@ const createExpProfile = async (req, res, next) => {
     //   builder.select('*')
     // }).debug();
     // const user_prof = await users.$relatedQuery('user_experience');
-     console.log('users', users);
-       console.log("profile1", Object.keys(users).length); //0
+   const usersLength = Object.keys(users).length//0
 
     // FILTER
 
@@ -278,7 +277,7 @@ const createExpProfile = async (req, res, next) => {
     // }
 
 
-    if (Array.isArray(users) && Object.keys(users).length > 0) {
+    if (Array.isArray(users) && usersLength > 0) {
       return next(
             createError({
               status: CONFLICT,
@@ -286,7 +285,15 @@ const createExpProfile = async (req, res, next) => {
             })
           );
       
-    } else {
+    } else if (Array.isArray(users) && usersLength == 0) {
+      return next(
+        createError({
+          status: CONFLICT,
+          message: "No User profile data found! You might want to add user profile data"
+        })
+      );
+      
+    }else {
     const profileExpCreate = await registerExpProfile(newExp);
     return res.status(200).json({ success: true, profileExpCreate });
       
@@ -442,7 +449,7 @@ async function registerProfile(datus) {
 }
 async function registerExpProfile(datus) {
   try {
-    const result = await UserExperience.query().insertGraph(datus);
+    const result = await UserExperience.query().insertGraph(datus).debug();
 
     return result;
   } catch (error) {
