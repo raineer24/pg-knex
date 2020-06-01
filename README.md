@@ -16,12 +16,22 @@ npm run dev
 
 The REST API to the example app is described below.
 
-## Get list of Things
+## Get All Users
 
 ### Request
- * Register user
+*public
 
 `GET /users/`
 
     curl -i -H 'Accept: application/json' localhost:3000/api/v2/users
+
+## Get all profiles
+
+### Request
+*public
+
+`GET /users/`
+
+    curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/profile/getProfiles
+
 
