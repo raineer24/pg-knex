@@ -12,28 +12,86 @@ npm install
 npm run dev
 ```
 
-## Test
+# REST API
 
-```sh
-npm test
-```
+The REST API to the example app is described below.
 
-## TODO
+## Get All Users
 
-[TODO Checklist](TODO.md)
+### Request
 
-## VIDEO
+* public
 
-[![IMAGE ALT TEXT HERE](https://i.imgur.com/fziyA9i.png)](https://www.youtube.com/playlist?list=PLM_i0obccy3uwR6ZYa7QE03xDRAqs4Aso)
+`GET /users/`
 
-## Deploy to Heroku
-* Heroku app
-  * sudo snap install heroku --classic [ubuntu] / install heroku cli
-  * login/signup to heroku website 
-  * heroku create [name of app]
-  * heroku open <--- visit the app
-  * heroku logs (view logs )
-  * line 88 [test/app-test.js] delete test record
+    curl -i -H 'Accept: application/json' localhost:3000/api/v2/users
 
-## Next
-* [ ] Add postgres DB to Heroku
+## Get All User Profiles
+
+### Request
+
+* public
+
+`GET /api/v2/users/profile/getProfiles`
+
+    curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/profile/getProfiles
+
+ ## Register a User
+
+### Request
+
+* public
+
+`POST /api/v2/users/register  `
+
+    curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/register 
+
+## Login a User
+
+### Request
+
+* public / Return JWT
+
+`POST /api/v2/users/login  `
+
+    curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/login
+
+## Get Current User's Profile
+
+### Request
+
+* Private - use jwt strategy to authenticate
+
+`GET /api/v2/users/profile/current `
+
+    curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/profile/current
+
+## Create or Edit user profile
+
+### Request
+
+* Private - use jwt strategy to authenticate
+
+`POST /api/v2/users/profile `
+
+    curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/profile               
+
+## Add experience to profile
+
+### Request
+
+* Private - use jwt strategy to authenticate
+
+`POST /api/v2/users/profile/experience`
+
+    curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/profile/experience
+
+## Delete experience from profile
+
+### Request
+
+* Private - use jwt strategy to authenticate
+
+`DELETE /api/v2/users/profile/experience/:exp_id`
+
+    curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/profile/experience/:exp_id
