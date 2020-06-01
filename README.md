@@ -56,7 +56,7 @@ The REST API to the example app is described below.
 
     curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/login
 
-## Get current user's profile
+## Get Current User's Profile
 
 ### Request
 
@@ -64,6 +64,16 @@ The REST API to the example app is described below.
 
 `GET /api/v2/users/profile/current `
 
-    curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/profile/current        
+    curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/profile/current
+
+## Create or Edit user profile
+
+### Request
+
+* Private - use jwt strategy to authenticate
+
+`POST /api/v2/users/profile `
+
+    curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/profile               
 
 
