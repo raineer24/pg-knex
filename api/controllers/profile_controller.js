@@ -22,19 +22,7 @@ const getTest = (req, res, next) => {
 // @access   Private
 const deleteExp = async (req, res, next) => {
   try {
-    // const profile = await UserExperience.query().findById(
-    //   req.params.exp_id
-    // );
-
-    // const profileExp = await UserProfile.query()
-    //   .eager("[user_experience,user_skill_set]")
-    //   .findById(req.user.id)
-    //   .select("user_experience");
-
-    // const profileExp = await UserProfile.relatedQuery("user_experience");
-
-    // console.log("ser_Exp:", profileExp);
-
+  
     const profileExp = await UserProfile.query().findById(req.user.id);
 
     const prof = await profileExp
@@ -44,71 +32,7 @@ const deleteExp = async (req, res, next) => {
 
     console.log("ser_Exp:", prof);
 
-    // idUser = profileExp.user_experience.filter(
-    //   exp => exp.users_id.toString() !== req.params.exp_id
-    // );
-    // console.log("iduser: ", idUser);
-
-    // const removeIndex = profileExp.user_experience
-    //   .map(item => {
-    //     console.log("item:", item);
-
-    //     console.log("items: ", item.user_experience_detail_id);
-    //   })
-    //   .indexOf(req.params.exp_id);
-
-    // indexer = profileExp.user_experience.splice(removeIndex, -1);
-
-    // console.log("indexer", removeIndex);
-
-    // const profileExp = await UserProfile.query()
-    //   .eager("[user_experience,user_skill_set]")
-    //   .findById(req.params.exp_id)
-    //   .then(data => {
-    //     console.log("data: ", data);
-
-    //     const removeIndex = data.user_experience
-    //       .map(item => {
-    //         console.log("item:", item);
-
-    //         console.log("items: ", item.user_experience_detail_id);
-    //       })
-    //       .indexOf(req.params.exp_id);
-    //     // const index = data.user_experience.filter(
-    //     //   exp => exp.users_id.toString() == req.params.exp_id
-    //     // );
-    //     console.log("index", removeIndex);
-
-    //     //splice out of array
-    //     indexer = data.user_experience.splice(removeIndex, -1);
-    //     console.log("index: ", indexer);
-    //   });
-
-    // const x = await UserProfile.query()
-    //   .select()
-    //   .whereExists(
-    //     UserProfile.relatedQuery("user_experience").where(
-    //       "user_experience.job_title",
-    //       "senior software engineer"
-    //     )
-    //   )
-    //   .debug();
-
-    // if (typeof profile == "undefined") {
-    //   return next(
-    //     createError({
-    //       status: CONFLICT,
-    //       message: "No experience profile data found"
-    //     })
-    //   );
-    //   console.log("wtf");
-    // } else {
-    //   const profileExpDeleted = await UserExperience.query().deleteById(
-    //     req.params.exp_id
-    //   );
-    //   return res.status(200).json({ success: true, profileExpDeleted });
-    // }
-  } catch (error) {
+   } catch (error) {
     log.error(`Profile controller[DeleteExpProfile]: Failed to send ${error}`);
 
     return next(error);
@@ -160,60 +84,14 @@ const createExpProfile = async (req, res, next) => {
   };
 
   try {
-    //const profile = await UserExperience.query().findById(req.user.id);
-    // const profile = await UserProfile.query()
-    //   //.findById(req.user.id)
-    //   .debug();
-
-    // // const profile1 = await UserExperience.query();
-    // console.log("profile1", profile);
-
-    // const users  = await User.query()
-    //   .eager("[user_skill, user_experience]")
-    //   .findById(req.user.id)
-    //   .debug()
-    //   .then(data => {
-    //     user_exp = data.user_experience;
-    //     //console.log("user", user_exp.length);
-
-    //     // if (Array.isArray(user_exp)) {
-    //     //   console.log("is array");
-    //     // }
-    //     //return user_exp;
-    //   });
-    // .then(data => {
-    //   console.log("data: ", data);
-    //   //return data.user_skill;
-    //   // skill = data.user_skill;
-    //   // if (Array.isArray(skill)) {
-    //   //   console.log("array!");
-    //   // }
-    //   // skill.forEach(function(item) {
-    //   //   console.log(item.skill_set_name);
-    //   // });
-    // });
    
     const users = await User.query().findById(req.user.id).select('id').eager('user_experience').then(data => {
       let user_exp = data.user_experience;
 
       return user_exp;
 
-      // console.log('user_Exp', user_exp);
-
-      // if (Array.isArray(user_exp)) {
-      //      console.log("is array");
-      //   }
-       
-      
-      
-      
     });
-    // const users = await User.query().findById(req.user.id).select('id').eager('user_experience')
-    // .filterEager('user_experience', builder => {
-    //   builder.select('*')
-    // }).debug();
-    // const user_prof = await users.$relatedQuery('user_experience');
-   const usersLength = Object.keys(users).length//0
+       const usersLength = Object.keys(users).length//0
 
    const userProfile  = await User.query().findById(req.user.id).eager('user_profile').then(data => {
     return data.user_profile;
@@ -224,69 +102,6 @@ const createExpProfile = async (req, res, next) => {
 
    console.log('usersprofilelength: ', usersProfileLength);
    
-
-    // FILTER
-
-  //   PurchaseTransaction
-  // .query()
-  // .findById(490)
-  // .select('id')
-  // .eager('purchases')
-  // .pick(Purchase, ['id'])
-  // .debug()
-  // .then(console.log);
-
-  //   PurchaseTransaction
-  // .query()
-  // .findById(490)
-  // .select('id')
-  // .eager('purchases')
-  // .filterEager('purchases', builder => {
-  //   builder.select('id', 'transaction_id');
-  // })
-  // .debug()
-  // .then(console.log);
-    
-    
- // user_exp.forEach(function(item) {
-      //   console.log('item',item);
-      // });
-    //Array.isArray(profile) && profile.length == 0;
-
-    // if (!profile) {
-    //   return next(
-    //     createError({
-    //       status: CONFLICT,
-    //   .eager("[user_skill, user_exconsole.log('data',data.user_experience);perience]")
-    //   .findById(reconsole.log('data',data.user_experience);q.user.id)
-    //   .debug()
-    //   .then(data => {
-    //     user_exp = data.user_experience;
-    //     //console.log("user", user_exp.length);
-
-    //     // if (Array.isArray(user_exp)) {
-    //     //   console.log("is array");
-    //     // }
-    //     //return user_exp;
-    //   });
-    //       message:
-    //         "No User profile data found! You might want to add user profile data"
-    //     })
-    //   );
-    // // } else if (Object.keys(users).length > 0) {
-    // //   return next(
-    // //     createError({
-    // //       status: CONFLICT,
-    // //       message: "User experience already created!"
-    // //     })
-    // //   );
-    // } 
-    // else {
-      //const profileExpCreate = await registerExpProfile(newExp);
-      //return res.status(200).json({ success: true, profileExpCreate });
-    // }
-
-
     if (Array.isArray(users) && usersLength > 0) {
       return next(
             createError({
