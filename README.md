@@ -76,4 +76,22 @@ The REST API to the example app is described below.
 
     curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/profile               
 
+## Add experience to profile
 
+### Request
+
+* Private - use jwt strategy to authenticate
+
+`POST /api/v2/users/profile/experience`
+
+    curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/profile/experience
+
+## Delete experience from profile
+
+### Request
+
+* Private - use jwt strategy to authenticate
+
+`DELETE /api/v2/users/profile/experience/:exp_id`
+
+    curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/profile/experience/:exp_id
