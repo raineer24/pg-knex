@@ -30,9 +30,6 @@ const createUser = async (req, res, next) => {
   const { email, password } = req.body;
 
   if (!req.file) {
-    //let error = new Error("Please select an image to upload");
-    // error.status = CONFLICT;
-    // throw error;
     return next(
       createError({
         status: CONFLICT,
@@ -40,10 +37,6 @@ const createUser = async (req, res, next) => {
       })
     );
   }
-
-  // //console.log("test: ", test);
-
-  // console.log("email", email);
 
   try {
     let newUser = await getUserEmail(email);
@@ -55,8 +48,6 @@ const createUser = async (req, res, next) => {
           message: "Email already exist"
         })
       );
-
-    console.log("newUser", newUser);
 
     const hashPassword = await bcrypter.encryptPassword(password);
 
@@ -71,17 +62,12 @@ const createUser = async (req, res, next) => {
       first_name: req.body.first_name
     };
 
-    console.log("data", data);
-
     const signup = await registerUser(data);
-    //console.log("signup", signup);
 
     return res.status(201).json({
       status: true,
       data: signup
     });
-
-    //console.log("hashPassword: ", hashPassword);
   } catch (error) {
     log.error(`Authcontroller[createUser]: Failed to send ${error}`);
 
@@ -112,13 +98,6 @@ const postLogin = async (req, res, next) => {
         })
       );
 
-    // if (!user) {
-    //   //let err = new Error("User with this email does not exist");
-    //   errors.email = "User with this email does not exist!";
-    //   errors.status = CONFLICT;
-    //   throw errors;
-    // }
-
     /* now check password */
     const isValidPassword = await bcrypter.checkPassword(
       password,
@@ -140,26 +119,6 @@ const postLogin = async (req, res, next) => {
     return next(error);
   }
 };
-
-// function getUserEmail(email) {
-//   return new Promise((resolve, reject) => {
-//     User.query()
-//       .where("email", email)
-//       .then(result => {
-//         const row = result[0];
-//         //console.log(row);
-
-//         // if (!row) {
-//         //   const error = new Error("email not found");
-
-//         //   reject(error);
-//         //   return;
-//         // }
-//         resolve(row);
-//       })
-//       .catch(reject);
-//   });
-// }
 
 async function getUserEmail(email) {
   try {
@@ -190,43 +149,29 @@ function uploadToCloudinary(image) {
   });
 }
 
-// async function uploadCloudinary(image) {
-//   return new Promise((resolve, reject) => {
-//     cloudinary.uploader
-//       .upload(image, (err, url) => {
-//         if (err) return reject(err);
-//         console.log("url", url);
-
-//         return resolve(url);
-//       })
-//       .catch(reject);
-//   });
-// }
-
-// function getUserEmail(email) {
-//   return new Promise((resolve, reject) => {
-//     User.query()
-//       .where("email", email)
-//       .then(result => {
-//         const row = result[0];
-//         console.log(row);
-
-//         if (!row) {
-//           reject("email not found");
-//           return;
-//         }
-//         resolve(row);
-//       })
-//       .catch(reject);
-//   });
-// }
-
-const getUsers = (req, res, next) => {
-  User.query().then(user => {
-    res.json({
-      user
+// @route    GET api/v2/users
+// @desc     Get all users
+// @access   Public
+const getUsers = async (req, res, next) => {
+  const user = await User.query()
+    .eager("[user_profile,user_experience, user_skill,]")
+    .debug()
+    .then(data => {
+      //console.log("data: ", data);
+      //return data.user_skill;
+      // skill = data.user_skill;
+      // if (Array.isArray(skill)) {
+      //   console.log("array!");
+      // }
+      // skill.forEach(function(item) {
+      //   console.log(item.skill_set_name);
+      // });
+      return data;
     });
-  });
+  // const users = await User.query().eager("[user_profile,user_experience]");
+  // console.log("usrs", users);
+  res.status(200).json({ status: true, user });
+  //return res.status(200).json({ success: true, profileExpCreate });
 };
 
 module.exports = { getUsers, postLogin, createUser };
