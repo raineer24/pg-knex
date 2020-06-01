@@ -44,6 +44,16 @@ The REST API to the example app is described below.
 
 `POST /api/v2/users/register  `
 
-    curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/register   
+    curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/register 
+
+## Login a User
+
+### Request
+
+* public / Return JWT
+
+`POST /api/v2/users/login  `
+
+    curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/login  
 
 
