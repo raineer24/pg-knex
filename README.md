@@ -12,19 +12,17 @@ npm install
 npm run dev
 ```
 
-## Test
+# REST API
 
-```sh
-npm test
-```
+The REST API to the example app is described below.
 
-## TODO
+## Get list of Things
 
-[TODO Checklist](TODO.md)
+### Request
+ * Register user
+`GET /users/`
 
-## VIDEO
-
-[![IMAGE ALT TEXT HERE](https://i.imgur.com/fziyA9i.png)](https://www.youtube.com/playlist?list=PLM_i0obccy3uwR6ZYa7QE03xDRAqs4Aso)
+    curl -i -H 'Accept: application/json' localhost:3000/api/v2/users
 
 ## Deploy to Heroku
 * Heroku app
