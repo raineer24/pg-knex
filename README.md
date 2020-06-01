@@ -19,6 +19,7 @@ The REST API to the example app is described below.
 ## Get All Users
 
 ### Request
+
 *public
 
 `GET /users/`
@@ -28,9 +29,10 @@ The REST API to the example app is described below.
 ## Get all profiles
 
 ### Request
+
 *public
 
-`GET /users/`
+`GET /api/v2/users/profile/getProfiles`
 
     curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/profile/getProfiles
 
