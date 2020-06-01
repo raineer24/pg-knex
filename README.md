@@ -20,20 +20,30 @@ The REST API to the example app is described below.
 
 ### Request
 
-*public
+* public
 
 `GET /users/`
 
     curl -i -H 'Accept: application/json' localhost:3000/api/v2/users
 
-## Get all profiles
+## Get All User Profiles
 
 ### Request
 
-*public
+* public
 
 `GET /api/v2/users/profile/getProfiles`
 
     curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/profile/getProfiles
+
+ ## Register a User
+
+### Request
+
+* public
+
+`POST /api/v2/users/register  `
+
+    curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/register   
 
 
