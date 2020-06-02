@@ -250,19 +250,34 @@ const createProfile = async (req, res, next) => {
     };
 
     const profile = await UserProfile.query().findById(req.user.id);
-    if (profile) {
+    console.log('profile:', profile);
+    
+    // if (error.code === "23505") {
+    //   return next(
+    //     createError({
+    //       status: CONFLICT,
+    //       message: "Already added profile"
+    //     })
+    //   );
+    // } else {
+    //   const profileCreate = await registerProfile(data);
+    //   return res.status(200).json(profileCreate);
+    // }
+
+    
+      const profileCreate = await registerProfile(data);
+      return res.status(200).json(profileCreate);
+    
+  } catch (error) {
+    log.error(`Profile controller[createProfile]: Failed to send ${error}`);
+     if (error.code === "23505") {
       return next(
         createError({
           status: CONFLICT,
           message: "Already added profile"
         })
       );
-    } else {
-      const profileCreate = await registerProfile(data);
-      return res.status(200).json(profileCreate);
-    }
-  } catch (error) {
-    log.error(`Profile controller[createProfile]: Failed to send ${error}`);
+     }
 
     return next(error);
   }
