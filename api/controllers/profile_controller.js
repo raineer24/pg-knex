@@ -60,15 +60,14 @@ const deleteProfile = async(req, res,next) => {
 // @access   Private
 const deleteExp = async (req, res, next) => {
   try {
-  
-    const profileExp = await UserProfile.query().findById(req.user.id);
+    const user = await User.query().findById(req.params.exp_id).debug(true);
+    
+    const userExp = await user.$relatedQuery('user_experience').delete();
+    console.log('userExp: ', userExp);
 
-    const prof = await profileExp
-      .$relatedQuery("user_experience")
-      .delete()
-      .whereIn("users_id", req.params.exp_id);
-
-    console.log("ser_Exp:", prof);
+    return res.status(200).json({ success: true, msg: 'User Profile Experience Deleted' });
+    
+    
 
    } catch (error) {
     log.error(`Profile controller[DeleteExpProfile]: Failed to send ${error}`);
