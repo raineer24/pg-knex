@@ -304,7 +304,7 @@ const createProfile = async (req, res, next) => {
 
     
       const profileCreate = await registerProfile(data);
-      return res.status(200).json(profileCreate);
+      return res.status(200).json({success: true, profileCreate});
     
   } catch (error) {
     log.error(`Profile controller[createProfile]: Failed to send ${error}`);
@@ -332,7 +332,7 @@ async function registerProfile(datus) {
 }
 async function registerExpProfile(datus) {
   try {
-    const result = await UserExperience.query().insertGraph(datus).debug();
+    const result = await UserExperience.query().insertGraph(datus);
 
     return result;
   } catch (error) {
