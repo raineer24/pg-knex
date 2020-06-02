@@ -21,10 +21,38 @@ const getTest = (req, res, next) => {
 
 
 // @route    DELETE api/v2/users/profile
-// @desc     Delete profile, user & posts
+// @desc     Delete profile, user 
 // @access   Private
-const deleteProfile = (req, res,next) => {
-  res.json({ msg: "Profile works" });
+const deleteProfile = async(req, res,next) => {
+
+  try {
+    const userProfile = await User.query().findById(req.user.id).debug(true);
+    console.log('userProfile', userProfile);
+    
+    if(userProfile) {
+
+      const userSkill = await userProfile
+      .$relatedQuery('user_skill').delete();  
+     console.log('userSkill',userSkill);
+
+     
+      const userP = await userProfile
+          .$relatedQuery('user_profile').delete();
+
+          await userProfile.$query().delete().debug(true);
+          
+  
+          return res.status(200).json({ success: true, msg: 'User Deleted' });
+         
+          //res.json({ msg: 'User deleted' });
+          
+    }
+  } catch (error) {
+    log.error(`Profile controller[DeleteUserProfile]: Failed to send ${error}`);
+
+    return next(error);
+  }
+ 
 }
 
 // @route    DELETE /api/v2/users/profile/experience/:exp_id

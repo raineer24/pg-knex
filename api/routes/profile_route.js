@@ -25,7 +25,7 @@ const {
 // @route    DELETE api/profile
 // @desc     Delete profile, user & posts
 // @access   Private
-router.delete('/', deleteProfile);
+router.delete('/', passport.authenticate("jwt", { session: false }),deleteProfile);
 
 // @route    DELETE /api/v2/users/profile/experience/:exp_id
 // @desc     Delete experience from profile
