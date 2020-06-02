@@ -14,8 +14,18 @@ const {
 } = require("../../helpers/error_helper");
 
 const getTest = (req, res, next) => {
+  console.log('error');
+  
   res.json({ msg: "Profile works" });
 };
+
+
+// @route    DELETE api/v2/users/profile
+// @desc     Delete profile, user & posts
+// @access   Private
+const deleteProfile = (req, res,next) => {
+  res.json({ msg: "Profile works" });
+}
 
 // @route    DELETE /api/v2/users/profile/experience/:exp_id
 // @desc     Delete experience from profile
@@ -319,5 +329,6 @@ module.exports = {
   createExpProfile,
   AllProfiles,
   createEducation,
-  deleteExp
+  deleteExp,
+  deleteProfile
 };
