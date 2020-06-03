@@ -188,6 +188,7 @@ const createEducation = async (req, res, next) => {
     } = req.body;
 
     const newEdu = {
+      users_id: req.user.id,
       school_name,
       degree_name,
       major_fieldofstudy,

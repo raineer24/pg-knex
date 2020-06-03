@@ -106,3 +106,13 @@ The REST API to the example app is described below.
 `DELETE /api/v2/users/profile`
 
     curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/profile
+
+## Add profile education
+
+### Request
+
+* Private - use jwt strategy to authenticate
+
+`POST /api/v2/users/profile/education`
+
+    curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/profile/education
