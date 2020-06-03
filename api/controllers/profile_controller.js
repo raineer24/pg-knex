@@ -82,7 +82,7 @@ const deleteExp = async (req, res, next) => {
 const AllProfiles = async (req, res, next) => {
   try {
     UserProfile.query()
-      .eager("[user_experience,user_skill_set]")
+      .eager("[user_experience,user_skill_set,user_education]")
       .then(profiles => {
         res.json({
           profiles

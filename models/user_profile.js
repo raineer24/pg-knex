@@ -46,6 +46,7 @@ class UserProfile extends Model {
     const UserSkillSet = require("./user_skill_set");
     const Users = require("./users");
     const UserExperience = require("./user_exp");
+    const UserEducation = require("./user_edu");
     return {
       // user_experience: {
       //   relation: Model.ManyToManyRelation,
@@ -83,6 +84,18 @@ class UserProfile extends Model {
             to: "user_profile.users_id"
           },
           to: "user_experience_detail.users_id"
+        }
+      },
+      user_education: {
+        relation: Model.ManyToManyRelation,
+        modelClass: UserEducation,
+        join: {
+          from: "user_profile.users_id",
+          through: {
+            from: "user_profile.users_id",
+            to: "user_profile.users_id"
+          },
+          to: "user_education_detail.users_id"
         }
       }
     };
