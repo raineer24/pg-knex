@@ -199,6 +199,8 @@ const createEducation = async (req, res, next) => {
     };
 
     const profileEducation = await UserEducation.query().findById(req.user.id);
+    console.log('profileEdu', profileEducation);
+    
     if (profileEducation) {
       return next(
         createError({
@@ -207,7 +209,7 @@ const createEducation = async (req, res, next) => {
         })
       );
     } else {
-      const profileEduCreate = await registerExpProfile(newEdu);
+      const profileEduCreate = await registerEduProfile(newEdu);
       return res.status(200).json({ success: true, profileEduCreate });
     }
   } catch (error) {
