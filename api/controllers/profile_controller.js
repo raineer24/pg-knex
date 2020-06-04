@@ -23,7 +23,31 @@ const getTest = (req, res, next) => {
 // @desc     Delete education from profile
 // @access   Private
 const deleteEducation = async(req, res, next) => {
-  res.json({ msg: "Profile works" });
+
+  
+  try {
+
+  
+   // const userEducation = await user.$relatedQuery('user_education').debug(true);
+ // console.log('userEducation', userEdu);
+  // const user = await User.query().findById(req.params.edu_id);
+
+  
+
+  // if (user) {
+
+    const userEdu = await UserEducation.query().where('users_id', req.params.edu_id).delete();
+    return res.status(200).json({ success: true, userEdu, msg: 'User Education profile data Deleted' });
+ // }
+
+  
+  
+  
+  } catch (error) {
+    log.error(`Profile controller[DeleteUserEducation]: Failed to send ${error}`);
+
+    return next(error);
+  }
 }
 
 
@@ -74,9 +98,7 @@ const deleteExp = async (req, res, next) => {
 
     return res.status(200).json({ success: true, msg: 'User Profile Experience Deleted' });
     
-    
-
-   } catch (error) {
+     } catch (error) {
     log.error(`Profile controller[DeleteExpProfile]: Failed to send ${error}`);
 
     return next(error);
