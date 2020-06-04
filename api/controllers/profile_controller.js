@@ -19,6 +19,13 @@ const getTest = (req, res, next) => {
   res.json({ msg: "Profile works" });
 };
 
+// @route    DELETE /api/v2/users/profile/education/:edu_id
+// @desc     Delete education from profile
+// @access   Private
+const deleteEducation = async(req, res, next) => {
+  res.json({ msg: "Profile works" });
+}
+
 
 // @route    DELETE api/v2/users/profile
 // @desc     Delete profile, user 
@@ -366,5 +373,6 @@ module.exports = {
   AllProfiles,
   createEducation,
   deleteExp,
-  deleteProfile
+  deleteProfile,
+  deleteEducation
 };

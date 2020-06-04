@@ -10,7 +10,8 @@ const {
   AllProfiles,
   createEducation,
   deleteExp,
-  deleteProfile
+  deleteProfile,
+  deleteEducation
 } = require("../controllers/profile_controller");
 
 const validation = require("../../validation/express-profile");
@@ -21,6 +22,11 @@ const {
   validate
 } = require("./../../validation/validation");
 
+
+// @route    DELETE /api/v2/users/profile/education/:edu_id
+// @desc     Delete education from profile
+// @access   Private
+router.delete('/education/:edu_id', deleteEducation)
 
 // @route    DELETE api/profile
 // @desc     Delete profile, user & posts
