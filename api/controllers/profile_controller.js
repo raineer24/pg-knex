@@ -198,10 +198,16 @@ const createEducation = async (req, res, next) => {
       description
     };
 
-    const profileEducation = await UserEducation.query().findById(req.user.id);
+    const profileEducation = await User.query().findById(req.user.id).eager('user_education').then(data => {
+      return data.user_education;
+    });
     console.log('profileEdu', profileEducation);
+
+    const usersEduLength = Object.keys(profileEducation).length//0
+    console.log('usersEduLength', usersEduLength);
     
-    if (profileEducation) {
+    
+    if (Array.isArray(profileEducation) && usersEduLength > 0) {
       return next(
         createError({
           status: CONFLICT,
