@@ -27,17 +27,39 @@ const deleteEducation = async(req, res, next) => {
   
   try {
 
-  
-   // const userEducation = await user.$relatedQuery('user_education').debug(true);
- // console.log('userEducation', userEdu);
-  // const user = await User.query().findById(req.params.edu_id);
+    
+
+   const user = await User.query().findById(req.params.edu_id);
+   const userEducation = await user.$relatedQuery('user_education').debug(true);
+    const userEduLength = Object.keys(userEducation).length;
+
+    if (user) {
+      if (Array.isArray(userEducation) && userEduLength === 0) {
+        return next(
+          createError({
+            status: CONFLICT,
+            message: "No User Education profile found!"
+          })
+        );
+    
+       }
+
+       const userEdu = await UserEducation.query().where('users_id', req.params.edu_id).delete();
+    return res.status(200).json({ success: true, userEdu, msg: 'User Education profile data Deleted' });
+    }
+    
+   
+   //console.log('userEducation', userEduLength);
+ 
+
+   
+
 
   
 
   // if (user) {
 
-    const userEdu = await UserEducation.query().where('users_id', req.params.edu_id).delete();
-    return res.status(200).json({ success: true, userEdu, msg: 'User Education profile data Deleted' });
+    
  // }
 
   
