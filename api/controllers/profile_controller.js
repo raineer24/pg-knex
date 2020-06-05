@@ -281,23 +281,31 @@ const createEducation = async (req, res, next) => {
 // @access   Private
 const getProfile = async (req, res, next) => {
   try {
-    const user = await UserProfile.query()
-      .findById(req.user.id)
-      .eager("user_skill_set")
-      .then(userprofile => {
-        console.log("userprofile", userprofile);
-        if (userprofile === "undefined") {
-          return next(
-            createError({
-              status: CONFLICT,
-              message: "There is no profile for this user"
-            })
-          );
-        }
-        res.json(userprofile);
-      });
+    // const user = await UserProfile.query()
+    //   .findById(req.user.id)
+    //   .eager("user_skill_set")
+    //   .then(userprofile => {
+    //     console.log("userprofile", userprofile);
+    //     if (userprofile === "undefined") {
+    //       return next(
+    //         createError({
+    //           status: CONFLICT,
+    //           message: "There is no profile for this user"
+    //         })
+    //       );
+    //     }
+    //     res.json(userprofile);
+    //   });
+
+    const userprofile = await UserProfile.query().where('users_id', req.user.id).eager("[user_experience,user_skill_set,user_education]");
+    console.log('userprofile', userprofile);
+    return res.status(200).json({success: true, userprofile});
+    
+    
   } catch (error) {
-    throw error;
+    log.error(`Profile controller[Get Current Profile]: Failed to send ${error}`);
+
+    return next(error);
   }
 };
 
