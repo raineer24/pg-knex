@@ -5,6 +5,8 @@ const UserExperience = require("../../models/user_exp");
 const UserEducation = require("../../models/user_edu");
 const passport = require("passport");
 const log = require("color-logs")(true, true, "User Profile");
+const axios = require('axios');
+const config = require('config');
 
 const {
   createError,
@@ -23,9 +25,21 @@ const getTest = (req, res, next) => {
 // @desc     Get user repos from Github
 // @access   Public
 const getRepo = async(req, res,next) => {
-  console.log('error');
+  try {
+    const uri = encodeURI(`https://api.github.com/users/${req.params.username}/repos?per_page=5&sort=created:asc`);
+    const headers = {
+      'user-great': 'node.js',
+      Authorization: `token ${config.get('githubToken')}`
+    };
+
+    const gitHubResponse = await axios.get(uri, {headers});
+    console.log(gitHubResponse);
+    
   
-  res.json({ msg: "Profile works" });
+  } catch (error) {
+    console.log(error.message);
+    
+  }
 }
 
 // @route    DELETE /api/v2/users/profile/education/:edu_id
