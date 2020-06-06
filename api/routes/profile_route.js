@@ -11,7 +11,8 @@ const {
   createEducation,
   deleteExp,
   deleteProfile,
-  deleteEducation
+  deleteEducation,
+  getRepo
 } = require("../controllers/profile_controller");
 
 const validation = require("../../validation/express-profile");
@@ -22,11 +23,15 @@ const {
   validate
 } = require("./../../validation/validation");
 
+// @route    GET /api/v2/users/profile/github/:username
+// @desc     Get user repos from Github
+// @access   Public
+router.get('/github/:username',getRepo);
 
 // @route    DELETE /api/v2/users/profile/education/:edu_id
 // @desc     Delete education from profile
 // @access   Private
-router.delete('/education/:edu_id', passport.authenticate("jwt", { session: false }),deleteEducation)
+router.delete('/education/:edu_id', passport.authenticate("jwt", { session: false }),deleteEducation);
 
 // @route    DELETE api/profile
 // @desc     Delete profile, user & posts

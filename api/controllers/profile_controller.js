@@ -19,6 +19,15 @@ const getTest = (req, res, next) => {
   res.json({ msg: "Profile works" });
 };
 
+// @route    GET /api/v2/users/profile/github/:username
+// @desc     Get user repos from Github
+// @access   Public
+const getRepo = async(req, res,next) => {
+  console.log('error');
+  
+  res.json({ msg: "Profile works" });
+}
+
 // @route    DELETE /api/v2/users/profile/education/:edu_id
 // @desc     Delete education from profile
 // @access   Private
@@ -426,5 +435,6 @@ module.exports = {
   createEducation,
   deleteExp,
   deleteProfile,
-  deleteEducation
+  deleteEducation,
+  getRepo
 };
