@@ -33,14 +33,14 @@ const getRepo = async(req, res,next) => {
     };
 
     const gitHubResponse = await axios.get(uri, {headers});
-    console.log(gitHubResponse);
+    return res.json(gitHubResponse.data);
     
   
   } catch (error) {
     console.log(error.message);
-    
+    return res.status(404).json({ msg: 'No Github profile found'});
   }
-}
+};
 
 // @route    DELETE /api/v2/users/profile/education/:edu_id
 // @desc     Delete education from profile
