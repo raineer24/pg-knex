@@ -32,6 +32,7 @@ class User extends Model {
     const UserProfile = require("./user_profile");
     const UserSkillSet = require("./user_skill_set");
     const UserExperience = require("./user_exp");
+    const UserEducation = require("./user_edu");
     return {
       user_profile: {
         relation: Model.HasManyRelation,
@@ -47,10 +48,10 @@ class User extends Model {
         join: {
           from: "users.id",
           through: {
-            from: "user_profile.id",
-            to: "user_profile.id"
+            from: "user_profile.users_id",
+            to: "user_profile.users_id"
           },
-          to: "user_skill_set.user_skill_set_id"
+          to: "user_skill_set.users_id"
         }
       },
       user_experience: {
@@ -63,6 +64,18 @@ class User extends Model {
             to: "user_profile.users_id"
           },
           to: "user_experience_detail.users_id"
+        }
+      },
+      user_education: {
+        relation: Model.ManyToManyRelation,
+        modelClass: UserEducation,
+        join: {
+          from: "users.id",
+          through: {
+            from: "user_profile.users_id",
+            to: "user_profile.users_id"
+          },
+          to: "user_education_detail.users_id"
         }
       }
     };

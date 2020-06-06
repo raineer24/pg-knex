@@ -9,7 +9,9 @@ const {
   createExpProfile,
   AllProfiles,
   createEducation,
-  deleteExp
+  deleteExp,
+  deleteProfile,
+  deleteEducation
 } = require("../controllers/profile_controller");
 
 const validation = require("../../validation/express-profile");
@@ -19,6 +21,17 @@ const {
   userEducationProfileValidationRules,
   validate
 } = require("./../../validation/validation");
+
+
+// @route    DELETE /api/v2/users/profile/education/:edu_id
+// @desc     Delete education from profile
+// @access   Private
+router.delete('/education/:edu_id', passport.authenticate("jwt", { session: false }),deleteEducation)
+
+// @route    DELETE api/profile
+// @desc     Delete profile, user & posts
+// @access   Private
+router.delete('/', passport.authenticate("jwt", { session: false }),deleteProfile);
 
 // @route    DELETE /api/v2/users/profile/experience/:exp_id
 // @desc     Delete experience from profile
