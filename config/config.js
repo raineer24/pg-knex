@@ -12,5 +12,7 @@ module.exports = {
     password: "batman489~"
   },
   bycryptSalt: 13,
-  secret_key: "123456"
+  secret_key: "123456",
+  githubClientId: "6c8af49d7044b5cb7842",
+  githubSecret:""
 };
