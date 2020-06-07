@@ -7,7 +7,6 @@ const passport = require("passport");
 const log = require("color-logs")(true, true, "User Profile");
 const axios = require('axios');
 const config = require('config');
-console.log('config: ',config)
 const {
   createError,
   BAD_REQUEST,
