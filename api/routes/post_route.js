@@ -10,6 +10,6 @@ const {
 
 router.get("/", getTest);
 
-router.post("/", addPost);
+router.post("/", passport.authenticate("jwt", { session: false }),addPost);
 
 module.exports = router;

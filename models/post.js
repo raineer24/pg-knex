@@ -4,7 +4,7 @@ const path = require("path");
 
 class Post extends Model {
   static get tableName() {
-    return "post;
+    return "post";
   }
   // defines the relations to other models.
   // static get relationMappings() {
