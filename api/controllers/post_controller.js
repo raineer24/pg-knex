@@ -17,7 +17,7 @@ const addPost = async(req, res,next) => {
     body
   } = req.body;
 
-  const data = {
+  const insertData = {
     users_id: req.user.id,
     title,
     body
@@ -27,18 +27,18 @@ const addPost = async(req, res,next) => {
 
     const user = await User.query().findById(req.user.id);
     if (user) {
-
+      const postData = await insertPost(insertData);
+      return res.status(200).json({ success: true, postData });
     }
     
-    res.json({ msg: "Profile works" });
-  } catch (error) {
+      } catch (error) {
     log.error(`Post controller[Add post]: Failed to send ${error}`);
 
     return next(error);
   }
 }
 
-async function InsertPost(datus) {
+async function insertPost(datus) {
   try {
     const result = await Post.query().insertGraph(datus);
 

@@ -34,7 +34,7 @@ class Post extends Model {
 
       properties: {
         id: { type: "integer" },
-        users_id: { type: "string" },
+        users_id: { type: "integer" },
         title: { type: "string" },
         body: { type: "string" },
         publish_date: { type: "string" },
