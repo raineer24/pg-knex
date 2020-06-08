@@ -38,6 +38,13 @@ const addPost = async(req, res,next) => {
   }
 }
 
+// @route    GET api/v2/posts
+// @desc     Get all posts
+// @access   Private
+const getAllPosts = async(req,res,next) => {
+  res.json({ msg: "Profile works" });
+}
+
 async function insertPost(datus) {
   try {
     const result = await Post.query().insertGraph(datus);
@@ -50,5 +57,6 @@ async function insertPost(datus) {
 
   module.exports = {
     getTest,
-    addPost
+    addPost,
+    getAllPosts
   };
