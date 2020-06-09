@@ -155,8 +155,19 @@ The REST API to the example app is described below.
 
 * Private - use jwt strategy to authenticate
 
-`GET /api/v2/posts`
+`GET /api/v2/posts/:id`
 
-    curl -i -H 'Accept: application/json' localhost:3000/api/v2/posts 
+    curl -i -H 'Accept: application/json' localhost:3000/api/v2/posts
+
+
+## Delete post by Id
+
+### Request
+
+* Private - use jwt strategy to authenticate
+
+`DELETE /api/v2/posts/:id`
+
+    curl -i -H 'Accept: application/json' localhost:3000/api/v2/posts/:id     
 
     
