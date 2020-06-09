@@ -5,8 +5,15 @@ const passport = require("passport");
 const {
   getTest,
   addPost,
-  getAllPosts
+  getAllPosts,
+  getPostId
 } = require("../controllers/post_controller");
+
+
+// @route    GET api/v2/posts/:id
+// @desc     Get post by ID
+// @access   Private
+router.get('/:id', getPostId);
 
 
 //router.get("/", getTest);

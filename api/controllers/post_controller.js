@@ -10,6 +10,9 @@ const getTest = (req, res, next) => {
   // @route    GET api/posts/:id
 // @desc     Get post by ID
 // @access   Private
+const getPostId = async(req, res,next) => {
+  res.json({ msg: "Profile works" });
+}
 
   // @route    POST api/v2/posts
 // @desc     Create a post
@@ -70,5 +73,5 @@ async function insertPost(datus) {
   module.exports = {
     getTest,
     addPost,
-    getAllPosts
+    getAllPosts,getPostId
   };

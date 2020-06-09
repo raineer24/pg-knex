@@ -134,7 +134,7 @@ The REST API to the example app is described below.
 
 * Private - use jwt strategy to authenticate
 
-`POST /api/v2/posts`
+`GET /api/v2/posts`
 
     curl -i -H 'Accept: application/json' localhost:3000/api/v2/posts 
 
@@ -149,5 +149,14 @@ The REST API to the example app is described below.
 
     curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/profile/github/:username
 
+ ## Get post by Id
+
+### Request
+
+* Private - use jwt strategy to authenticate
+
+`GET /api/v2/posts`
+
+    curl -i -H 'Accept: application/json' localhost:3000/api/v2/posts 
 
     
