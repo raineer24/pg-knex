@@ -8,6 +8,13 @@ const {
   CONFLICT
 } = require("../../helpers/error_helper");
 
+// @route    DELETE api/v2/posts/:id
+// @desc     Delete a post
+// @access   Private
+const deletePost = async (req, res,next) =>{
+  res.json({ msg: "Profile works" });
+}
+
 
 const getTest = (req, res, next) => {
       
@@ -100,5 +107,6 @@ async function insertPost(datus) {
   module.exports = {
     getTest,
     addPost,
+    deletePost,
     getAllPosts,getPostId
   };

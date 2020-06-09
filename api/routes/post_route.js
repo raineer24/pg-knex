@@ -6,9 +6,15 @@ const {
   getTest,
   addPost,
   getAllPosts,
-  getPostId
+  getPostId,
+  deletePost
 } = require("../controllers/post_controller");
 
+
+// @route    DELETE api/v2/posts/:id
+// @desc     Delete a post
+// @access   Private
+router.delete('/:id', deletePost)
 
 // @route    GET api/v2/posts/:id
 // @desc     Get post by ID
