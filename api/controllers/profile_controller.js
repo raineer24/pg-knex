@@ -5,7 +5,8 @@ const UserExperience = require("../../models/user_exp");
 const UserEducation = require("../../models/user_edu");
 const passport = require("passport");
 const log = require("color-logs")(true, true, "User Profile");
-
+const axios = require('axios');
+const config = require('config');
 const {
   createError,
   BAD_REQUEST,
@@ -19,6 +20,27 @@ const getTest = (req, res, next) => {
   res.json({ msg: "Profile works" });
 };
 
+// @route    GET /api/v2/users/profile/github/:username
+// @desc     Get user repos from Github
+// @access   Public
+const getRepo = async(req, res,next) => {
+  try {
+    const uri = encodeURI(`https://api.github.com/users/${req.params.username}/repos?per_page=5&sort=created:asc`);
+    const headers = {
+      'user-great': 'node.js',
+      Authorization: `token ${config.get('githubToken')}`
+    };
+
+    const gitHubResponse = await axios.get(uri, {headers});
+    return res.json(gitHubResponse.data);
+    
+  
+  } catch (error) {
+    console.log(error.message);
+    return res.status(404).json({ msg: 'No Github profile found'});
+  }
+};
+
 // @route    DELETE /api/v2/users/profile/education/:edu_id
 // @desc     Delete education from profile
 // @access   Private
@@ -26,9 +48,6 @@ const deleteEducation = async(req, res, next) => {
 
   
   try {
-
-    
-
    const user = await User.query().findById(req.params.edu_id);
    const userEducation = await user.$relatedQuery('user_education').debug(true);
     const userEduLength = Object.keys(userEducation).length;
@@ -47,24 +66,8 @@ const deleteEducation = async(req, res, next) => {
        const userEdu = await UserEducation.query().where('users_id', req.params.edu_id).delete();
     return res.status(200).json({ success: true, userEdu, msg: 'User Education profile data Deleted' });
     }
-    
    
-   //console.log('userEducation', userEduLength);
- 
-
    
-
-
-  
-
-  // if (user) {
-
-    
- // }
-
-  
-  
-  
   } catch (error) {
     log.error(`Profile controller[DeleteUserEducation]: Failed to send ${error}`);
 
@@ -281,22 +284,7 @@ const createEducation = async (req, res, next) => {
 // @access   Private
 const getProfile = async (req, res, next) => {
   try {
-    // const user = await UserProfile.query()
-    //   .findById(req.user.id)
-    //   .eager("user_skill_set")
-    //   .then(userprofile => {
-    //     console.log("userprofile", userprofile);
-    //     if (userprofile === "undefined") {
-    //       return next(
-    //         createError({
-    //           status: CONFLICT,
-    //           message: "There is no profile for this user"
-    //         })
-    //       );
-    //     }
-    //     res.json(userprofile);
-    //   });
-
+  
     const userprofile = await UserProfile.query().where('users_id', req.user.id).eager("[user_experience,user_skill_set,user_education]");
     console.log('userprofile', userprofile);
     return res.status(200).json({success: true, userprofile});
@@ -356,21 +344,7 @@ const createProfile = async (req, res, next) => {
 
     const profile = await UserProfile.query().findById(req.user.id);
     console.log('profile:', profile);
-    
-    // if (error.code === "23505") {
-    //   return next(
-    //     createError({
-    //       status: CONFLICT,
-    //       message: "Already added profile"
-    //     })
-    //   );
-    // } else {
-    //   const profileCreate = await registerProfile(data);
-    //   return res.status(200).json(profileCreate);
-    // }
-
-    
-      const profileCreate = await registerProfile(data);
+       const profileCreate = await registerProfile(data);
       return res.status(200).json({success: true, profileCreate});
     
   } catch (error) {
@@ -426,5 +400,6 @@ module.exports = {
   createEducation,
   deleteExp,
   deleteProfile,
-  deleteEducation
+  deleteEducation,
+  getRepo
 };
