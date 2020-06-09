@@ -48,9 +48,6 @@ const deleteEducation = async(req, res, next) => {
 
   
   try {
-
-    
-
    const user = await User.query().findById(req.params.edu_id);
    const userEducation = await user.$relatedQuery('user_education').debug(true);
     const userEduLength = Object.keys(userEducation).length;
@@ -69,24 +66,8 @@ const deleteEducation = async(req, res, next) => {
        const userEdu = await UserEducation.query().where('users_id', req.params.edu_id).delete();
     return res.status(200).json({ success: true, userEdu, msg: 'User Education profile data Deleted' });
     }
-    
    
-   //console.log('userEducation', userEduLength);
- 
-
    
-
-
-  
-
-  // if (user) {
-
-    
- // }
-
-  
-  
-  
   } catch (error) {
     log.error(`Profile controller[DeleteUserEducation]: Failed to send ${error}`);
 
@@ -303,22 +284,7 @@ const createEducation = async (req, res, next) => {
 // @access   Private
 const getProfile = async (req, res, next) => {
   try {
-    // const user = await UserProfile.query()
-    //   .findById(req.user.id)
-    //   .eager("user_skill_set")
-    //   .then(userprofile => {
-    //     console.log("userprofile", userprofile);
-    //     if (userprofile === "undefined") {
-    //       return next(
-    //         createError({
-    //           status: CONFLICT,
-    //           message: "There is no profile for this user"
-    //         })
-    //       );
-    //     }
-    //     res.json(userprofile);
-    //   });
-
+  
     const userprofile = await UserProfile.query().where('users_id', req.user.id).eager("[user_experience,user_skill_set,user_education]");
     console.log('userprofile', userprofile);
     return res.status(200).json({success: true, userprofile});
@@ -378,21 +344,7 @@ const createProfile = async (req, res, next) => {
 
     const profile = await UserProfile.query().findById(req.user.id);
     console.log('profile:', profile);
-    
-    // if (error.code === "23505") {
-    //   return next(
-    //     createError({
-    //       status: CONFLICT,
-    //       message: "Already added profile"
-    //     })
-    //   );
-    // } else {
-    //   const profileCreate = await registerProfile(data);
-    //   return res.status(200).json(profileCreate);
-    // }
-
-    
-      const profileCreate = await registerProfile(data);
+       const profileCreate = await registerProfile(data);
       return res.status(200).json({success: true, profileCreate});
     
   } catch (error) {
