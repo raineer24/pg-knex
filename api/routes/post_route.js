@@ -9,7 +9,7 @@ const {
 } = require("../controllers/post_controller");
 
 
-router.get("/", getTest);
+//router.get("/", getTest);
 
 
 // @route    POST api/v2/posts
@@ -20,6 +20,6 @@ router.post("/", passport.authenticate("jwt", { session: false }),addPost);
 // @route    GET api/v2/posts
 // @desc     Get all posts
 // @access   Private
-router.get("/", getAllPosts);
+router.get("/", passport.authenticate("jwt", { session: false }),getAllPosts);
 
 module.exports = router;

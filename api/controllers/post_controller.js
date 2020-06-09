@@ -7,6 +7,10 @@ const getTest = (req, res, next) => {
     res.json({ msg: "Profile works" });
   };
 
+  // @route    GET api/posts/:id
+// @desc     Get post by ID
+// @access   Private
+
   // @route    POST api/v2/posts
 // @desc     Create a post
 // @access   Private
@@ -42,7 +46,15 @@ const addPost = async(req, res,next) => {
 // @desc     Get all posts
 // @access   Private
 const getAllPosts = async(req,res,next) => {
-  res.json({ msg: "Profile works" });
+  try {
+    const posts = await Post.query().orderBy('publish_date','desc'); ;
+    return res.status(200).json({ success: true, posts });
+    
+  } catch (error) {
+    log.error(`Post controller[Get all posts]: Failed to send ${error}`);
+
+    return next(error);
+  }
 }
 
 async function insertPost(datus) {
