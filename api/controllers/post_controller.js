@@ -1,6 +1,13 @@
 const User = require("../../models/users");
 const Post = require("../../models/post");
 const log = require("color-logs")(true, true, "User Profile");
+const {
+  createError,
+  BAD_REQUEST,
+  UNAUTHORIZED,
+  CONFLICT
+} = require("../../helpers/error_helper");
+
 
 const getTest = (req, res, next) => {
       
@@ -11,7 +18,27 @@ const getTest = (req, res, next) => {
 // @desc     Get post by ID
 // @access   Private
 const getPostId = async(req, res,next) => {
-  res.json({ msg: "Profile works" });
+  try {
+    const post = await Post.query().findById(req.params.id);
+
+    if (!post) {
+      return next(
+        createError({
+          status: CONFLICT,
+          message: "No Post found!"
+        })
+      );
+  
+     }
+    return res.status(200).json({ success: true, post });
+
+   
+    
+  } catch (error) {
+    log.error(`Post controller[Get post by Id]: Failed to send ${error}`);
+
+    return next(error);
+  }
 }
 
   // @route    POST api/v2/posts

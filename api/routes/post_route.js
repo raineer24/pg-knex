@@ -13,7 +13,7 @@ const {
 // @route    GET api/v2/posts/:id
 // @desc     Get post by ID
 // @access   Private
-router.get('/:id', getPostId);
+router.get('/:id', passport.authenticate("jwt", { session: false }), getPostId);
 
 
 //router.get("/", getTest);
