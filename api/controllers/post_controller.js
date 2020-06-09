@@ -12,7 +12,31 @@ const {
 // @desc     Delete a post
 // @access   Private
 const deletePost = async (req, res,next) =>{
-  res.json({ msg: "Profile works" });
+  const post = await Post.query().findById(req.params.id);
+
+  if (!post) {
+    return next(
+      createError({
+        status: CONFLICT,
+        message: "No Post found!"
+      })
+    );
+   } else if(post.users_id !== req.user.id) {
+    return next(
+      createError({
+        status: CONFLICT,
+        message: "User not authorized!"
+      })
+    );
+  } else {
+    const postDelete = await Post.query().findById(req.params.id).delete();
+    return res.status(200).json({ success: true, msg: 'Post data Deleted' });
+  }
+  
+  
+  
+
+   //check user
 }
 
 
@@ -35,8 +59,7 @@ const getPostId = async(req, res,next) => {
           message: "No Post found!"
         })
       );
-  
-     }
+       }
     return res.status(200).json({ success: true, post });
 
    

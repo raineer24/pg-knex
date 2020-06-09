@@ -14,7 +14,7 @@ const {
 // @route    DELETE api/v2/posts/:id
 // @desc     Delete a post
 // @access   Private
-router.delete('/:id', deletePost)
+router.delete('/:id', passport.authenticate("jwt", { session: false }),deletePost)
 
 // @route    GET api/v2/posts/:id
 // @desc     Get post by ID
