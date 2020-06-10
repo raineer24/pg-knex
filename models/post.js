@@ -6,26 +6,7 @@ class Post extends Model {
   static get tableName() {
     return "post";
   }
-  // defines the relations to other models.
-  // static get relationMappings() {
-  //   //Import User class model for relationMappings()
-  //   const User = require("./user_profile");
 
-  //   return {
-  //     user: {
-  //       relation: Model.BelongsToOneRelation,
-  //       ModelClass: require("./user_profile").default,
-  //       join: {
-  //         from: "user_profile.id",
-  //         to: "users.id"
-  //       }
-  //     }
-  //   };
-  // }
-
-//   static get idColumn() {
-//     return ["user_experience_detail_id"];
-//   }
 
   static get jsonSchema() {
     return {
@@ -33,12 +14,41 @@ class Post extends Model {
       //required: ["job_title", "company_name", "start_date"],
 
       properties: {
-        id: { type: "integer" },
-        users_id: { type: "integer" },
-        title: { type: "string" },
-        body: { type: "string" },
-        publish_date: { type: "string" },
+        id: {
+          type: "integer"
+        },
+        users_id: {
+          type: "integer"
+        },
+        title: {
+          type: "string"
+        },
+        body: {
+          type: "string"
+        },
+        publish_date: {
+          type: "string"
+        },
       }
+    };
+  }
+
+  static get relationMappings() {
+    const Likes = require("./likes");
+    const Users = require("./users");
+    return {
+      likes: {
+        relation: Model.ManyToManyRelation,
+        modelClass: Likes,
+        join: {
+          from: 'post.id',
+          through: {
+            from: 'likes.post_id',
+            to: 'likes.post_id',
+          },
+          to: 'likes.post_id',
+        },
+      },
     };
   }
 }

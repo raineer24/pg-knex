@@ -26,15 +26,11 @@ class Likes extends Model {
   }
 
   static get relationMappings() {
-  
-    const Users = require("./users");
+      const Users = require("./users");
        return {
-     
-     
-     
-      users: {
+           users: {
         relation: Model.ManyToManyRelation,
-        modelClass: User,
+        modelClass: Users,
         join: {
           from: 'post.id',
           through: {

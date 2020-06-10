@@ -1,5 +1,6 @@
 const User = require("../../models/users");
 const Post = require("../../models/post");
+const Likes = require("../../models/likes");
 const log = require("color-logs")(true, true, "User Profile");
 const {
   createError,
@@ -13,7 +14,12 @@ const {
 // @desc     Like a post
 // @access   Private
 const likePost = async (req,res, next) => {
-  res.json({ msg: "Profile works" });
+  const post = await Post
+     .query()
+     .leftJoinRelation('likes', req.user.id, '=', 'likes.id')
+     .select('post.*');
+  console.log('post: ', post);
+  
 }
 
 // @route    DELETE api/v2/posts/:id

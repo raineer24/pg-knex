@@ -15,7 +15,7 @@ const {
 // @route    POST api/v2/posts/like/:id
 // @desc     Like a post
 // @access   Private
-router.post('/like/:id', likePost);
+router.post('/like/:id', passport.authenticate("jwt", { session: false }),likePost);
 
 // @route    DELETE api/v2/posts/:id
 // @desc     Delete a post
