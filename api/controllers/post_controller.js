@@ -8,6 +8,14 @@ const {
   CONFLICT
 } = require("../../helpers/error_helper");
 
+
+// @route    POST api/v2/posts/like/:id
+// @desc     Like a post
+// @access   Private
+const likePost = async (req,res, next) => {
+  res.json({ msg: "Profile works" });
+}
+
 // @route    DELETE api/v2/posts/:id
 // @desc     Delete a post
 // @access   Private
@@ -131,5 +139,5 @@ async function insertPost(datus) {
     getTest,
     addPost,
     deletePost,
-    getAllPosts,getPostId
+    getAllPosts,getPostId, likePost
   };

@@ -12,6 +12,7 @@ class Likes extends Model {
   }
 
   static get jsonSchema() {
+      
     return {
       type: "object",
       
@@ -21,6 +22,28 @@ class Likes extends Model {
         users_id: { type: "integer" },
         post_id: { type: "integer" },
       }
+    };
+  }
+
+  static get relationMappings() {
+  
+    const Users = require("./users");
+       return {
+     
+     
+     
+      users: {
+        relation: Model.ManyToManyRelation,
+        modelClass: User,
+        join: {
+          from: 'post.id',
+          through: {
+            from: 'likes.post_id',
+            to: 'likes.user_id',
+          },
+          to: 'users.id',
+        },
+      },
     };
   }
 }
