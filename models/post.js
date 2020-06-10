@@ -44,7 +44,7 @@ class Post extends Model {
           from: 'post.id',
           through: {
             from: 'likes.post_id',
-            to: 'likes.post_id',
+            to: 'likes.users_id',
           },
           to: 'likes.post_id',
         },

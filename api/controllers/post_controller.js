@@ -1,5 +1,6 @@
 const User = require("../../models/users");
 const Post = require("../../models/post");
+const { raw } = require('objection');
 const Likes = require("../../models/likes");
 const log = require("color-logs")(true, true, "User Profile");
 const {
@@ -13,19 +14,32 @@ const {
 // @route    POST api/v2/posts/like/:id
 // @desc     Like a post
 // @access   Private
-const likePost = async (req,res, next) => {
+const likePost = async (req, res, next) => {
   const post = await Post
-     .query()
-     .leftJoinRelation('likes', req.user.id, '=', 'likes.id')
-     .select('post.*');
+    .query()
+    .leftJoinRelation('likes', req.user.id, '=', 'likes.id')
+     .select('post.*', raw(`IF('${req.user.id}'=likes.likes_id,'True','False') AS isLikedByYou`));
+
+    //  Tweet
+    //  .query()
+    //  .leftJoinRelation('likers', currentUserId, '=', 'likers.id')
+    //  .select('tweets.*', knex.raw(`IF('${currentUserId}'=likers.id,'True','False') AS isLikedByYou`))
+try {
+  //const post = await Post.query().select(['Post.*', Post.relatedQuery('likes').select(true).where('id', req.user.id).as('youLiked')]).whereIn('id', req.params.id);
   console.log('post: ', post);
+
+} catch (error) {
+  log.error(`Post controller[Like post]: Failed to send ${error}`);
+
+  return next(error);
+}
   
 }
 
 // @route    DELETE api/v2/posts/:id
 // @desc     Delete a post
 // @access   Private
-const deletePost = async (req, res,next) =>{
+const deletePost = async (req, res, next) => {
   const post = await Post.query().findById(req.params.id);
 
   if (!post) {
@@ -35,7 +49,7 @@ const deletePost = async (req, res,next) =>{
         message: "No Post found!"
       })
     );
-   } else if(post.users_id !== req.user.id) {
+  } else if (post.users_id !== req.user.id) {
     return next(
       createError({
         status: CONFLICT,
@@ -44,25 +58,30 @@ const deletePost = async (req, res,next) =>{
     );
   } else {
     const postDelete = await Post.query().findById(req.params.id).delete();
-    return res.status(200).json({ success: true, msg: 'Post data Deleted' });
+    return res.status(200).json({
+      success: true,
+      msg: 'Post data Deleted'
+    });
   }
-  
-  
-  
 
-   //check user
+
+
+
+  //check user
 }
 
 
 const getTest = (req, res, next) => {
-      
-    res.json({ msg: "Profile works" });
-  };
 
-  // @route    GET api/posts/:id
+  res.json({
+    msg: "Profile works"
+  });
+};
+
+// @route    GET api/posts/:id
 // @desc     Get post by ID
 // @access   Private
-const getPostId = async(req, res,next) => {
+const getPostId = async (req, res, next) => {
   try {
     const post = await Post.query().findById(req.params.id);
 
@@ -73,11 +92,14 @@ const getPostId = async(req, res,next) => {
           message: "No Post found!"
         })
       );
-       }
-    return res.status(200).json({ success: true, post });
+    }
+    return res.status(200).json({
+      success: true,
+      post
+    });
 
-   
-    
+
+
   } catch (error) {
     log.error(`Post controller[Get post by Id]: Failed to send ${error}`);
 
@@ -85,10 +107,10 @@ const getPostId = async(req, res,next) => {
   }
 }
 
-  // @route    POST api/v2/posts
+// @route    POST api/v2/posts
 // @desc     Create a post
 // @access   Private
-const addPost = async(req, res,next) => {
+const addPost = async (req, res, next) => {
 
   const {
     title,
@@ -106,10 +128,13 @@ const addPost = async(req, res,next) => {
     const user = await User.query().findById(req.user.id);
     if (user) {
       const postData = await insertPost(insertData);
-      return res.status(200).json({ success: true, postData });
+      return res.status(200).json({
+        success: true,
+        postData
+      });
     }
-    
-      } catch (error) {
+
+  } catch (error) {
     log.error(`Post controller[Add post]: Failed to send ${error}`);
 
     return next(error);
@@ -119,11 +144,14 @@ const addPost = async(req, res,next) => {
 // @route    GET api/v2/posts
 // @desc     Get all posts
 // @access   Private
-const getAllPosts = async(req,res,next) => {
+const getAllPosts = async (req, res, next) => {
   try {
-    const posts = await Post.query().orderBy('publish_date','desc'); ;
-    return res.status(200).json({ success: true, posts });
-    
+    const posts = await Post.query().orderBy('publish_date', 'desc');;
+    return res.status(200).json({
+      success: true,
+      posts
+    });
+
   } catch (error) {
     log.error(`Post controller[Get all posts]: Failed to send ${error}`);
 
@@ -141,9 +169,11 @@ async function insertPost(datus) {
   }
 }
 
-  module.exports = {
-    getTest,
-    addPost,
-    deletePost,
-    getAllPosts,getPostId, likePost
-  };
+module.exports = {
+  getTest,
+  addPost,
+  deletePost,
+  getAllPosts,
+  getPostId,
+  likePost
+};
