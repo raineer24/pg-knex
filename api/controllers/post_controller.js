@@ -15,18 +15,38 @@ const {
 // @desc     Like a post
 // @access   Private
 const likePost = async (req, res, next) => {
-  const post = await Post
-    .query()
-    .leftJoinRelation('likes', req.user.id, '=', 'likes.id')
-     .select('post.*', raw(`IF('${req.user.id}'=likes.likes_id,'True','False') AS isLikedByYou`));
+  
 
     //  Tweet
     //  .query()
     //  .leftJoinRelation('likers', currentUserId, '=', 'likers.id')
     //  .select('tweets.*', knex.raw(`IF('${currentUserId}'=likers.id,'True','False') AS isLikedByYou`))
 try {
+  // const post = await Post
+  //   .query()
+  //   .leftJoinRelation('likes', req.user.id, '=', 'likes.id')
+  //    .select('post.*', raw(`IF('${req.user.id}'=likes.likes_id,'True','False') AS isLikedByYou`));
   //const post = await Post.query().select(['Post.*', Post.relatedQuery('likes').select(true).where('id', req.user.id).as('youLiked')]).whereIn('id', req.params.id);
-  console.log('post: ', post);
+ 
+  // const post= await Post.query()
+  // .select([
+  //   'post.*',
+  //   Post.relatedQuery('likes')
+  //     .select(raw('true'))
+  //     .where('id', req.user.id)
+  //     .as('youLiked')
+  // ])
+  // .whereIn('id', req.user.id);
+  const post = await Post.query().select('post.*', Post.relatedQuery('likes').count().as('numberofLikes'));
+  //const likes = await Likes.query();
+  // const tweets = await Tweet.query().select(
+  //   'Tweet.*',
+  //   Tweet.relatedQuery('likes')
+  //     .count()
+  //     .as('numberOfLikes')
+  // );
+  //console.log(tweets[4].numberOfLikes);
+  console.log('post: ', post[0].numberofLikes);
 
 } catch (error) {
   log.error(`Post controller[Like post]: Failed to send ${error}`);

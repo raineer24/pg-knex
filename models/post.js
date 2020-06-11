@@ -37,17 +37,25 @@ class Post extends Model {
     const Likes = require("./likes");
     const Users = require("./users");
     return {
+      // likes: {
+      //   relation: Model.ManyToManyRelation,
+      //   modelClass: Likes,
+      //   join: {
+      //     from: 'post.id',
+      //     through: {
+      //       from: 'post.id',
+      //       to: 'post.id',
+      //     },
+      //     to: 'likes.post_id',
+      //   },
+      // },
       likes: {
-        relation: Model.ManyToManyRelation,
+        relation: Model.HasManyRelation,
         modelClass: Likes,
         join: {
-          from: 'post.id',
-          through: {
-            from: 'likes.post_id',
-            to: 'likes.users_id',
-          },
-          to: 'likes.post_id',
-        },
+          from: "post.id",
+          to: "likes.post_id"
+        }
       },
     };
   }
