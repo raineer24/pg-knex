@@ -2,7 +2,7 @@ const User = require("../../models/users");
 const Post = require("../../models/post");
 const { raw } = require('objection');
 const Likes = require("../../models/likes");
-const log = require("color-logs")(true, true, "User Profile");
+const log = require("color-logs")(true, true, "Post");
 const {
   createError,
   BAD_REQUEST,
@@ -15,6 +15,10 @@ const {
 // @desc     Like a post
 // @access   Private
 const likePost = async (req, res, next) => {
+  const { id } = req.params;
+  console.log('id : ', typeof id);
+  console.log(req.user.id);
+  
   
 
     //  Tweet
@@ -24,20 +28,21 @@ const likePost = async (req, res, next) => {
 try {
   // const post = await Post
   //   .query()
-  //   .leftJoinRelation('likes', req.user.id, '=', 'likes.id')
-  //    .select('post.*', raw(`IF('${req.user.id}'=likes.likes_id,'True','False') AS isLikedByYou`));
-  //const post = await Post.query().select(['Post.*', Post.relatedQuery('likes').select(true).where('id', req.user.id).as('youLiked')]).whereIn('id', req.params.id);
- 
-  // const post= await Post.query()
-  // .select([
-  //   'post.*',
-  //   Post.relatedQuery('likes')
-  //     .select(raw('true'))
-  //     .where('id', req.user.id)
-  //     .as('youLiked')
-  // ])
-  // .whereIn('id', req.user.id);
-  const post = await Post.query().select('post.*', Post.relatedQuery('likes').count().as('numberofLikes'));
+  //   .leftJoinRelation('likes', req.user.id, '=', 'likes.users_id')
+  //    .select('post.*', raw(`IF('${req.user.id}'=likes.users_id,'True','False') AS isLikedByYou`));
+const post = await Likes.query();
+console.log('post', post[0].map(user => console.log(user)));
+
+  if (post === req.user.id) {
+    console.log('sane id');
+    
+  }
+
+  //const existingUserlikes = ;
+  //console.log('existinguserlikes', existingUserlikes);
+  
+  
+ // const post = await Post.query().select('post.*', Post.relatedQuery('likes').count().as('numberofLikes'));
   //const likes = await Likes.query();
   // const tweets = await Tweet.query().select(
   //   'Tweet.*',
@@ -46,7 +51,9 @@ try {
   //     .as('numberOfLikes')
   // );
   //console.log(tweets[4].numberOfLikes);
-  console.log('post: ', post[0].numberofLikes);
+  //console.log('post: ', post[0].numberofLikes);
+  //console.log('post', post);
+  
 
 } catch (error) {
   log.error(`Post controller[Like post]: Failed to send ${error}`);
@@ -182,6 +189,16 @@ const getAllPosts = async (req, res, next) => {
 async function insertPost(datus) {
   try {
     const result = await Post.query().insertGraph(datus);
+
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function likesPost(datus) {
+  try {
+    const result = await Likes.query().insertGraph(datus);
 
     return result;
   } catch (error) {

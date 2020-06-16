@@ -42,6 +42,15 @@ class Likes extends Model {
       },
     };
   }
+
+  $parseDatabaseJson(json) {
+    json = super.$parseDatabaseJson(json);
+    //let location = json.location;
+  
+    return json;
+    //console.log("object json", Object.assign({}, json, { skills }));
+    // return super.$parseDatabaseJson(json);
+  }
 }
 
 module.exports = Likes;
