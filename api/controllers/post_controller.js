@@ -1,6 +1,8 @@
 const User = require("../../models/users");
 const Post = require("../../models/post");
-const { raw } = require('objection');
+const {
+  raw
+} = require('objection');
 const Likes = require("../../models/likes");
 const log = require("color-logs")(true, true, "Post");
 const {
@@ -15,52 +17,62 @@ const {
 // @desc     Like a post
 // @access   Private
 const likePost = async (req, res, next) => {
-  const { id } = req.params;
+  const {
+    id
+  } = req.params;
   console.log('id : ', typeof id);
   console.log(req.user.id);
-  
-  
 
-    //  Tweet
-    //  .query()
-    //  .leftJoinRelation('likers', currentUserId, '=', 'likers.id')
-    //  .select('tweets.*', knex.raw(`IF('${currentUserId}'=likers.id,'True','False') AS isLikedByYou`))
-try {
-  // const post = await Post
-  //   .query()
-  //   .leftJoinRelation('likes', req.user.id, '=', 'likes.users_id')
-  //    .select('post.*', raw(`IF('${req.user.id}'=likes.users_id,'True','False') AS isLikedByYou`));
-const post = await Likes.query();
-console.log('post', post[0].map(user => console.log(user)));
 
-  if (post === req.user.id) {
-    console.log('sane id');
-    
+
+  //  Tweet
+  //  .query()
+  //  .leftJoinRelation('likers', currentUserId, '=', 'likers.id')
+  //  .select('tweets.*', knex.raw(`IF('${currentUserId}'=likers.id,'True','False') AS isLikedByYou`))
+  try {
+    // const post = await Post
+    //   .query()
+    //   .leftJoinRelation('likes', req.user.id, '=', 'likes.users_id')
+    //    .select('post.*', raw(`IF('${req.user.id}'=likes.users_id,'True','False') AS isLikedByYou`));
+    const post = await Likes.query();
+
+    let likesUserId = post[0].users_id;
+    console.log('likesUserID', likesUserId);
+
+
+    if (Array.isArray(post)) {
+      console.log('is an array');
+
+    }
+
+    if (likesUserId === req.user.id) {
+      console.log('sane id');
+
+    }
+
+    //const existingUserlikes = ;
+    //console.log('existinguserlikes', existingUserlikes);
+
+
+    // const post = await Post.query().select('post.*', Post.relatedQuery('likes').count().as('numberofLikes'));
+    //const likes = await Likes.query();
+    // const tweets = await Tweet.query().select(
+    //   'Tweet.*',
+    //   Tweet.relatedQuery('likes')
+    //     .count()
+    //     .as('numberOfLikes')
+    // );
+    //console.log(tweets[4].numberOfLikes);
+    //console.log('post: ', post[0].numberofLikes);
+    //console.log('post', post);
+
+
+  } catch (error) {
+    log.error(`Post controller[Like post]: Failed to send ${error}`);
+
+    return next(error);
   }
 
-  //const existingUserlikes = ;
-  //console.log('existinguserlikes', existingUserlikes);
-  
-  
- // const post = await Post.query().select('post.*', Post.relatedQuery('likes').count().as('numberofLikes'));
-  //const likes = await Likes.query();
-  // const tweets = await Tweet.query().select(
-  //   'Tweet.*',
-  //   Tweet.relatedQuery('likes')
-  //     .count()
-  //     .as('numberOfLikes')
-  // );
-  //console.log(tweets[4].numberOfLikes);
-  //console.log('post: ', post[0].numberofLikes);
-  //console.log('post', post);
-  
-
-} catch (error) {
-  log.error(`Post controller[Like post]: Failed to send ${error}`);
-
-  return next(error);
-}
-  
 }
 
 // @route    DELETE api/v2/posts/:id

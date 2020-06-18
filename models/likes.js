@@ -45,9 +45,15 @@ class Likes extends Model {
 
   $parseDatabaseJson(json) {
     json = super.$parseDatabaseJson(json);
+    let users_id = json.users_id;
+    if (users_id) {
+      users_id = JSON.parse(users_id);
+    }
+    return Object.assign({}, json, {users_id});
+    
     //let location = json.location;
   
-    return json;
+    //return json;
     //console.log("object json", Object.assign({}, json, { skills }));
     // return super.$parseDatabaseJson(json);
   }
