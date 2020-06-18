@@ -20,19 +20,20 @@ const likePost = async (req, res, next) => {
   const {
     id
   } = req.params;
-  console.log('id : ', typeof id);
-  console.log(typeof req.user.id);
+  const like = await Likes.query();
+  const userLike_id = like.map(l => l.users_id);
   try {
     const likePosts = {
       post_id: parseInt(id),
       users_id: req.user.id,
-      //likedByme: req.user.id === likes.likes.user_id ? false : true
+      likedbyme: req.user.id === userLike_id ? false : true
     };
 
-    //const like = await Like
+
+    console.log(userLike_id);
+
     const post = await Post.query().findById(req.params.id);
     const existinglikes = await post.$relatedQuery('likes').map(l => l.users_id);
-    //console.log('post', likes);
 
     if (existinglikes.includes(req.user.id)) {
       return next(
@@ -41,7 +42,6 @@ const likePost = async (req, res, next) => {
           message: "You already liked this post!"
         })
       );
-
     } else {
       const userLikedPost = await likesPost(likePosts);
       return res.status(200).json({

@@ -6,29 +6,38 @@ class Likes extends Model {
   static get tableName() {
     return "likes";
   }
- 
+
   static get idColumn() {
     return ["likes_id"];
   }
 
   static get jsonSchema() {
-      
+
     return {
       type: "object",
-      
+
 
       properties: {
-        likes_id: { type: "integer" },
-        users_id: { type: "integer" },
-        post_id: { type: "integer" },
+        likes_id: {
+          type: "integer"
+        },
+        users_id: {
+          type: "integer"
+        },
+        post_id: {
+          type: "integer"
+        },
+        likedByMe: {
+          type: "boolean"
+        }
       }
     };
   }
 
   static get relationMappings() {
-      const Users = require("./users");
-       return {
-           users: {
+    const Users = require("./users");
+    return {
+      users: {
         relation: Model.ManyToManyRelation,
         modelClass: Users,
         join: {
@@ -49,10 +58,12 @@ class Likes extends Model {
     if (users_id) {
       users_id = JSON.parse(users_id);
     }
-    return Object.assign({}, json, {users_id});
-    
+    return Object.assign({}, json, {
+      users_id
+    });
+
     //let location = json.location;
-  
+
     //return json;
     //console.log("object json", Object.assign({}, json, { skills }));
     // return super.$parseDatabaseJson(json);
