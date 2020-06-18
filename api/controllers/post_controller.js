@@ -21,51 +21,34 @@ const likePost = async (req, res, next) => {
     id
   } = req.params;
   console.log('id : ', typeof id);
-  console.log(req.user.id);
-
-
-
-  //  Tweet
-  //  .query()
-  //  .leftJoinRelation('likers', currentUserId, '=', 'likers.id')
-  //  .select('tweets.*', knex.raw(`IF('${currentUserId}'=likers.id,'True','False') AS isLikedByYou`))
+  console.log(typeof req.user.id);
   try {
-    // const post = await Post
-    //   .query()
-    //   .leftJoinRelation('likes', req.user.id, '=', 'likes.users_id')
-    //    .select('post.*', raw(`IF('${req.user.id}'=likes.users_id,'True','False') AS isLikedByYou`));
-    const post = await Likes.query();
+    const likePosts = {
+      post_id: parseInt(id),
+      users_id: req.user.id,
+      //likedByme: req.user.id === likes.likes.user_id ? false : true
+    };
 
-    let likesUserId = post[0].users_id;
-    console.log('likesUserID', likesUserId);
+    //const like = await Like
+    const post = await Post.query().findById(req.params.id);
+    const existinglikes = await post.$relatedQuery('likes').map(l => l.users_id);
+    //console.log('post', likes);
 
+    if (existinglikes.includes(req.user.id)) {
+      return next(
+        createError({
+          status: CONFLICT,
+          message: "You already liked this post!"
+        })
+      );
 
-    if (Array.isArray(post)) {
-      console.log('is an array');
-
+    } else {
+      const userLikedPost = await likesPost(likePosts);
+      return res.status(200).json({
+        success: true,
+        userLikedPost
+      });
     }
-
-    if (likesUserId === req.user.id) {
-      console.log('sane id');
-
-    }
-
-    //const existingUserlikes = ;
-    //console.log('existinguserlikes', existingUserlikes);
-
-
-    // const post = await Post.query().select('post.*', Post.relatedQuery('likes').count().as('numberofLikes'));
-    //const likes = await Likes.query();
-    // const tweets = await Tweet.query().select(
-    //   'Tweet.*',
-    //   Tweet.relatedQuery('likes')
-    //     .count()
-    //     .as('numberOfLikes')
-    // );
-    //console.log(tweets[4].numberOfLikes);
-    //console.log('post: ', post[0].numberofLikes);
-    //console.log('post', post);
-
 
   } catch (error) {
     log.error(`Post controller[Like post]: Failed to send ${error}`);
