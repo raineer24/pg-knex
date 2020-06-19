@@ -11,21 +11,32 @@ const {
   likePost
 } = require("../controllers/post_controller");
 
+const {
+  userPostValidationRules,
+  validate
+} = require("./../../validation/validation");
+
 
 // @route    POST api/v2/posts/like/:id
 // @desc     Like a post
 // @access   Private
-router.post('/like/:id', passport.authenticate("jwt", { session: false }),likePost);
+router.post('/like/:id', passport.authenticate("jwt", {
+  session: false
+}), likePost);
 
 // @route    DELETE api/v2/posts/:id
 // @desc     Delete a post
 // @access   Private
-router.delete('/:id', passport.authenticate("jwt", { session: false }),deletePost)
+router.delete('/:id', passport.authenticate("jwt", {
+  session: false
+}), deletePost)
 
 // @route    GET api/v2/posts/:id
 // @desc     Get post by ID
 // @access   Private
-router.get('/:id', passport.authenticate("jwt", { session: false }), getPostId);
+router.get('/:id', passport.authenticate("jwt", {
+  session: false
+}), getPostId);
 
 
 //router.get("/", getTest);
@@ -34,11 +45,15 @@ router.get('/:id', passport.authenticate("jwt", { session: false }), getPostId);
 // @route    POST api/v2/posts
 // @desc     Create a post
 // @access   Private
-router.post("/", passport.authenticate("jwt", { session: false }),addPost);
+router.post("/", passport.authenticate("jwt", {
+  session: false
+}), userPostValidationRules(), validate, addPost);
 
 // @route    GET api/v2/posts
 // @desc     Get all posts
 // @access   Private
-router.get("/", passport.authenticate("jwt", { session: false }),getAllPosts);
+router.get("/", passport.authenticate("jwt", {
+  session: false
+}), getAllPosts);
 
 module.exports = router;
