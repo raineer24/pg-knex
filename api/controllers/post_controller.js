@@ -13,6 +13,18 @@ const {
 } = require("../../helpers/error_helper");
 
 
+// @route    Post api/v2/posts/unlike/:id
+// @desc     Unlike a post
+// @access   Private
+const unlikePost = (req, res, next) => {
+  console.log('error');
+
+  res.json({
+    msg: "Profile works"
+  });
+};
+
+
 // @route    POST api/v2/posts/like/:id
 // @desc     Like a post
 // @access   Private
@@ -207,5 +219,6 @@ module.exports = {
   deletePost,
   getAllPosts,
   getPostId,
-  likePost
+  likePost,
+  unlikePost
 };
