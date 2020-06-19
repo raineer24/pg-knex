@@ -16,12 +16,40 @@ const {
 // @route    Post api/v2/posts/unlike/:id
 // @desc     Unlike a post
 // @access   Private
-const unlikePost = (req, res, next) => {
-  console.log('error');
+const unlikePost = async (req, res, next) => {
+  try {
+    const post = await Post.query().findById(req.params.id);
+    const existinglikes = await post.$relatedQuery('likes').map(l => l.users_id);
 
-  res.json({
-    msg: "Profile works"
-  });
+    // Check if the post has not yet been liked
+    //  if (!post.likes.some(like => like.user.toString() === req.user.id)) {
+    //    return res.status(400).json({
+    //      msg: 'Post has not yet been liked'
+    //    });
+    //  }
+    if (post) {
+      if (!existinglikes.includes(req.user.id)) {
+        return next(
+          createError({
+            status: CONFLICT,
+            message: "Post has not yet been liked!"
+          })
+        );
+      } else {
+        const unlike = await Likes.query().where('users_id', req.user.id).delete();
+        return res.status(200).json({
+          success: true,
+          message: 'You unliked the post!'
+        });
+      }
+
+    }
+
+  } catch (error) {
+    log.error(`Post controller[unLike post]: Failed to send ${error}`);
+
+    return next(error);
+  }
 };
 
 
@@ -58,7 +86,7 @@ const likePost = async (req, res, next) => {
       const userLikedPost = await likesPost(likePosts);
       return res.status(200).json({
         success: true,
-        userLikedPost
+        message: 'You liked the post!'
       });
     }
 
