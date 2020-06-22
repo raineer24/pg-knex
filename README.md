@@ -195,3 +195,13 @@ The REST API to the example app is described below.
 `POST /api/v2/posts/comment/:id`
 
     curl -i -H 'Accept: application/json' localhost:3000/api/v2/posts/comment/:id
+
+## Delete comment
+
+### Request
+
+- Private - use jwt strategy to authenticate
+
+`POST api/v2/posts/comment/:id/:comment_id`
+
+    curl -i -H 'Accept: application/json' localhost:3000/api/v2/posts/comment/:id/:comment_id
