@@ -10,7 +10,8 @@ const {
   deletePost,
   likePost,
   unlikePost,
-  postComment
+  postComment,
+  deleteComment
 } = require("../controllers/post_controller");
 
 const {
@@ -18,6 +19,13 @@ const {
   validate
 } = require("./../../validation/validation");
 
+
+// @route    DELETE api/v2/posts/comment/:id/:comment_id
+// @desc     Delete comment
+// @access   Private
+router.delete('/comment/:id/:comment_id', passport.authenticate("jwt", {
+  session: false
+}), deleteComment)
 
 // @route    POST api/v2/posts/comment/:id
 // @desc     Comment on a post

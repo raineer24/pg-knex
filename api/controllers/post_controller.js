@@ -14,7 +14,17 @@ const {
 } = require("../../helpers/error_helper");
 
 
-// @route    POST api/posts/comment/:id
+// @route    DELETE api/v2/posts/comment/:id/:comment_id
+// @desc     Delete comment
+// @access   Private
+const deleteComment = (req, res, next) => {
+
+  res.json({
+    msg: "Profile works"
+  });
+};
+
+// @route    POST api/v2/posts/comment/:id
 // @desc     Comment on a post
 // @access   Private
 const postComment = async (req, res, next) => {
@@ -288,5 +298,6 @@ module.exports = {
   getPostId,
   likePost,
   unlikePost,
-  postComment
+  postComment,
+  deleteComment
 };
