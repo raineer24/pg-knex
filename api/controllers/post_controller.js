@@ -1,6 +1,10 @@
 const User = require("../../models/users");
 const Post = require("../../models/post");
-const log = require("color-logs")(true, true, "User Profile");
+const {
+  raw
+} = require('objection');
+const Likes = require("../../models/likes");
+const log = require("color-logs")(true, true, "Post");
 const {
   createError,
   BAD_REQUEST,
@@ -8,10 +12,108 @@ const {
   CONFLICT
 } = require("../../helpers/error_helper");
 
+
+// @route    POST api/posts/comment/:id
+// @desc     Comment on a post
+// @access   Private
+const postComment = (req, res, next) => {
+  console.log('error');
+
+  res.json({
+    msg: "Profile works"
+  });
+};
+
+
+// @route    Post api/v2/posts/unlike/:id
+// @desc     Unlike a post
+// @access   Private
+const unlikePost = async (req, res, next) => {
+  try {
+    const post = await Post.query().findById(req.params.id);
+    const existinglikes = await post.$relatedQuery('likes').map(l => l.users_id);
+
+    // Check if the post has not yet been liked
+    //  if (!post.likes.some(like => like.user.toString() === req.user.id)) {
+    //    return res.status(400).json({
+    //      msg: 'Post has not yet been liked'
+    //    });
+    //  }
+    if (post) {
+      if (!existinglikes.includes(req.user.id)) {
+        return next(
+          createError({
+            status: CONFLICT,
+            message: "Post has not yet been liked!"
+          })
+        );
+      } else {
+        const unlike = await Likes.query().where('users_id', req.user.id).delete();
+        return res.status(200).json({
+          success: true,
+          message: 'You unliked the post!'
+        });
+      }
+
+    }
+
+  } catch (error) {
+    log.error(`Post controller[unLike post]: Failed to send ${error}`);
+
+    return next(error);
+  }
+};
+
+
+// @route    POST api/v2/posts/like/:id
+// @desc     Like a post
+// @access   Private
+const likePost = async (req, res, next) => {
+  const {
+    id
+  } = req.params;
+  const like = await Likes.query();
+  const userLike_id = like.map(l => l.users_id);
+  try {
+    const likePosts = {
+      post_id: parseInt(id),
+      users_id: req.user.id,
+      likedbyme: req.user.id === userLike_id ? false : true
+    };
+
+
+    console.log(userLike_id);
+
+    const post = await Post.query().findById(req.params.id);
+    const existinglikes = await post.$relatedQuery('likes').map(l => l.users_id);
+
+    if (existinglikes.includes(req.user.id)) {
+      return next(
+        createError({
+          status: CONFLICT,
+          message: "You already liked this post!"
+        })
+      );
+    } else {
+      const userLikedPost = await likesPost(likePosts);
+      return res.status(200).json({
+        success: true,
+        message: 'You liked the post!'
+      });
+    }
+
+  } catch (error) {
+    log.error(`Post controller[Like post]: Failed to send ${error}`);
+
+    return next(error);
+  }
+
+}
+
 // @route    DELETE api/v2/posts/:id
 // @desc     Delete a post
 // @access   Private
-const deletePost = async (req, res,next) =>{
+const deletePost = async (req, res, next) => {
   const post = await Post.query().findById(req.params.id);
 
   if (!post) {
@@ -21,7 +123,7 @@ const deletePost = async (req, res,next) =>{
         message: "No Post found!"
       })
     );
-   } else if(post.users_id !== req.user.id) {
+  } else if (post.users_id !== req.user.id) {
     return next(
       createError({
         status: CONFLICT,
@@ -30,25 +132,30 @@ const deletePost = async (req, res,next) =>{
     );
   } else {
     const postDelete = await Post.query().findById(req.params.id).delete();
-    return res.status(200).json({ success: true, msg: 'Post data Deleted' });
+    return res.status(200).json({
+      success: true,
+      msg: 'Post data Deleted'
+    });
   }
-  
-  
-  
 
-   //check user
+
+
+
+  //check user
 }
 
 
 const getTest = (req, res, next) => {
-      
-    res.json({ msg: "Profile works" });
-  };
 
-  // @route    GET api/posts/:id
+  res.json({
+    msg: "Profile works"
+  });
+};
+
+// @route    GET api/posts/:id
 // @desc     Get post by ID
 // @access   Private
-const getPostId = async(req, res,next) => {
+const getPostId = async (req, res, next) => {
   try {
     const post = await Post.query().findById(req.params.id);
 
@@ -59,11 +166,14 @@ const getPostId = async(req, res,next) => {
           message: "No Post found!"
         })
       );
-       }
-    return res.status(200).json({ success: true, post });
+    }
+    return res.status(200).json({
+      success: true,
+      post
+    });
 
-   
-    
+
+
   } catch (error) {
     log.error(`Post controller[Get post by Id]: Failed to send ${error}`);
 
@@ -71,10 +181,10 @@ const getPostId = async(req, res,next) => {
   }
 }
 
-  // @route    POST api/v2/posts
+// @route    POST api/v2/posts
 // @desc     Create a post
 // @access   Private
-const addPost = async(req, res,next) => {
+const addPost = async (req, res, next) => {
 
   const {
     title,
@@ -92,10 +202,13 @@ const addPost = async(req, res,next) => {
     const user = await User.query().findById(req.user.id);
     if (user) {
       const postData = await insertPost(insertData);
-      return res.status(200).json({ success: true, postData });
+      return res.status(200).json({
+        success: true,
+        postData
+      });
     }
-    
-      } catch (error) {
+
+  } catch (error) {
     log.error(`Post controller[Add post]: Failed to send ${error}`);
 
     return next(error);
@@ -105,11 +218,14 @@ const addPost = async(req, res,next) => {
 // @route    GET api/v2/posts
 // @desc     Get all posts
 // @access   Private
-const getAllPosts = async(req,res,next) => {
+const getAllPosts = async (req, res, next) => {
   try {
-    const posts = await Post.query().orderBy('publish_date','desc'); ;
-    return res.status(200).json({ success: true, posts });
-    
+    const posts = await Post.query().orderBy('publish_date', 'desc');;
+    return res.status(200).json({
+      success: true,
+      posts
+    });
+
   } catch (error) {
     log.error(`Post controller[Get all posts]: Failed to send ${error}`);
 
@@ -127,9 +243,23 @@ async function insertPost(datus) {
   }
 }
 
-  module.exports = {
-    getTest,
-    addPost,
-    deletePost,
-    getAllPosts,getPostId
-  };
+async function likesPost(datus) {
+  try {
+    const result = await Likes.query().insertGraph(datus);
+
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
+
+module.exports = {
+  getTest,
+  addPost,
+  deletePost,
+  getAllPosts,
+  getPostId,
+  likePost,
+  unlikePost,
+  postComment
+};

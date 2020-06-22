@@ -1,61 +1,80 @@
-const { check, validationResult } = require("express-validator");
+const {
+  check,
+  validationResult
+} = require("express-validator");
+
+const userPostValidationRules = () => {
+  return [
+    check("title")
+    .not()
+    .isEmpty()
+    .withMessage("Title is required")
+    .bail(),
+    check("body")
+    .not()
+    .isEmpty()
+    .withMessage("Content is required")
+    .bail()
+  ];
+};
+
 const userExperienceProfileValidationRules = () => {
   return [
     check("job_title")
-      .not()
-      .isEmpty()
-      .withMessage("Job title is required")
-      .bail(),
+    .not()
+    .isEmpty()
+    .withMessage("Job title is required")
+    .bail(),
     check("company_name")
-      .not()
-      .isEmpty()
-      .withMessage("Company is required")
-      .bail(),
+    .not()
+    .isEmpty()
+    .withMessage("Company is required")
+    .bail(),
     check("start_date")
-      .not()
-      .isEmpty()
-      .withMessage("Start date is required")
-      .bail()
+    .not()
+    .isEmpty()
+    .withMessage("Start date is required")
+    .bail()
   ];
 };
 
 const userProfileValidationRules = () => {
   return [
     check("status")
-      .not()
-      .isEmpty()
-      .withMessage("Status is required")
-      .bail(),
+    .not()
+    .isEmpty()
+    .withMessage("Status is required")
+    .bail(),
     check("areas_of_expertise")
-      .not()
-      .isEmpty()
-      .withMessage("Areas of expertise is required")
-      .bail()
+    .not()
+    .isEmpty()
+    .withMessage("Areas of expertise is required")
+    .bail()
   ];
 };
 
 const userEducationProfileValidationRules = () => {
   return [
     check("school_name")
-      .not()
-      .isEmpty()
-      .withMessage("School name is required")
-      .bail(),
+    .not()
+    .isEmpty()
+    .withMessage("School name is required")
+    .bail(),
     check("degree_name")
-      .not()
-      .isEmpty()
-      .withMessage("Degree name is required")
-      .bail(),
+    .not()
+    .isEmpty()
+    .withMessage("Degree name is required")
+    .bail(),
     check("major_fieldofstudy")
-      .not()
-      .isEmpty()
-      .withMessage("Major field of study is required")
-      .bail(),
+    .not()
+    .isEmpty()
+    .withMessage("Major field of study is required")
+    .bail(),
     check("start_date")
-      .not()
-      .isEmpty()
-      .withMessage("Start date is required")
-      .bail()
+    .not()
+    .isEmpty()
+    .withMessage("Start date is required")
+    .bail()
   ];
 };
 
@@ -65,7 +84,9 @@ const validate = (req, res, next) => {
     return next();
   }
   const extractedErrors = [];
-  errors.array().map(err => extractedErrors.push({ [err.param]: err.msg }));
+  errors.array().map(err => extractedErrors.push({
+    [err.param]: err.msg
+  }));
 
   return res.status(422).json({
     errors: extractedErrors
@@ -76,5 +97,6 @@ module.exports = {
   userExperienceProfileValidationRules,
   userProfileValidationRules,
   userEducationProfileValidationRules,
+  userPostValidationRules,
   validate
 };
