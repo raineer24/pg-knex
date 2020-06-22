@@ -13,6 +13,18 @@ const {
 } = require("../../helpers/error_helper");
 
 
+// @route    POST api/posts/comment/:id
+// @desc     Comment on a post
+// @access   Private
+const postComment = (req, res, next) => {
+  console.log('error');
+
+  res.json({
+    msg: "Profile works"
+  });
+};
+
+
 // @route    Post api/v2/posts/unlike/:id
 // @desc     Unlike a post
 // @access   Private
@@ -248,5 +260,6 @@ module.exports = {
   getAllPosts,
   getPostId,
   likePost,
-  unlikePost
+  unlikePost,
+  postComment
 };

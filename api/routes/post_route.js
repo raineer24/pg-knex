@@ -9,7 +9,8 @@ const {
   getPostId,
   deletePost,
   likePost,
-  unlikePost
+  unlikePost,
+  postComment
 } = require("../controllers/post_controller");
 
 const {
@@ -17,6 +18,13 @@ const {
   validate
 } = require("./../../validation/validation");
 
+
+// @route    POST api/v2/posts/comment/:id
+// @desc     Comment on a post
+// @access   Private
+router.post('/comment/:id', passport.authenticate("jwt", {
+  session: false
+}), postComment);
 
 // @route    Post api/v2/posts/unlike/:id
 // @desc     Unlike a post
