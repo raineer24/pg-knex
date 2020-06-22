@@ -4,6 +4,7 @@ const {
   raw
 } = require('objection');
 const Likes = require("../../models/likes");
+const Comments = require("../../models/comments");
 const log = require("color-logs")(true, true, "Post");
 const {
   createError,
@@ -16,12 +17,32 @@ const {
 // @route    POST api/posts/comment/:id
 // @desc     Comment on a post
 // @access   Private
-const postComment = (req, res, next) => {
-  console.log('error');
+const postComment = async (req, res, next) => {
+  try {
+    const newComment = {
+      post_id: parseInt(req.params.id),
+      body: req.body.body,
+      users_id: req.user.id
+    };
 
-  res.json({
-    msg: "Profile works"
-  });
+    const user = await User.query().findById(req.user.id);
+    if (user) {
+      const post = await Post.query().findById(req.params.id);
+      if (post) {
+        const commentInsert = await insertComment(newComment);
+        return res.status(200).json({
+          success: true,
+          commentInsert
+        });
+      }
+
+    }
+
+  } catch (error) {
+    log.error(`Post controller[Post comment]: Failed to send ${error}`);
+
+    return next(error);
+  }
 };
 
 
@@ -137,11 +158,6 @@ const deletePost = async (req, res, next) => {
       msg: 'Post data Deleted'
     });
   }
-
-
-
-
-  //check user
 }
 
 
@@ -252,6 +268,17 @@ async function likesPost(datus) {
     throw error;
   }
 }
+
+async function insertComment(datus) {
+  try {
+    const result = await Comments.query().insertGraph(datus);
+
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
+
 
 module.exports = {
   getTest,
