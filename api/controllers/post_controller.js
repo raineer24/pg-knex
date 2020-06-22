@@ -17,11 +17,54 @@ const {
 // @route    DELETE api/v2/posts/comment/:id/:comment_id
 // @desc     Delete comment
 // @access   Private
-const deleteComment = (req, res, next) => {
+const deleteComment = async (req, res, next) => {
+  try {
+    console.log('users_id', req.user.id);
 
-  res.json({
-    msg: "Profile works"
-  });
+    const post = await Post.query().findById(req.params.id);
+    console.log('post', post);
+
+    if (!post) {
+      return next(
+        createError({
+          status: CONFLICT,
+          message: "Post does not exist!"
+        })
+      );
+    }
+    if (post) {
+      const comment = await Comments.query().findById(req.params.comment_id);
+      if (!comment) {
+        return next(
+          createError({
+            status: CONFLICT,
+            message: "Comment does not exist!"
+          })
+        );
+      } else if (comment.users_id !== req.user.id) {
+        console.log('comment', comment.users_id);
+        console.log('req,yser', req.user.id);
+        return next(
+          createError({
+            status: CONFLICT,
+            message: "User not authorized!"
+          })
+        );
+      } else {
+        const deleteComment = await Comments.query().findById(req.params.comment_id).delete();
+        return res.status(200).json({
+          success: true,
+          msg: 'Comment Deleted'
+        });
+      }
+
+    }
+
+  } catch (error) {
+    log.error(`Post controller[Delete comment]: Failed to send ${error}`);
+
+    return next(error);
+  }
 };
 
 // @route    POST api/v2/posts/comment/:id
