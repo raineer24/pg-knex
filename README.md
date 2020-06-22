@@ -20,7 +20,7 @@ The REST API to the example app is described below.
 
 ### Request
 
-* public
+- public
 
 `GET /users/`
 
@@ -30,29 +30,29 @@ The REST API to the example app is described below.
 
 ### Request
 
-* public
+- public
 
 `GET /api/v2/users/profile/getProfiles`
 
     curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/profile/getProfiles
 
- ## Register a User
+## Register a User
 
 ### Request
 
-* public
+- public
 
-`POST /api/v2/users/register  `
+`POST /api/v2/users/register`
 
-    curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/register 
+    curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/register
 
 ## Login a User
 
 ### Request
 
-* public / Return JWT
+- public / Return JWT
 
-`POST /api/v2/users/login  `
+`POST /api/v2/users/login`
 
     curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/login
 
@@ -60,9 +60,9 @@ The REST API to the example app is described below.
 
 ### Request
 
-* Private - use jwt strategy to authenticate
+- Private - use jwt strategy to authenticate
 
-`GET /api/v2/users/profile/current `
+`GET /api/v2/users/profile/current`
 
     curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/profile/current
 
@@ -70,17 +70,17 @@ The REST API to the example app is described below.
 
 ### Request
 
-* Private - use jwt strategy to authenticate
+- Private - use jwt strategy to authenticate
 
-`POST /api/v2/users/profile `
+`POST /api/v2/users/profile`
 
-    curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/profile               
+    curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/profile
 
 ## Add experience to profile
 
 ### Request
 
-* Private - use jwt strategy to authenticate
+- Private - use jwt strategy to authenticate
 
 `POST /api/v2/users/profile/experience`
 
@@ -90,18 +90,17 @@ The REST API to the example app is described below.
 
 ### Request
 
-* Private - use jwt strategy to authenticate
+- Private - use jwt strategy to authenticate
 
 `DELETE /api/v2/users/profile/experience/:exp_id`
 
     curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/profile/experience/:exp_id
 
-
-## Delete profile, user 
+## Delete profile, user
 
 ### Request
 
-* Private - use jwt strategy to authenticate
+- Private - use jwt strategy to authenticate
 
 `DELETE /api/v2/users/profile`
 
@@ -111,74 +110,88 @@ The REST API to the example app is described below.
 
 ### Request
 
-* Private - use jwt strategy to authenticate
+- Private - use jwt strategy to authenticate
 
 `POST /api/v2/users/profile/education`
 
     curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/profile/education
 
-
 ## Add Post
 
 ### Request
 
-* Private - use jwt strategy to authenticate
+- Private - use jwt strategy to authenticate
 
 `POST /api/v2/posts`
 
     curl -i -H 'Accept: application/json' localhost:3000/api/v2/posts
 
- ## Get All Posts
+## Get All Posts
 
 ### Request
 
-* Private - use jwt strategy to authenticate
+- Private - use jwt strategy to authenticate
 
 `GET /api/v2/posts`
 
-    curl -i -H 'Accept: application/json' localhost:3000/api/v2/posts 
+    curl -i -H 'Accept: application/json' localhost:3000/api/v2/posts
 
-
- ## Get Github Repository by username
+## Get Github Repository by username
 
 ### Request
 
-* Public - Get Github Repository by username
+- Public - Get Github Repository by username
 
 `POST /api/v2/users/profile/github/:username`
 
     curl -i -H 'Accept: application/json' localhost:3000/api/v2/users/profile/github/:username
 
- ## Get post by Id
+## Get post by Id
 
 ### Request
 
-* Private - use jwt strategy to authenticate
+- Private - use jwt strategy to authenticate
 
 `GET /api/v2/posts/:id`
 
     curl -i -H 'Accept: application/json' localhost:3000/api/v2/posts
 
-
 ## Delete post by Id
 
 ### Request
 
-* Private - use jwt strategy to authenticate
+- Private - use jwt strategy to authenticate
 
 `DELETE /api/v2/posts/:id`
 
-    curl -i -H 'Accept: application/json' localhost:3000/api/v2/posts/:id  
-
+    curl -i -H 'Accept: application/json' localhost:3000/api/v2/posts/:id
 
 ## Like a Post
 
 ### Request
 
-* Private - use jwt strategy to authenticate
+- Private - use jwt strategy to authenticate
 
 `POST /api/v2/posts/like/:id`
 
     curl -i -H 'Accept: application/json' localhost:3000/api/v2/posts/like/:id
 
-    
+## Unlike a Post
+
+### Request
+
+- Private - use jwt strategy to authenticate
+
+`POST /api/v2/posts/like/:id`
+
+    curl -i -H 'Accept: application/json' localhost:3000/api/v2/posts/unlike/:id
+
+## Comment a Post
+
+### Request
+
+- Private - use jwt strategy to authenticate
+
+`POST /api/v2/posts/comment/:id`
+
+    curl -i -H 'Accept: application/json' localhost:3000/api/v2/posts/comment/:id
