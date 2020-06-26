@@ -3,6 +3,21 @@ const {
   validationResult
 } = require("express-validator");
 
+const userLoginValidationRules = () => {
+  return [
+    check("email")
+    .not()
+    .isEmpty()
+    .withMessage("Email is required")
+    .bail(),
+    check("password")
+    .not()
+    .isEmpty()
+    .withMessage("Password is required")
+    .bail()
+  ];
+};
+
 const userPostValidationRules = () => {
   return [
     check("title")
@@ -98,5 +113,6 @@ module.exports = {
   userProfileValidationRules,
   userEducationProfileValidationRules,
   userPostValidationRules,
+  userLoginValidationRules,
   validate
 };

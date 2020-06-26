@@ -18,6 +18,12 @@ const passport = require("passport");
 
 const validation = require("../../validation/express-register");
 
+
+const {
+  userLoginValidationRules,
+  validate
+} = require("./../../validation/validation");
+
 const {
   getUsers,
   postLogin,
@@ -44,6 +50,6 @@ router.post("/register", fileUpload, validation.validateUser, createUser);
 
 //router.route("/login").post(postLogin);
 
-router.post("/login", postLogin);
+router.post("/login", userLoginValidationRules(), validate, postLogin);
 
 module.exports = router;
