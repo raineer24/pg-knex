@@ -23,6 +23,37 @@ cloudinary.config({
   api_secret: "OEJwFk8xMOuNID7Z7L5MNDJ9nY8"
 });
 
+
+
+// @route    GET api/v2/users/:id
+// @desc     Get users by ID
+// @access   Private
+const getUsersId = async (req, res, next) => {
+  try {
+    const post = await User.query().findById(req.params.id);
+
+    if (!post) {
+      return next(
+        createError({
+          status: CONFLICT,
+          message: "No User found!"
+        })
+      );
+    }
+    return res.status(200).json({
+      success: true,
+      post
+    });
+
+
+
+  } catch (error) {
+    log.error(`Auth controller[Get User by Id]: Failed to send ${error}`);
+
+    return next(error);
+  }
+}
+
 // @route GET api/users/register
 // @desc Register a user
 // @access Public
@@ -192,5 +223,6 @@ const getUsers = async (req, res, next) => {
 module.exports = {
   getUsers,
   postLogin,
-  createUser
+  createUser,
+  getUsersId
 };

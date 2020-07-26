@@ -27,7 +27,8 @@ const {
 const {
   getUsers,
   postLogin,
-  createUser
+  createUser,
+  getUsersId
 } = require("../controllers/auth_controller");
 
 // router.get("/current", checkAuth, (req, res) => {
@@ -35,6 +36,13 @@ const {
 //     message: "Welcome Test Development"
 //   });
 // });
+
+// @route    GET api/v2/users/:id
+// @desc     Get post by ID
+// @access   Private
+router.get('/:id', passport.authenticate("jwt", {
+  session: false
+}), getUsersId);
 
 // @route   GET api/v2/users/
 // @desc    Return all users
