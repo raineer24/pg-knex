@@ -30,9 +30,22 @@ cloudinary.config({
 // @access   Private
 const getUsersId = async (req, res, next) => {
   try {
-    const post = await User.query().findById(req.params.id);
+    const user = await User.query().findById(req.params.id).eager("[user_profile,user_experience, user_skill,user_education]")
+      .debug()
+      .then(data => {
+        //console.log("data: ", data);
+        //return data.user_skill;
+        // skill = data.user_skill;
+        // if (Array.isArray(skill)) {
+        //   console.log("array!");
+        // }
+        // skill.forEach(function(item) {
+        //   console.log(item.skill_set_name);
+        // });
+        return data;
+      });
 
-    if (!post) {
+    if (!user) {
       return next(
         createError({
           status: CONFLICT,
@@ -42,7 +55,7 @@ const getUsersId = async (req, res, next) => {
     }
     return res.status(200).json({
       success: true,
-      post
+      user
     });
 
 
