@@ -23,27 +23,35 @@ const {
   validate
 } = require("./../../validation/validation");
 
+//router.put("/user/:id", UserController.UpdateUser);
+
 // @route    GET /api/v2/users/profile/github/:username
 // @desc     Get user repos from Github
 // @access   Public
-router.get('/github/:username',getRepo);
+router.get('/github/:username', getRepo);
 
 // @route    DELETE /api/v2/users/profile/education/:edu_id
 // @desc     Delete education from profile
 // @access   Private
-router.delete('/education/:edu_id', passport.authenticate("jwt", { session: false }),deleteEducation);
+router.delete('/education/:edu_id', passport.authenticate("jwt", {
+  session: false
+}), deleteEducation);
 
 // @route    DELETE api/profile
 // @desc     Delete profile, user & posts
 // @access   Private
-router.delete('/', passport.authenticate("jwt", { session: false }),deleteProfile);
+router.delete('/', passport.authenticate("jwt", {
+  session: false
+}), deleteProfile);
 
 // @route    DELETE /api/v2/users/profile/experience/:exp_id
 // @desc     Delete experience from profile
 // @access   Private
 router.delete(
   "/experience/:exp_id",
-  passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", {
+    session: false
+  }),
   deleteExp
 );
 
@@ -57,7 +65,9 @@ router.get("/getProfiles", AllProfiles);
 // @access Private - use jwt strategy to authenticate
 router.get(
   "/current",
-  passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", {
+    session: false
+  }),
   getProfile
 );
 
@@ -66,7 +76,9 @@ router.get(
 // @access Private - use jwt strategy to authenticate
 router.post(
   "/",
-  passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", {
+    session: false
+  }),
   userProfileValidationRules(),
   validate,
   createProfile
@@ -77,7 +89,9 @@ router.post(
 // @access Private
 router.post(
   "/experience",
-  passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", {
+    session: false
+  }),
   userExperienceProfileValidationRules(),
   validate,
   createExpProfile
@@ -88,7 +102,9 @@ router.post(
 // @access Private
 router.post(
   "/education",
-  passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", {
+    session: false
+  }),
   userEducationProfileValidationRules(),
   validate,
   createEducation
