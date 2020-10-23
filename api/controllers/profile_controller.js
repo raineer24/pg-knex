@@ -347,47 +347,47 @@ const updateProfile = async (req, res, next) => {
   const skill_set_name =
     typeof areaExpertise === "string" ? [areaExpertise] : areaExpertise;
 
-  try {
-    const data = {
+
+  const data = {
+    company_name,
+    website,
+    job_location,
+    status,
+    bio,
+    youtube_handle,
+    twitter_handle,
+    facebook_handle,
+    instagram_handle,
+    user_skill_set: [{
       users_id: req.user.id,
-      company_name,
-      website,
-      job_location,
-      status,
-      bio,
-      youtube_handle,
-      twitter_handle,
-      facebook_handle,
-      instagram_handle,
-      user_skill_set: [{
-        users_id: req.user.id,
-        skill_set_name: skill_set_name
-      }]
-    };
+      skill_set_name: skill_set_name
+    }]
+  };
+
+  let updated_user = await UserProfile.query().skipUndefined().update(data).where("id", req.user.id);
 
 
+  // const profile = await UserProfile.query().findById(req.user.id);
+  // console.log('profile:', profile);
+  // const profileCreate = await registerProfile(data);
+  return res.status(200).json({
+    success: true,
+    updated_user
+  });
 
-    const profile = await UserProfile.query().findById(req.user.id);
-    console.log('profile:', profile);
-    const profileCreate = await registerProfile(data);
-    return res.status(200).json({
-      success: true,
-      profileCreate
-    });
+  // } catch (error) {
+  //   log.error(`Profile controller[createProfile]: Failed to send ${error}`);
+  //   if (error.code === "23505") {
+  //     return next(
+  //       createError({
+  //         status: CONFLICT,
+  //         message: "Already added profile"
+  //       })
+  //     );
+  //   }
 
-  } catch (error) {
-    log.error(`Profile controller[createProfile]: Failed to send ${error}`);
-    if (error.code === "23505") {
-      return next(
-        createError({
-          status: CONFLICT,
-          message: "Already added profile"
-        })
-      );
-    }
-
-    return next(error);
-  }
+  //   return next(error);
+  // }
 };
 
 // @route  POST /api/v2/users/profile
@@ -433,25 +433,25 @@ const createProfile = async (req, res, next) => {
       }]
     };
 
-    let updated_user = await User.query().skipUndefined().update(data).where("id", data.id);
 
 
 
-    // const profile = await UserProfile.query().findById(req.user.id);
-    // console.log('profile:', profile);
-    // const profileCreate = await registerProfile(data);
+
+    const profile = await UserProfile.query().findById(req.user.id);
+    console.log('profile:', profile);
+    const profileCreate = await registerProfile(data);
     return res.status(200).json({
       success: true,
-      updated_user
+      profileCreate
     });
 
   } catch (error) {
-    log.error(`Profile controller[updateProfile]: Failed to send ${error}`);
+    log.error(`Profile controller[CREATEProfile]: Failed to send ${error}`);
     if (error.code === "23505") {
       return next(
         createError({
           status: CONFLICT,
-          message: "Already Updated profile"
+          message: "Already ADDED profile"
         })
       );
     }
