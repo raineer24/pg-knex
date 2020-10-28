@@ -396,11 +396,10 @@ const updateProfile = async (req, res, next) => {
   console.log('profile:', updated_user);
   // const profileCreate = await registerProfile(data);
 
-  // return res.status(200).json({
-  //   success: true,
-
-  //   user
-  // });
+  return res.status(200).json({
+    success: true,
+    updated_user
+  });
 
   // } catch (error) {
   //   log.error(`Profile controller[createProfile]: Failed to send ${error}`);
