@@ -22,6 +22,23 @@ const getTest = (req, res, next) => {
   });
 };
 
+// @route    GET /api/v2/users/profile/:id
+// @desc     Get user profile :id
+// @access   Public
+const getId = async (req, res, next) => {
+  try {
+    const user = await UserProfile.query().findById(req.params.id).debug(true);
+    console.log('user', user);
+
+
+  } catch (error) {
+    console.log(error.message);
+    return res.status(404).json({
+      msg: 'No User profile found'
+    });
+  }
+};
+
 // @route    GET /api/v2/users/profile/github/:username
 // @desc     Get user repos from Github
 // @access   Public
@@ -505,5 +522,6 @@ module.exports = {
   deleteProfile,
   deleteEducation,
   getRepo,
-  updateProfile
+  updateProfile,
+  getId
 };
