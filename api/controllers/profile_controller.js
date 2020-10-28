@@ -24,11 +24,16 @@ const getTest = (req, res, next) => {
 
 // @route    GET /api/v2/users/profile/:id
 // @desc     Get user profile :id
-// @access   Public
+// @access   Private
 const getId = async (req, res, next) => {
   try {
     const user = await UserProfile.query().findById(req.params.id).debug(true);
     console.log('user', user);
+
+    return res.status(200).json({
+      success: true,
+      user
+    });
 
 
   } catch (error) {
