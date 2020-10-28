@@ -364,16 +364,21 @@ const updateProfile = async (req, res, next) => {
     }]
   };
 
-  let updated_user = await UserProfile.query().skipUndefined().update(data).where("id", req.user.id);
+  //const user = await UserProfile.query().findById(req.params.id).debug(true);
+  //const userEdu = await UserEducation.query().where('users_id', req.params.id).delete();
+
+  let updated_user = await UserProfile.query().skipUndefined().update(data).where("id", req.params.id).debug(true);
 
 
   // const profile = await UserProfile.query().findById(req.user.id);
-  // console.log('profile:', profile);
+  console.log('profile:', updated_user);
   // const profileCreate = await registerProfile(data);
-  return res.status(200).json({
-    success: true,
-    updated_user
-  });
+
+  // return res.status(200).json({
+  //   success: true,
+
+  //   user
+  // });
 
   // } catch (error) {
   //   log.error(`Profile controller[createProfile]: Failed to send ${error}`);
