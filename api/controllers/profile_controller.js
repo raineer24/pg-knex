@@ -394,26 +394,12 @@ const updateProfile = async (req, res, next) => {
 
   // const profile = await UserProfile.query().findById(req.user.id);
   console.log('profile:', updated_user);
-  // const profileCreate = await registerProfile(data);
 
   return res.status(200).json({
     success: true,
     updated_user
   });
 
-  // } catch (error) {
-  //   log.error(`Profile controller[createProfile]: Failed to send ${error}`);
-  //   if (error.code === "23505") {
-  //     return next(
-  //       createError({
-  //         status: CONFLICT,
-  //         message: "Already added profile"
-  //       })
-  //     );
-  //   }
-
-  //   return next(error);
-  // }
 };
 
 // @route  POST /api/v2/users/profile
