@@ -27,7 +27,8 @@ const getTest = (req, res, next) => {
 // @access   Private
 const getId = async (req, res, next) => {
   try {
-    const user = await UserProfile.query().findById(req.params.id).debug(true);
+    const user = await UserProfile.query().findById(req.params.id).eager("user_skill_set")
+      .debug(true);
     console.log('user', user);
 
     return res.status(200).json({
@@ -391,9 +392,11 @@ const updateProfile = async (req, res, next) => {
 
   let updated_user = await UserProfile.query().skipUndefined().update(data).where("id", req.params.id).debug(true);
 
+  //const user = await UserProfile.query().findById(req.params.id);
+  //const userSkill = await user.$relatedQuery('user_skill_set').debug(true);
 
   // const profile = await UserProfile.query().findById(req.user.id);
-  console.log('profile:', updated_user);
+  //console.log('profile:', userSkill);
 
   return res.status(200).json({
     success: true,
