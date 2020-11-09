@@ -36,9 +36,9 @@ router.put("/:id", passport.authenticate("jwt", {
 // @route    GET /api/v2/users/profile/:id
 // @desc     Get user profile id
 // @access   Private
-router.get('/:id', passport.authenticate("jwt", {
-  session: false
-}), getId);
+router.get('/:id', getId);
+
+
 
 // @route    GET /api/v2/users/profile/github/:username
 // @desc     Get user repos from Github
