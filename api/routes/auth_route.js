@@ -38,11 +38,13 @@ const {
 // });
 
 // @route    GET api/v2/users/:id
-// @desc     Get post by ID
+// @desc     Get user by ID
 // @access   Private
-router.get('/:id', passport.authenticate("jwt", {
-  session: false
-}), getUsersId);
+// router.get('/:id', passport.authenticate("jwt", {
+//   session: false
+// }), getUsersId);
+
+router.get('/:id', getUsersId);
 
 // @route   GET api/v2/users/
 // @desc    Return all users
