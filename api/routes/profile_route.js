@@ -29,7 +29,7 @@ const {
 // @route    PUT /api/v2/users/profile/:id
 // @desc     Edit user profile 
 // @access   Private
-router.put("/:id", passport.authenticate("jwt", {
+router.patch("/:id", passport.authenticate("jwt", {
   session: false
 }), updateProfile);
 
