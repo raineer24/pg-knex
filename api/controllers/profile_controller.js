@@ -355,6 +355,8 @@ const updateProfile = async (req, res, next) => {
 
   let areaExpertise = req.body.areas_of_expertise;
 
+  console.log('areaExpertise ', areaExpertise);
+
   const {
     company_name,
     website,
@@ -390,8 +392,9 @@ const updateProfile = async (req, res, next) => {
   //const user = await UserProfile.query().findById(req.params.id).debug(true);
   //const userEdu = await UserEducation.query().where('users_id', req.params.id).delete();
 
-  let updated_user = await UserProfile.query().skipUndefined().update(data).where("id", req.params.id).debug(true);
+  let updated_user = await UserProfile.query().skipUndefined().update(data).where("id", req.params.id).returning('*').debug(true);
 
+  console.log('updated user', updated_user);
   //const user = await UserProfile.query().findById(req.params.id);
   //const userSkill = await user.$relatedQuery('user_skill_set').debug(true);
 
