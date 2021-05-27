@@ -28,16 +28,36 @@ class UserProfile extends Model {
       type: "object",
 
       properties: {
-        id: { type: "integer" },
-        company_name: { type: "string" },
-        website: { type: "string" },
-        job_location: { type: "string" },
-        status: { type: "string" },
-        bio: { type: "string" },
-        youtube_handle: { type: "string" },
-        twitter_handle: { type: "string" },
-        facebook_handle: { type: "string" },
-        instagram_handle: { type: "string" }
+        id: {
+          type: "integer"
+        },
+        company_name: {
+          type: "string"
+        },
+        website: {
+          type: "string"
+        },
+        job_location: {
+          type: "string"
+        },
+        status: {
+          type: "string"
+        },
+        bio: {
+          type: "string"
+        },
+        youtube_handle: {
+          type: "string"
+        },
+        twitter_handle: {
+          type: "string"
+        },
+        facebook_handle: {
+          type: "string"
+        },
+        instagram_handle: {
+          type: "string"
+        }
       }
     };
   }
@@ -100,6 +120,19 @@ class UserProfile extends Model {
       }
     };
   }
+
+  $formatJson(obj) {
+    obj = super.$formatJson(obj);
+    console.log("obj", obj);
+
+    //   obj.avatar = this.avatar;
+    //  console.log("obj username: ", obj.first_name);
+
+    //  return _.omit(obj, hiddenFields);
+    return obj;
+  }
 }
+
+
 
 module.exports = UserProfile;

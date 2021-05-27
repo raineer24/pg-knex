@@ -27,9 +27,11 @@ const getTest = (req, res, next) => {
 // @access   Private
 const getId = async (req, res, next) => {
   try {
-    const user = await UserProfile.query().findById(req.params.id).eager("user_skill_set")
-      .debug(true);
-    console.log('user', user);
+    const user = await UserProfile.query().findById(req.params.id).eager("user_skill_set").then(data => {
+      console.log('USER DATA:', data)
+    })
+    // .debug(true);
+    console.log('USER: ', user);
 
     return res.status(200).json({
       success: true,
@@ -373,41 +375,76 @@ const updateProfile = async (req, res, next) => {
   const skill_set_name =
     typeof areaExpertise === "string" ? [areaExpertise] : areaExpertise;
 
+  try {
+    const data = {
+      id,
+      //  users_id: req.params.id,
+      company_name,
+      website,
+      job_location,
+      status,
+      bio,
+      youtube_handle,
+      twitter_handle,
+      facebook_handle,
+      instagram_handle,
+      user_skill_set: [{
+        users_id: req.user.id,
+        skill_set_name: skill_set_name
+      }]
+    };
 
-  const data = {
+    const profileUpdate = await updateUserProfile(data);
+    return res.status(200).json({
+      success: true,
+      profileUpdate
+    });
+  } catch (error) {
+    log.error(`Profile controller[update PROFILE]: Failed to send ${error}`);
+  }
 
-    company_name,
-    website,
-    job_location,
-    status,
-    bio,
-    youtube_handle,
-    twitter_handle,
-    facebook_handle,
-    instagram_handle,
-    user_skill_set: [{
-      users_id: req.user.id,
-      skill_set_name: skill_set_name
-    }]
-  };
+  // const data = {
+  //   //  users_id: req.params.id,
+  //   company_name,
+  //   website,
+  //   job_location,
+  //   status,
+  //   bio,
+  //   youtube_handle,
+  //   twitter_handle,
+  //   facebook_handle,
+  //   instagram_handle,
+  //   user_skill_set: [{
+  //     users_id: req.user.id,
+  //     skill_set_name: skill_set_name
+  //   }]
+  // };
 
-  //const user = await UserProfile.query().findById(req.params.id).debug(true);
-  // const user = await UserProfile.query().where('users_id', req.params.id).debug(true);
 
-  const updated_user = await UserProfile.query().skipUndefined().update(data).where("users_id", req.params.id).returning('*').debug(true);
+  // //const user = await UserProfile.query().findById(req.params.id).debug(true);
+  // // const user = await UserProfile.query().where('users_id', req.params.id).debug(true);
+
+  // const updated_user = await UserProfile.query().skipUndefined().update(data).where("users_id", req.params.id).returning('*').debug(true).then(data => {
+  //   console.log("data: ", data);
+  //   return data;
+  // });
+
+  // const updated_user = await UserProfile.query().skipUndefined().where("users_id", req.params.id)
 
   //console.log('user:', user);
-  // console.log('updated user', updated_user);
+  // console.log('updated user :', updated_user);
   //const user = await UserProfile.query().findById(req.params.id);
   //const userSkill = await user.$relatedQuery('user_skill_set').debug(true);
 
   // const profile = await UserProfile.query().findById(req.user.id);
   //console.log('profile:', userSkill);
 
-  return res.status(200).json({
-    success: true,
-    updated_user
-  });
+
+
+  // return res.status(200).json({
+  //   success: true,
+  //   updated_user
+  // });
 
 };
 
@@ -435,6 +472,8 @@ const createProfile = async (req, res, next) => {
 
   const skill_set_name =
     typeof areaExpertise === "string" ? [areaExpertise] : areaExpertise;
+
+
 
   try {
     const data = {
@@ -480,6 +519,20 @@ const createProfile = async (req, res, next) => {
     return next(error);
   }
 };
+
+async function updateUserProfile({
+  datus
+}) {
+  try {
+    const result = await UserProfile.query().upsertGraph({
+      datus
+    }).debug();
+
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
 
 async function registerProfile(datus) {
   try {
