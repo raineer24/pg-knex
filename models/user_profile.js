@@ -86,6 +86,18 @@ class UserProfile extends Model {
           to: "user_skill_set.user_skill_set_id"
         }
       },
+      // user_skill_set: {
+      //   relation: Model.HasManyRelation,
+      //   modelClass: UserSkillSet,
+      //   join: {
+      //     from: "user_profile.id",
+      //     through: {
+      //       from: "user_profile.users_id",
+      //       to: "user_profile.users_id"
+      //     },
+      //     to: "user_skill_set.users_id"
+      //   }
+      // },
       // user_profile: {
       //   relation: Model.HasManyRelation,
       //   modelClass: UserProfile,

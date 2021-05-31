@@ -375,33 +375,33 @@ const updateProfile = async (req, res, next) => {
   const skill_set_name =
     typeof areaExpertise === "string" ? [areaExpertise] : areaExpertise;
 
-  try {
-    const data = {
-      id,
-      //  users_id: req.params.id,
-      company_name,
-      website,
-      job_location,
-      status,
-      bio,
-      youtube_handle,
-      twitter_handle,
-      facebook_handle,
-      instagram_handle,
-      user_skill_set: [{
-        users_id: req.user.id,
-        skill_set_name: skill_set_name
-      }]
-    };
+  // try {
+  //   const data = {
 
-    const profileUpdate = await updateUserProfile(data);
-    return res.status(200).json({
-      success: true,
-      profileUpdate
-    });
-  } catch (error) {
-    log.error(`Profile controller[update PROFILE]: Failed to send ${error}`);
-  }
+  //     //  users_id: req.params.id,
+  //     company_name,
+  //     website,
+  //     job_location,
+  //     status,
+  //     bio,
+  //     youtube_handle,
+  //     twitter_handle,
+  //     facebook_handle,
+  //     instagram_handle,
+  //     user_skill_set: [{
+  //       users_id: req.user.id,
+  //       skill_set_name: skill_set_name
+  //     }]
+  //   };
+
+  //   const profileUpdate = await updateUserProfile(data);
+  //   return res.status(200).json({
+  //     success: true,
+  //     profileUpdate
+  //   });
+  // } catch (error) {
+  //   log.error(`Profile controller[update PROFILE]: Failed to send ${error}`);
+  // }
 
   // const data = {
   //   //  users_id: req.params.id,
@@ -419,6 +419,82 @@ const updateProfile = async (req, res, next) => {
   //     skill_set_name: skill_set_name
   //   }]
   // };
+
+  // const something = await SomeModel
+  //   .query()
+  //   .findById('some-id')
+  //   .joinEager('someRelation');
+
+  //await something.$query().patch(obj)
+
+
+  try {
+    const userprofile = await UserProfile.query().where('users_id', req.params.id).then(data => {
+      console.log('data', data[0].id);
+      return data[0].id
+    });
+    const data = {
+      id: userprofile,
+      //  users_id: req.params.id,
+      company_name,
+      website,
+      job_location,
+      status,
+      bio,
+      youtube_handle,
+      twitter_handle,
+      facebook_handle,
+      instagram_handle,
+      user_skill_set: [{
+        user_skill_set_id: userprofile,
+        users_id: req.user.id,
+        skill_set_name: skill_set_name
+      }]
+    };
+    //const user = await User.query().findById(req.params.id).joinEager('[user_profile, user_skill]');
+    //const user = await UserProfile.query().findById(req.params.id).joinEager('user_skill_set');
+    // await user.$query().patch({
+    //   user_profile: data
+    // }).returning('*').debug();
+
+    // const userp = await updateUserProfile({
+    //   user_profile: data
+    // }).debug();
+
+    // const userp = await updateUserProfile({
+    //   id: 1,
+    //   users_id: req.params.id,
+
+    //   movies: [{
+    //       id: 1,
+    //       edition: "first"
+    //     },
+    //     {
+    //       id: 1,
+    //       edition: "second"
+    //     }
+    //   ]
+    // });
+
+
+    // console.log('userprofile', userprofile);
+
+    userp = await UserProfile.query().upsertGraph(data, {
+      // relate: true,
+      // unrelate: true
+      relate: ['user_skill_set'],
+      unrelate: ['user_skill_set']
+    });
+    console.log('USER: ', userp);
+    return res.status(200).json({
+      success: true,
+      userp
+    });
+  } catch (error) {
+    log.error(`Profile controller[update PROFILE]: Failed to send ${error}`);
+  }
+
+
 
 
   // //const user = await UserProfile.query().findById(req.params.id).debug(true);
