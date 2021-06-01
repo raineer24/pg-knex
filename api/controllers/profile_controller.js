@@ -479,12 +479,7 @@ const updateProfile = async (req, res, next) => {
 
     // console.log('userprofile', userprofile);
 
-    userp = await UserProfile.query().upsertGraph(data, {
-      // relate: true,
-      // unrelate: true
-      relate: ['user_skill_set'],
-      unrelate: ['user_skill_set']
-    });
+    userp = await UserProfile.query().upsertGraph(data);
     console.log('USER: ', userp);
     return res.status(200).json({
       success: true,
