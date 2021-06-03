@@ -23,11 +23,58 @@ cloudinary.config({
   api_secret: "OEJwFk8xMOuNID7Z7L5MNDJ9nY8"
 });
 
+
+
+// @route    GET api/v2/users/:id
+// @desc     Get users by ID
+// @access   Private
+const getUsersId = async (req, res, next) => {
+  try {
+    const user = await User.query().findById(req.params.id).eager("[user_profile,user_experience, user_skill,user_education]")
+      .debug()
+      .then(data => {
+        //console.log("data: ", data);
+        //return data.user_skill;
+        // skill = data.user_skill;
+        // if (Array.isArray(skill)) {
+        //   console.log("array!");
+        // }
+        // skill.forEach(function(item) {
+        //   console.log(item.skill_set_name);
+        // });
+        return data;
+      });
+
+    if (!user) {
+      return next(
+        createError({
+          status: CONFLICT,
+          message: "No User found!"
+        })
+      );
+    }
+    return res.status(200).json({
+      success: true,
+      user
+    });
+
+
+
+  } catch (error) {
+    log.error(`Auth controller[Get User by Id]: Failed to send ${error}`);
+
+    return next(error);
+  }
+}
+
 // @route GET api/users/register
 // @desc Register a user
 // @access Public
 const createUser = async (req, res, next) => {
-  const { email, password } = req.body;
+  const {
+    email,
+    password
+  } = req.body;
 
   if (!req.file) {
     return next(
@@ -48,6 +95,9 @@ const createUser = async (req, res, next) => {
           message: "Email already exist"
         })
       );
+
+    console.log('new user', newUser);
+
 
     const hashPassword = await bcrypter.encryptPassword(password);
 
@@ -112,8 +162,14 @@ const postLogin = async (req, res, next) => {
       );
 
     /** create token with some data */
-    const token = await tokenHandler.createToken({ ...user });
-    res.json({ status: true, user, token });
+    const token = await tokenHandler.createToken({
+      ...user
+    });
+    res.json({
+      status: true,
+      user,
+      token
+    });
   } catch (error) {
     log.error(`Authcontroller[createUser]: Failed to send ${error}`);
     return next(error);
@@ -170,8 +226,16 @@ const getUsers = async (req, res, next) => {
     });
   // const users = await User.query().eager("[user_profile,user_experience]");
   // console.log("usrs", users);
-  res.status(200).json({ status: true, user });
+  res.status(200).json({
+    status: true,
+    user
+  });
   //return res.status(200).json({ success: true, profileExpCreate });
 };
 
-module.exports = { getUsers, postLogin, createUser };
+module.exports = {
+  getUsers,
+  postLogin,
+  createUser,
+  getUsersId
+};

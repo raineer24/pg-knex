@@ -28,16 +28,36 @@ class UserProfile extends Model {
       type: "object",
 
       properties: {
-        id: { type: "integer" },
-        company_name: { type: "string" },
-        website: { type: "string" },
-        job_location: { type: "string" },
-        status: { type: "string" },
-        bio: { type: "string" },
-        youtube_handle: { type: "string" },
-        twitter_handle: { type: "string" },
-        facebook_handle: { type: "string" },
-        instagram_handle: { type: "string" }
+        id: {
+          type: "integer"
+        },
+        company_name: {
+          type: "string"
+        },
+        website: {
+          type: "string"
+        },
+        job_location: {
+          type: "string"
+        },
+        status: {
+          type: "string"
+        },
+        bio: {
+          type: "string"
+        },
+        youtube_handle: {
+          type: "string"
+        },
+        twitter_handle: {
+          type: "string"
+        },
+        facebook_handle: {
+          type: "string"
+        },
+        instagram_handle: {
+          type: "string"
+        }
       }
     };
   }
@@ -66,6 +86,18 @@ class UserProfile extends Model {
           to: "user_skill_set.user_skill_set_id"
         }
       },
+      // user_skill_set: {
+      //   relation: Model.HasManyRelation,
+      //   modelClass: UserSkillSet,
+      //   join: {
+      //     from: "user_profile.id",
+      //     through: {
+      //       from: "user_profile.users_id",
+      //       to: "user_profile.users_id"
+      //     },
+      //     to: "user_skill_set.users_id"
+      //   }
+      // },
       // user_profile: {
       //   relation: Model.HasManyRelation,
       //   modelClass: UserProfile,
@@ -100,6 +132,19 @@ class UserProfile extends Model {
       }
     };
   }
+
+  $formatJson(obj) {
+    obj = super.$formatJson(obj);
+    console.log("obj", obj);
+
+    //   obj.avatar = this.avatar;
+    //  console.log("obj username: ", obj.first_name);
+
+    //  return _.omit(obj, hiddenFields);
+    return obj;
+  }
 }
+
+
 
 module.exports = UserProfile;

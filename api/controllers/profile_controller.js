@@ -16,14 +16,41 @@ const {
 
 const getTest = (req, res, next) => {
   console.log('error');
-  
-  res.json({ msg: "Profile works" });
+
+  res.json({
+    msg: "Profile works"
+  });
+};
+
+// @route    GET /api/v2/users/profile/:id
+// @desc     Get user profile :id
+// @access   Private
+const getId = async (req, res, next) => {
+  try {
+    const user = await UserProfile.query().findById(req.params.id).eager("user_skill_set").then(data => {
+      console.log('USER DATA:', data)
+    })
+    // .debug(true);
+    console.log('USER: ', user);
+
+    return res.status(200).json({
+      success: true,
+      user
+    });
+
+
+  } catch (error) {
+    console.log(error.message);
+    return res.status(404).json({
+      msg: 'No User profile found'
+    });
+  }
 };
 
 // @route    GET /api/v2/users/profile/github/:username
 // @desc     Get user repos from Github
 // @access   Public
-const getRepo = async(req, res,next) => {
+const getRepo = async (req, res, next) => {
   try {
     const uri = encodeURI(`https://api.github.com/users/${req.params.username}/repos?per_page=5&sort=created:asc`);
     const headers = {
@@ -31,25 +58,29 @@ const getRepo = async(req, res,next) => {
       Authorization: `token ${config.get('githubToken')}`
     };
 
-    const gitHubResponse = await axios.get(uri, {headers});
+    const gitHubResponse = await axios.get(uri, {
+      headers
+    });
     return res.json(gitHubResponse.data);
-    
-  
+
+
   } catch (error) {
     console.log(error.message);
-    return res.status(404).json({ msg: 'No Github profile found'});
+    return res.status(404).json({
+      msg: 'No Github profile found'
+    });
   }
 };
 
 // @route    DELETE /api/v2/users/profile/education/:edu_id
 // @desc     Delete education from profile
 // @access   Private
-const deleteEducation = async(req, res, next) => {
+const deleteEducation = async (req, res, next) => {
 
-  
+
   try {
-   const user = await User.query().findById(req.params.edu_id);
-   const userEducation = await user.$relatedQuery('user_education').debug(true);
+    const user = await User.query().findById(req.params.edu_id);
+    const userEducation = await user.$relatedQuery('user_education').debug(true);
     const userEduLength = Object.keys(userEducation).length;
 
     if (user) {
@@ -60,14 +91,18 @@ const deleteEducation = async(req, res, next) => {
             message: "No User Education profile found!"
           })
         );
-    
-       }
 
-       const userEdu = await UserEducation.query().where('users_id', req.params.edu_id).delete();
-    return res.status(200).json({ success: true, userEdu, msg: 'User Education profile data Deleted' });
+      }
+
+      const userEdu = await UserEducation.query().where('users_id', req.params.edu_id).delete();
+      return res.status(200).json({
+        success: true,
+        userEdu,
+        msg: 'User Education profile data Deleted'
+      });
     }
-   
-   
+
+
   } catch (error) {
     log.error(`Profile controller[DeleteUserEducation]: Failed to send ${error}`);
 
@@ -79,36 +114,39 @@ const deleteEducation = async(req, res, next) => {
 // @route    DELETE api/v2/users/profile
 // @desc     Delete profile, user 
 // @access   Private
-const deleteProfile = async(req, res,next) => {
+const deleteProfile = async (req, res, next) => {
 
   try {
     const userProfile = await User.query().findById(req.user.id).debug(true);
     console.log('userProfile', userProfile);
-    
-    if(userProfile) {
+
+    if (userProfile) {
 
       const userSkill = await userProfile
-      .$relatedQuery('user_skill').delete();  
-     console.log('userSkill',userSkill);
+        .$relatedQuery('user_skill').delete();
+      console.log('userSkill', userSkill);
 
-     
+
       const userP = await userProfile
-          .$relatedQuery('user_profile').delete();
+        .$relatedQuery('user_profile').delete();
 
-          await userProfile.$query().delete().debug(true);
-          
-  
-          return res.status(200).json({ success: true, msg: 'User Deleted' });
-         
-          //res.json({ msg: 'User deleted' });
-          
+      await userProfile.$query().delete().debug(true);
+
+
+      return res.status(200).json({
+        success: true,
+        msg: 'User Deleted'
+      });
+
+      //res.json({ msg: 'User deleted' });
+
     }
   } catch (error) {
     log.error(`Profile controller[DeleteUserProfile]: Failed to send ${error}`);
 
     return next(error);
   }
- 
+
 }
 
 // @route    DELETE /api/v2/users/profile/experience/:exp_id
@@ -117,13 +155,16 @@ const deleteProfile = async(req, res,next) => {
 const deleteExp = async (req, res, next) => {
   try {
     const user = await User.query().findById(req.params.exp_id).debug(true);
-    
+
     const userExp = await user.$relatedQuery('user_experience').delete();
     console.log('userExp: ', userExp);
 
-    return res.status(200).json({ success: true, msg: 'User Profile Experience Deleted' });
-    
-     } catch (error) {
+    return res.status(200).json({
+      success: true,
+      msg: 'User Profile Experience Deleted'
+    });
+
+  } catch (error) {
     log.error(`Profile controller[DeleteExpProfile]: Failed to send ${error}`);
 
     return next(error);
@@ -175,37 +216,37 @@ const createExpProfile = async (req, res, next) => {
   };
 
   try {
-   
+
     const users = await User.query().findById(req.user.id).select('id').eager('user_experience').then(data => {
       let user_exp = data.user_experience;
 
       return user_exp;
 
     });
-       const usersLength = Object.keys(users).length//0
+    const usersLength = Object.keys(users).length //0
 
-   const userProfile  = await User.query().findById(req.user.id).eager('user_profile').then(data => {
-    return data.user_profile;
-    
-  });
+    const userProfile = await User.query().findById(req.user.id).eager('user_profile').then(data => {
+      return data.user_profile;
 
-  const usersProfileLength = Object.keys(userProfile).length//0
+    });
 
-   console.log('usersprofilelength: ', usersProfileLength);
-   
+    const usersProfileLength = Object.keys(userProfile).length //0
+
+    console.log('usersprofilelength: ', usersProfileLength);
+
     if (Array.isArray(users) && usersLength > 0) {
       return next(
-            createError({
-              status: CONFLICT,
-              message: "User experience already created!"
-            })
-          );
-      
+        createError({
+          status: CONFLICT,
+          message: "User experience already created!"
+        })
+      );
+
     } else if (Array.isArray(userProfile) && usersProfileLength === 0) {
 
-      
+
       console.log('users: ', users);
-      
+
 
       return next(
         createError({
@@ -213,11 +254,14 @@ const createExpProfile = async (req, res, next) => {
           message: "No User profile data found! You might want to add user profile data"
         })
       );
-      
-    }else {
-    const profileExpCreate = await registerExpProfile(newExp);
-    return res.status(200).json({ success: true, profileExpCreate });
-      
+
+    } else {
+      const profileExpCreate = await registerExpProfile(newExp);
+      return res.status(200).json({
+        success: true,
+        profileExpCreate
+      });
+
     }
   } catch (error) {
     log.error(`Profile controller[createExpProfile]: Failed to send ${error}`);
@@ -257,10 +301,10 @@ const createEducation = async (req, res, next) => {
     });
     console.log('profileEdu', profileEducation);
 
-    const usersEduLength = Object.keys(profileEducation).length//0
+    const usersEduLength = Object.keys(profileEducation).length //0
     console.log('usersEduLength', usersEduLength);
-    
-    
+
+
     if (Array.isArray(profileEducation) && usersEduLength > 0) {
       return next(
         createError({
@@ -270,7 +314,10 @@ const createEducation = async (req, res, next) => {
       );
     } else {
       const profileEduCreate = await registerEduProfile(newEdu);
-      return res.status(200).json({ success: true, profileEduCreate });
+      return res.status(200).json({
+        success: true,
+        profileEduCreate
+      });
     }
   } catch (error) {
     log.error(`Profile controller[createEducation]: Failed to send ${error}`);
@@ -284,17 +331,192 @@ const createEducation = async (req, res, next) => {
 // @access   Private
 const getProfile = async (req, res, next) => {
   try {
-  
+
     const userprofile = await UserProfile.query().where('users_id', req.user.id).eager("[user_experience,user_skill_set,user_education]");
     console.log('userprofile', userprofile);
-    return res.status(200).json({success: true, userprofile});
-    
-    
+    return res.status(200).json({
+      success: true,
+      userprofile
+    });
+
+
   } catch (error) {
     log.error(`Profile controller[Get Current Profile]: Failed to send ${error}`);
 
     return next(error);
   }
+};
+
+// @route  Put /api/v2/users/profile
+// @desc   Edit user profile
+// @access Private - use jwt strategy to authenticate
+const updateProfile = async (req, res, next) => {
+  // Get all fields needed for a user profile
+
+  //Check for other form data
+
+  let areaExpertise = req.body.areas_of_expertise;
+
+  console.log('req.user.id ', req.user.id);
+  console.log('req.params.id ', req.params.id);
+
+  const {
+    company_name,
+    website,
+    job_location,
+    status,
+    bio,
+    youtube_handle,
+    twitter_handle,
+    facebook_handle,
+    instagram_handle
+  } = req.body;
+
+  const skill_set_name =
+    typeof areaExpertise === "string" ? [areaExpertise] : areaExpertise;
+
+  // try {
+  //   const data = {
+
+  //     //  users_id: req.params.id,
+  //     company_name,
+  //     website,
+  //     job_location,
+  //     status,
+  //     bio,
+  //     youtube_handle,
+  //     twitter_handle,
+  //     facebook_handle,
+  //     instagram_handle,
+  //     user_skill_set: [{
+  //       users_id: req.user.id,
+  //       skill_set_name: skill_set_name
+  //     }]
+  //   };
+
+  //   const profileUpdate = await updateUserProfile(data);
+  //   return res.status(200).json({
+  //     success: true,
+  //     profileUpdate
+  //   });
+  // } catch (error) {
+  //   log.error(`Profile controller[update PROFILE]: Failed to send ${error}`);
+  // }
+
+  // const data = {
+  //   //  users_id: req.params.id,
+  //   company_name,
+  //   website,
+  //   job_location,
+  //   status,
+  //   bio,
+  //   youtube_handle,
+  //   twitter_handle,
+  //   facebook_handle,
+  //   instagram_handle,
+  //   user_skill_set: [{
+  //     users_id: req.user.id,
+  //     skill_set_name: skill_set_name
+  //   }]
+  // };
+
+  // const something = await SomeModel
+  //   .query()
+  //   .findById('some-id')
+  //   .joinEager('someRelation');
+
+  //await something.$query().patch(obj)
+
+
+  try {
+    const userprofile = await UserProfile.query().where('users_id', req.params.id).then(data => {
+      console.log('data', data[0].id);
+      return data[0].id
+    });
+    const data = {
+      id: userprofile,
+      //  users_id: req.params.id,
+      company_name,
+      website,
+      job_location,
+      status,
+      bio,
+      youtube_handle,
+      twitter_handle,
+      facebook_handle,
+      instagram_handle,
+      user_skill_set: [{
+        user_skill_set_id: userprofile,
+        users_id: req.user.id,
+        skill_set_name: skill_set_name
+      }]
+    };
+    //const user = await User.query().findById(req.params.id).joinEager('[user_profile, user_skill]');
+    //const user = await UserProfile.query().findById(req.params.id).joinEager('user_skill_set');
+    // await user.$query().patch({
+    //   user_profile: data
+    // }).returning('*').debug();
+
+    // const userp = await updateUserProfile({
+    //   user_profile: data
+    // }).debug();
+
+    // const userp = await updateUserProfile({
+    //   id: 1,
+    //   users_id: req.params.id,
+
+    //   movies: [{
+    //       id: 1,
+    //       edition: "first"
+    //     },
+    //     {
+    //       id: 1,
+    //       edition: "second"
+    //     }
+    //   ]
+    // });
+
+
+    // console.log('userprofile', userprofile);
+
+    userp = await UserProfile.query().upsertGraph(data);
+    console.log('USER: ', userp);
+    return res.status(200).json({
+      success: true,
+      userp
+    });
+  } catch (error) {
+    log.error(`Profile controller[update PROFILE]: Failed to send ${error}`);
+  }
+
+
+
+
+  // //const user = await UserProfile.query().findById(req.params.id).debug(true);
+  // // const user = await UserProfile.query().where('users_id', req.params.id).debug(true);
+
+  // const updated_user = await UserProfile.query().skipUndefined().update(data).where("users_id", req.params.id).returning('*').debug(true).then(data => {
+  //   console.log("data: ", data);
+  //   return data;
+  // });
+
+  // const updated_user = await UserProfile.query().skipUndefined().where("users_id", req.params.id)
+
+  //console.log('user:', user);
+  // console.log('updated user :', updated_user);
+  //const user = await UserProfile.query().findById(req.params.id);
+  //const userSkill = await user.$relatedQuery('user_skill_set').debug(true);
+
+  // const profile = await UserProfile.query().findById(req.user.id);
+  //console.log('profile:', userSkill);
+
+
+
+  // return res.status(200).json({
+  //   success: true,
+  //   updated_user
+  // });
+
 };
 
 // @route  POST /api/v2/users/profile
@@ -322,6 +544,8 @@ const createProfile = async (req, res, next) => {
   const skill_set_name =
     typeof areaExpertise === "string" ? [areaExpertise] : areaExpertise;
 
+
+
   try {
     const data = {
       users_id: req.user.id,
@@ -334,33 +558,52 @@ const createProfile = async (req, res, next) => {
       twitter_handle,
       facebook_handle,
       instagram_handle,
-      user_skill_set: [
-        { 
-          users_id: req.user.id,
-          skill_set_name: skill_set_name
-        }
-      ]
+      user_skill_set: [{
+        users_id: req.user.id,
+        skill_set_name: skill_set_name
+      }]
     };
+
+
+
+
 
     const profile = await UserProfile.query().findById(req.user.id);
     console.log('profile:', profile);
-       const profileCreate = await registerProfile(data);
-      return res.status(200).json({success: true, profileCreate});
-    
+    const profileCreate = await registerProfile(data);
+    return res.status(200).json({
+      success: true,
+      profileCreate
+    });
+
   } catch (error) {
-    log.error(`Profile controller[createProfile]: Failed to send ${error}`);
-     if (error.code === "23505") {
+    log.error(`Profile controller[CREATEProfile]: Failed to send ${error}`);
+    if (error.code === "23505") {
       return next(
         createError({
           status: CONFLICT,
-          message: "Already added profile"
+          message: "Already ADDED profile"
         })
       );
-     }
+    }
 
     return next(error);
   }
 };
+
+async function updateUserProfile({
+  datus
+}) {
+  try {
+    const result = await UserProfile.query().upsertGraph({
+      datus
+    }).debug();
+
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
 
 async function registerProfile(datus) {
   try {
@@ -401,5 +644,7 @@ module.exports = {
   deleteExp,
   deleteProfile,
   deleteEducation,
-  getRepo
+  getRepo,
+  updateProfile,
+  getId
 };

@@ -18,10 +18,17 @@ const passport = require("passport");
 
 const validation = require("../../validation/express-register");
 
+
+const {
+  userLoginValidationRules,
+  validate
+} = require("./../../validation/validation");
+
 const {
   getUsers,
   postLogin,
-  createUser
+  createUser,
+  getUsersId
 } = require("../controllers/auth_controller");
 
 // router.get("/current", checkAuth, (req, res) => {
@@ -29,6 +36,15 @@ const {
 //     message: "Welcome Test Development"
 //   });
 // });
+
+// @route    GET api/v2/users/:id
+// @desc     Get user by ID
+// @access   Private
+// router.get('/:id', passport.authenticate("jwt", {
+//   session: false
+// }), getUsersId);
+
+router.get('/:id', getUsersId);
 
 // @route   GET api/v2/users/
 // @desc    Return all users
@@ -44,6 +60,6 @@ router.post("/register", fileUpload, validation.validateUser, createUser);
 
 //router.route("/login").post(postLogin);
 
-router.post("/login", postLogin);
+router.post("/login", userLoginValidationRules(), validate, postLogin);
 
 module.exports = router;

@@ -12,10 +12,12 @@ class UserSkillSet extends Model {
       type: "object",
 
       properties: {
-        user_skill_set_id: { type: "integer" },
+        // user_skill_set_id: { type: "integer" },
         skill_set_name: {
           type: "array",
-          items: { type: "strings" }
+          items: {
+            type: "strings"
+          }
         }
       }
     };
@@ -88,7 +90,9 @@ class UserSkillSet extends Model {
 
     //  skills = JSON.parse(JSON.stringify(skills));
     //console.log("log skill", skills.skills);
-    return Object.assign({}, json, { skills });
+    return Object.assign({}, json, {
+      skills
+    });
     //console.log("object json", Object.assign({}, json, { skills }));
     // return super.$parseDatabaseJson(json);
   }
