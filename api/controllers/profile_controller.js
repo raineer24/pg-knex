@@ -234,15 +234,7 @@ const createExpProfile = async (req, res, next) => {
 
     console.log('usersprofilelength: ', usersProfileLength);
 
-    if (Array.isArray(users) && usersLength > 0) {
-      return next(
-        createError({
-          status: CONFLICT,
-          message: "User experience already created!"
-        })
-      );
-
-    } else if (Array.isArray(userProfile) && usersProfileLength === 0) {
+    if (Array.isArray(userProfile) && usersProfileLength === 0) {
 
 
       console.log('users: ', users);
