@@ -154,25 +154,40 @@ const deleteProfile = async (req, res, next) => {
 // @access   Private
 const deleteExp = async (req, res, next) => {
 
-  const userExp = await UserExperience.query().where('user_experience_detail_id', req.params.exp_id)
+//  const userExp = await UserExperience.query().where('user_experience_detail_id', req.params.exp_id)
 
-  console.log('userExp', userExp)
-  // try {
-  //   const user = await User.query().findById(req.params.exp_id).debug(true);
+//   console.log('userExp', userExp)
 
-  //   const userExp = await user.$relatedQuery('user_experience').delete();
-  //   console.log('userExp: ', userExp);
+  
+  try {
+    const user = await UserExperience.query().where('user_experience_detail_id', req.params.exp_id).debug(true);
 
-  //   return res.status(200).json({
-  //     success: true,
-  //     msg: 'User Profile Experience Deleted'
-  //   });
+   
+   // console.log('userExp: ', userExp);
 
-  // } catch (error) {
-  //   log.error(`Profile controller[DeleteExpProfile]: Failed to send ${error}`);
+    if(user.length === 0) {
+    return next(
+        createError({
+          status: CONFLICT,
+          message: "No User Experience profile data found! You might want to add user profile experience data"
+        })
+      );
+  } else {
+    const userExp = await UserExperience.query().where('user_experience_detail_id', req.params.exp_id).delete();
+     return res.status(200).json({
+      success: true,
+      msg: 'User Profile Experience Deleted'
+    });
 
-  //   return next(error);
-  // }
+  }
+
+   
+
+  } catch (error) {
+    log.error(`Profile controller[DeleteExpProfile]: Failed to send ${error}`);
+
+    return next(error);
+  }
 };
 
 //@route GET /api/v2/users/profile/getProfiles
