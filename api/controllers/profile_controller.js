@@ -164,7 +164,7 @@ const deleteExp = async (req, res, next) => {
 
    
    // console.log('userExp: ', userExp);
-
+ // const userExp = await UserExperience.query().where('user_experience_detail_id', req.params.exp_id).delete();
     if(user.length === 0) {
     return next(
         createError({
@@ -173,15 +173,16 @@ const deleteExp = async (req, res, next) => {
         })
       );
   } else {
-    const userExp = await UserExperience.query().where('user_experience_detail_id', req.params.exp_id).delete();
+    
+  const userExp = await UserExperience.query().where('user_experience_detail_id', req.params.exp_id).delete();
      return res.status(200).json({
       success: true,
-      msg: 'User Profile Experience Deleted'
+      msg: 'User Profile Experience Deleted',
+      userExp
     });
-
   }
 
-   
+
 
   } catch (error) {
     log.error(`Profile controller[DeleteExpProfile]: Failed to send ${error}`);
