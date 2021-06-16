@@ -92,7 +92,7 @@ const deleteEducation = async (req, res, next) => {
       );
   } else {
     
-  const userEdu = await UserEducation.query().where('user_education_detail_id', req.params.edu_id).delete();
+  const userEdu = await UserEducation.query().where('user_education_detail_id', req.params.edu_id).delete().returning('*');
      return res.status(200).json({
       success: true,
       msg: 'User Profile Experience Deleted',
