@@ -317,20 +317,14 @@ const createEducation = async (req, res, next) => {
     console.log('usersEduLength', usersEduLength);
 
 
-    if (Array.isArray(profileEducation) && usersEduLength > 0) {
-      return next(
-        createError({
-          status: CONFLICT,
-          message: "Already added education profile"
-        })
-      );
-    } else {
+   
+    
       const profileEduCreate = await registerEduProfile(newEdu);
       return res.status(200).json({
         success: true,
         profileEduCreate
       });
-    }
+  
   } catch (error) {
     log.error(`Profile controller[createEducation]: Failed to send ${error}`);
 
