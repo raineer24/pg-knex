@@ -79,28 +79,26 @@ const deleteEducation = async (req, res, next) => {
 
 
   try {
-    const user = await User.query().findById(req.params.edu_id);
-    const userEducation = await user.$relatedQuery('user_education').debug(true);
-    const userEduLength = Object.keys(userEducation).length;
-
-    if (user) {
-      if (Array.isArray(userEducation) && userEduLength === 0) {
-        return next(
-          createError({
-            status: CONFLICT,
-            message: "No User Education profile found!"
-          })
-        );
-
-      }
-
-      const userEdu = await UserEducation.query().where('users_id', req.params.edu_id).delete();
-      return res.status(200).json({
-        success: true,
-        userEdu,
-        msg: 'User Education profile data Deleted'
-      });
-    }
+    // const user = await User.query().findById(req.params.edu_id);
+    // const userEducation = await user.$relatedQuery('user_education').debug(true);
+    // const userEduLength = Object.keys(userEducation).length;
+    const user = await UserEducation.query().where('user_education_detail_id', req.params.edu_id).debug(true);
+   if(user.length === 0) {
+    return next(
+        createError({
+          status: CONFLICT,
+          message: "No User Experience profile data found! You might want to add user profile experience data"
+        })
+      );
+  } else {
+    
+  const userEdu = await UserEducation.query().where('user_education_detail_id', req.params.edu_id).delete();
+     return res.status(200).json({
+      success: true,
+      msg: 'User Profile Experience Deleted',
+      userEdu
+    });
+  }
 
 
   } catch (error) {
@@ -109,6 +107,40 @@ const deleteEducation = async (req, res, next) => {
     return next(error);
   }
 }
+// const deleteEducation = async (req, res, next) => {
+
+
+//   try {
+//     const user = await User.query().findById(req.params.edu_id);
+//     const userEducation = await user.$relatedQuery('user_education').debug(true);
+//     const userEduLength = Object.keys(userEducation).length;
+
+//     if (user) {
+//       if (Array.isArray(userEducation) && userEduLength === 0) {
+//         return next(
+//           createError({
+//             status: CONFLICT,
+//             message: "No User Education profile found!"
+//           })
+//         );
+
+//       }
+
+//       const userEdu = await UserEducation.query().where('users_id', req.params.edu_id).delete();
+//       return res.status(200).json({
+//         success: true,
+//         userEdu,
+//         msg: 'User Education profile data Deleted'
+//       });
+//     }
+
+
+//   } catch (error) {
+//     log.error(`Profile controller[DeleteUserEducation]: Failed to send ${error}`);
+
+//     return next(error);
+//   }
+// }
 
 
 // @route    DELETE api/v2/users/profile
