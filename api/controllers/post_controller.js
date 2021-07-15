@@ -289,7 +289,7 @@ const addPost = async (req, res, next) => {
 // @access   Private
 const getAllPosts = async (req, res, next) => {
   try {
-    const posts = await Post.query().orderBy('publish_date', 'desc');;
+    const posts = await Post.query().orderBy('publish_date', 'desc').returning('*');
     return res.status(200).json({
       success: true,
       posts

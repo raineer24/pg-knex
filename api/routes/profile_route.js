@@ -14,7 +14,7 @@ const {
   deleteEducation,
   getRepo,
   updateProfile,
-  getId
+ // getId
 } = require("../controllers/profile_controller");
 
 const validation = require("../../validation/express-profile");
@@ -36,7 +36,7 @@ router.patch("/:id", passport.authenticate("jwt", {
 // @route    GET /api/v2/users/profile/:id
 // @desc     Get user profile id
 // @access   Private
-router.get('/:id', getId);
+//router.get('/:id', getId);
 
 
 

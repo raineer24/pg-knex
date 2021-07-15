@@ -26,6 +26,7 @@ const getTest = (req, res, next) => {
 // @desc     Get user profile :id
 // @access   Private
 const getId = async (req, res, next) => {
+  console.log('bogo k!')
   try {
     const user = await UserProfile.query().findById(req.params.id).eager("user_skill_set").then(data => {
       console.log('USER DATA:', data)
@@ -42,7 +43,7 @@ const getId = async (req, res, next) => {
   } catch (error) {
     console.log(error.message);
     return res.status(404).json({
-      msg: 'No User profile found'
+      msg: 'No User profile xfound'
     });
   }
 };
@@ -227,6 +228,16 @@ const deleteExp = async (req, res, next) => {
 // @desc     Get all profiles
 // @access   Public
 const AllProfiles = async (req, res, next) => {
+
+  // const user = await UserProfile.query()
+  //     .eager("[user_experience,user_skill_set,user_education]");
+  //     // .then(profiles => {
+  //     //   res.json({
+  //     //     profiles
+  //     //   });
+  //     // });
+
+  //     console.log("user",user)
   try {
     UserProfile.query()
       .eager("[user_experience,user_skill_set,user_education]")
