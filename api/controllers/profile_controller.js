@@ -151,16 +151,32 @@ const deleteProfile = async (req, res, next) => {
 // @desc     Delete experience from profile
 // @access   Private
 const deleteExp = async (req, res, next) => {
-  try {
-    const user = await User.query().findById(req.params.exp_id).debug(true);
 
-    const userExp = await user.$relatedQuery('user_experience').delete();
+  try {
+     const user = await UserExperience.query().where('user_experience_detail_id', req.params.exp_id).debug(true);
+    //const user = await User.query().findById(req.params.exp_id).debug(true);
+      if(user.length === 0) {
+    return next(
+        createError({
+          status: CONFLICT,
+          message: "No User Experience profile data found! You might want to add user profile experience data"
+        })
+      );
+  } else {
+
+   //const userExp = await user.$relatedQuery('user_experience_detail_id').delete().returning('*');
+     const userExp = await UserExperience.query().where('user_experience_detail_id', req.params.exp_id).delete().returning('*');
     console.log('userExp: ', userExp);
 
     return res.status(200).json({
       success: true,
-      msg: 'User Profile Experience Deleted'
+      msg: 'User Profile Experience Deleted',
+      userExp
+      
     });
+  }
+   
+
 
   } catch (error) {
     log.error(`Profile controller[DeleteExpProfile]: Failed to send ${error}`);
