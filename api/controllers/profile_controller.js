@@ -26,7 +26,6 @@ const getTest = (req, res, next) => {
 // @desc     Get user profile :id
 // @access   Private
 const getId = async (req, res, next) => {
-  console.log('bogo k!')
   try {
     const user = await UserProfile.query().findById(req.params.id).eager("user_skill_set").then(data => {
       console.log('USER DATA:', data)
@@ -43,7 +42,7 @@ const getId = async (req, res, next) => {
   } catch (error) {
     console.log(error.message);
     return res.status(404).json({
-      msg: 'No User profile xfound'
+      msg: 'No User profile found'
     });
   }
 };
@@ -108,40 +107,6 @@ const deleteEducation = async (req, res, next) => {
     return next(error);
   }
 }
-// const deleteEducation = async (req, res, next) => {
-
-
-//   try {
-//     const user = await User.query().findById(req.params.edu_id);
-//     const userEducation = await user.$relatedQuery('user_education').debug(true);
-//     const userEduLength = Object.keys(userEducation).length;
-
-//     if (user) {
-//       if (Array.isArray(userEducation) && userEduLength === 0) {
-//         return next(
-//           createError({
-//             status: CONFLICT,
-//             message: "No User Education profile found!"
-//           })
-//         );
-
-//       }
-
-//       const userEdu = await UserEducation.query().where('users_id', req.params.edu_id).delete();
-//       return res.status(200).json({
-//         success: true,
-//         userEdu,
-//         msg: 'User Education profile data Deleted'
-//       });
-//     }
-
-
-//   } catch (error) {
-//     log.error(`Profile controller[DeleteUserEducation]: Failed to send ${error}`);
-
-//     return next(error);
-//   }
-// }
 
 
 // @route    DELETE api/v2/users/profile
@@ -187,18 +152,10 @@ const deleteProfile = async (req, res, next) => {
 // @access   Private
 const deleteExp = async (req, res, next) => {
 
-//  const userExp = await UserExperience.query().where('user_experience_detail_id', req.params.exp_id)
-
-//   console.log('userExp', userExp)
-
-  
   try {
-    const user = await UserExperience.query().where('user_experience_detail_id', req.params.exp_id).debug(true);
-
-   
-   // console.log('userExp: ', userExp);
- // const userExp = await UserExperience.query().where('user_experience_detail_id', req.params.exp_id).delete();
-    if(user.length === 0) {
+     const user = await UserExperience.query().where('user_experience_detail_id', req.params.exp_id).debug(true);
+    //const user = await User.query().findById(req.params.exp_id).debug(true);
+      if(user.length === 0) {
     return next(
         createError({
           status: CONFLICT,
@@ -206,15 +163,19 @@ const deleteExp = async (req, res, next) => {
         })
       );
   } else {
-    
-  const userExp = await UserExperience.query().where('user_experience_detail_id', req.params.exp_id).delete();
-     return res.status(200).json({
+
+   //const userExp = await user.$relatedQuery('user_experience_detail_id').delete().returning('*');
+     const userExp = await UserExperience.query().where('user_experience_detail_id', req.params.exp_id).delete().returning('*');
+    console.log('userExp: ', userExp);
+
+    return res.status(200).json({
       success: true,
       msg: 'User Profile Experience Deleted',
       userExp
+      
     });
   }
-
+   
 
 
   } catch (error) {
@@ -228,16 +189,6 @@ const deleteExp = async (req, res, next) => {
 // @desc     Get all profiles
 // @access   Public
 const AllProfiles = async (req, res, next) => {
-
-  // const user = await UserProfile.query()
-  //     .eager("[user_experience,user_skill_set,user_education]");
-  //     // .then(profiles => {
-  //     //   res.json({
-  //     //     profiles
-  //     //   });
-  //     // });
-
-  //     console.log("user",user)
   try {
     UserProfile.query()
       .eager("[user_experience,user_skill_set,user_education]")
@@ -297,27 +248,13 @@ const createExpProfile = async (req, res, next) => {
 
     console.log('usersprofilelength: ', usersProfileLength);
 
-    if (Array.isArray(userProfile) && usersProfileLength === 0) {
-
-
-      console.log('users: ', users);
-
-
-      return next(
-        createError({
-          status: CONFLICT,
-          message: "No User profile data found! You might want to add user profile data"
-        })
-      );
-
-    } else {
       const profileExpCreate = await registerExpProfile(newExp);
       return res.status(200).json({
         success: true,
         profileExpCreate
       });
 
-    }
+    
   } catch (error) {
     log.error(`Profile controller[createExpProfile]: Failed to send ${error}`);
 
