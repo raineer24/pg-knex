@@ -13,6 +13,8 @@ const {
   CONFLICT
 } = require("../../helpers/error_helper");
 
+const cloudinary = require("cloudinary");
+
 
 // @route    DELETE api/v2/posts/comment/:id/:comment_id
 // @desc     Delete comment
@@ -70,11 +72,67 @@ const deleteComment = async (req, res, next) => {
 // @route    POST api/v2/posts/comment/:id
 // @desc     Comment on a post
 // @access   Private
+const createUser = async (req, res, next) => {
+  const {
+    email,
+    password
+  } = req.body;
+
+  if (!req.file) {
+    return next(
+      createError({
+        status: CONFLICT,
+        message: "Please select an image to upload"
+      })
+    );
+  }
+
+  try {
+    let newUser = await getUserEmail(email);
+
+    if (newUser)
+      return next(
+        createError({
+          status: CONFLICT,
+          message: "Email already exist"
+        })
+      );
+
+    console.log('new user', newUser);
+
+
+    const hashPassword = await bcrypter.encryptPassword(password);
+
+    let url = await uploadToCloudinary(req.file.path);
+    const image_link = url.secure_url;
+
+    const data = {
+      username: req.body.username,
+      password: hashPassword,
+      email: email,
+      image_url: image_link,
+      first_name: req.body.first_name
+    };
+
+    const signup = await registerUser(data);
+
+    return res.status(201).json({
+      status: true,
+      data: signup
+    });
+  } catch (error) {
+    log.error(`Authcontroller[createUser]: Failed to send ${error}`);
+
+    return next(error);
+  }
+};
+
 const postComment = async (req, res, next) => {
   try {
     const newComment = {
       post_id: parseInt(req.params.id),
       body: req.body.body,
+
       users_id: req.user.id
     };
 
