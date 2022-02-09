@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-
+const fileUpload = require("../../middleware/image");
 const {
   getTest,
   addPost,
@@ -72,7 +72,7 @@ router.get('/:id', passport.authenticate("jwt", {
 // @access   Private
 router.post("/", passport.authenticate("jwt", {
   session: false
-}), userPostValidationRules(), validate, addPost);
+}), fileUpload, addPost);
 
 // @route    GET api/v2/posts
 // @desc     Get all posts

@@ -1,5 +1,6 @@
 const User = require("../../models/users");
 const Post = require("../../models/post");
+const Promise = require("bluebird");
 const {
   raw
 } = require('objection');
@@ -14,6 +15,12 @@ const {
 } = require("../../helpers/error_helper");
 
 const cloudinary = require("cloudinary");
+
+cloudinary.config({
+  cloud_name: "dwsbpkgvr",
+  api_key: "246382268158277",
+  api_secret: "OEJwFk8xMOuNID7Z7L5MNDJ9nY8"
+});
 
 
 // @route    DELETE api/v2/posts/comment/:id/:comment_id
@@ -72,67 +79,11 @@ const deleteComment = async (req, res, next) => {
 // @route    POST api/v2/posts/comment/:id
 // @desc     Comment on a post
 // @access   Private
-const createUser = async (req, res, next) => {
-  const {
-    email,
-    password
-  } = req.body;
-
-  if (!req.file) {
-    return next(
-      createError({
-        status: CONFLICT,
-        message: "Please select an image to upload"
-      })
-    );
-  }
-
-  try {
-    let newUser = await getUserEmail(email);
-
-    if (newUser)
-      return next(
-        createError({
-          status: CONFLICT,
-          message: "Email already exist"
-        })
-      );
-
-    console.log('new user', newUser);
-
-
-    const hashPassword = await bcrypter.encryptPassword(password);
-
-    let url = await uploadToCloudinary(req.file.path);
-    const image_link = url.secure_url;
-
-    const data = {
-      username: req.body.username,
-      password: hashPassword,
-      email: email,
-      image_url: image_link,
-      first_name: req.body.first_name
-    };
-
-    const signup = await registerUser(data);
-
-    return res.status(201).json({
-      status: true,
-      data: signup
-    });
-  } catch (error) {
-    log.error(`Authcontroller[createUser]: Failed to send ${error}`);
-
-    return next(error);
-  }
-};
-
 const postComment = async (req, res, next) => {
   try {
     const newComment = {
       post_id: parseInt(req.params.id),
       body: req.body.body,
-
       users_id: req.user.id
     };
 
@@ -317,18 +268,26 @@ const addPost = async (req, res, next) => {
     title,
     body
   } = req.body;
+  console.log('req body', req.body)
 
-  const insertData = {
-    users_id: req.user.id,
-    title,
-    body
-  }
+    try {
 
-  try {
+
+    let url = await uploadToCloudinary(req.file.path);
+    const image_link = url.secure_url;
+
+    const insertData = {
+     users_id: req.user.id,
+     title: title,
+     body: body,
+     image_url: image_link,
+     
+    };
 
     const user = await User.query().findById(req.user.id);
     if (user) {
       const postData = await insertPost(insertData);
+      console.log(postData);
       return res.status(200).json({
         success: true,
         postData
@@ -358,6 +317,15 @@ const getAllPosts = async (req, res, next) => {
 
     return next(error);
   }
+}
+
+function uploadToCloudinary(image) {
+  return new Promise((resolve, reject) => {
+    cloudinary.v2.uploader.upload(image, (err, url) => {
+      if (err) return reject(err);
+      return resolve(url);
+    });
+  });
 }
 
 async function insertPost(datus) {
