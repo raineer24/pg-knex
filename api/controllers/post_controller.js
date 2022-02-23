@@ -1,5 +1,6 @@
 const User = require("../../models/users");
 const Post = require("../../models/post");
+const Promise = require("bluebird");
 const {
   raw
 } = require('objection');
@@ -12,6 +13,14 @@ const {
   UNAUTHORIZED,
   CONFLICT
 } = require("../../helpers/error_helper");
+
+const cloudinary = require("cloudinary");
+
+cloudinary.config({
+  cloud_name: "dwsbpkgvr",
+  api_key: "246382268158277",
+  api_secret: "OEJwFk8xMOuNID7Z7L5MNDJ9nY8"
+});
 
 
 // @route    DELETE api/v2/posts/comment/:id/:comment_id
@@ -259,18 +268,26 @@ const addPost = async (req, res, next) => {
     title,
     body
   } = req.body;
+  console.log('req body', req.body)
 
-  const insertData = {
-    users_id: req.user.id,
-    title,
-    body
-  }
+    try {
 
-  try {
+
+    let url = await uploadToCloudinary(req.file.path);
+    const image_link = url.secure_url;
+
+    const insertData = {
+     users_id: req.user.id,
+     title: title,
+     body: body,
+     image_url: image_link,
+     
+    };
 
     const user = await User.query().findById(req.user.id);
     if (user) {
       const postData = await insertPost(insertData);
+      console.log(postData);
       return res.status(200).json({
         success: true,
         postData
@@ -300,6 +317,15 @@ const getAllPosts = async (req, res, next) => {
 
     return next(error);
   }
+}
+
+function uploadToCloudinary(image) {
+  return new Promise((resolve, reject) => {
+    cloudinary.v2.uploader.upload(image, (err, url) => {
+      if (err) return reject(err);
+      return resolve(url);
+    });
+  });
 }
 
 async function insertPost(datus) {

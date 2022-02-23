@@ -26,6 +26,9 @@ class Post extends Model {
         body: {
           type: "string"
         },
+        image_url: {
+          type: "string"
+        },
         publish_date: {
           type: "string"
         },
