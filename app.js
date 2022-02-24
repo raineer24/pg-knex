@@ -25,7 +25,8 @@ const app = express();
 app.use(passport.initialize());
 
 // passport config
-require("./config/passport")(passport);
+//require("./config/passport")(passport);
+require('./config/jwtStrategy');
 
 const port = process.env.PORT || 3000;
 
