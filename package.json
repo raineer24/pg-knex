@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon app.js",
     "start": "node app.js",
-    "debug": "DEBUG=pg-knex:* nodemon app.js"
+    "debug": "DEBUG=pg-knex:* nodemon app.js",
+    "production": "NODE_ENV=production & node app.js"
   },
   "author": "",
   "license": "ISC",
