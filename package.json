@@ -8,7 +8,6 @@
     "dev": "nodemon app.js",
     "start": "node app.js",
     "debug": "DEBUG=pg-knex:* nodemon app.js",
-    "start-prod": "set NODE_ENV=production & node app.js",
     "production": "NODE_ENV=production & node app.js"
   },
   "author": "",
