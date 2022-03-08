@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS user_experience_detail (
   CURRENT boolean DEFAULT false, 
   description text, 
   PRIMARY KEY (
-    user_experience_detail_id, usersp_id
+    user_experience_detail_id, users_id
   )
 );
 CREATE TABLE IF NOT EXISTS user_skill_set (
@@ -112,7 +112,7 @@ UNIQUE(id)
 );
 CREATE TABLE IF NOT EXISTS user_experience_detail (
   user_experience_detail_id serial, 
-  usersp_id integer REFERENCES user_profile(users_id), 
+  users_id integer REFERENCES user_profile(users_id), 
   job_title varchar(40) NOT NULL, 
   company_name varchar(40) NOT NULL, 
   job_location varchar(40), 
@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS user_experience_detail (
   CURRENT boolean DEFAULT false, 
   description text, 
   PRIMARY KEY (
-    user_experience_detail_id, usersp_id
+    user_experience_detail_id, users_id
   )
 );
 CREATE TABLE IF NOT EXISTS user_skill_set (
