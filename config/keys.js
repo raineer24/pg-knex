@@ -1,8 +1,7 @@
-if ((process.env.NODE_ENV || '').trim() !== 'production') {
-  console.log('prod');
+if (process.env.NODE_ENV === "production") {
   module.exports = require("./keys_prod");
-} else {
-  console.log('prod wtf');
+} else 
+  console.log('wtf')
   module.exports = require("./config");
 }
 
