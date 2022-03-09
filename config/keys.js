@@ -1,7 +1,8 @@
 if (process.env.NODE_ENV === "production") {
+  console.log('wtf');
   module.exports = require("./keys_prod");
 } else {
-  console.log('wtf')
+  
   module.exports = require("./config");
 }
 
