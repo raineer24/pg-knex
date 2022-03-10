@@ -1,5 +1,6 @@
   
 //import passport from 'passport';
+require('dotenv').config();
 const passport = require("passport");
 //import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 const JwtStrategy = require("passport-jwt").Strategy,
