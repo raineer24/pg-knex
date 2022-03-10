@@ -9,7 +9,7 @@
     "start": "node app.js",
     "debug": "DEBUG=pg-knex:* nodemon app.js",
     "production": "NODE_ENV=production & node app.js",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false n&& npm run build"
+    "heroku-postbuild": "npm run build"
   },
   "author": "",
   "license": "ISC",
