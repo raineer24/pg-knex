@@ -9,6 +9,7 @@ const JwtStrategy = require("passport-jwt").Strategy,
 
 const isProduction = process.env.NODE_ENV === 'production';
 const secretOrKey = isProduction ? process.env.JWT_SECRET_PROD : process.env.JWT_SECRET_DEV;
+console.log('secretkey', secretOrKey);
 
 // JWT strategy
 const jwtLogin = new JwtStrategy(
